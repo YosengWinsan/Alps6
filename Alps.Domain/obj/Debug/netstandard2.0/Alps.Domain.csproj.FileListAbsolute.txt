@@ -1,0 +1,9 @@
+D:\AlpsV6\Alps.Domain\bin\Debug\netstandard2.0\Alps.Domain.deps.json
+D:\AlpsV6\Alps.Domain\bin\Debug\netstandard2.0\Alps.Domain.dll
+D:\AlpsV6\Alps.Domain\bin\Debug\netstandard2.0\Alps.Domain.pdb
+D:\AlpsV6\Alps.Domain\obj\Debug\netstandard2.0\Alps.Domain.csprojAssemblyReference.cache
+D:\AlpsV6\Alps.Domain\obj\Debug\netstandard2.0\Alps.Domain.csproj.CoreCompileInputs.cache
+D:\AlpsV6\Alps.Domain\obj\Debug\netstandard2.0\Alps.Domain.AssemblyInfoInputs.cache
+D:\AlpsV6\Alps.Domain\obj\Debug\netstandard2.0\Alps.Domain.AssemblyInfo.cs
+D:\AlpsV6\Alps.Domain\obj\Debug\netstandard2.0\Alps.Domain.dll
+D:\AlpsV6\Alps.Domain\obj\Debug\netstandard2.0\Alps.Domain.pdb

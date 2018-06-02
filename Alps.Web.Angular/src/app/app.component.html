@@ -1,0 +1,36 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+<mat-sidenav-container class="app-container">
+  <mat-sidenav
+    #drawer
+    class="app-sidenav"
+    fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)">
+    <mat-toolbar color="primary">导航</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item *ngFor="let item of menuData" routerLink="{{item.path}}" (click)="(drawer.mode==='over')?drawer.toggle():null">{{item.name}}</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="app-content-container">
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>永盛金属ERP</span>
+    </mat-toolbar>
+<div class="app-content">
+  <router-outlet></router-outlet>
+</div>
+<mat-toolbar color="primary">
+  <span>永盛科技</span>
+</mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

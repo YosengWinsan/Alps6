@@ -1,0 +1,17 @@
+D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Web.Service.deps.json
+D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Web.Service.runtimeconfig.json
+D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Web.Service.runtimeconfig.dev.json
+D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Web.Service.dll
+D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Web.Service.pdb
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.csprojAssemblyReference.cache
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.csproj.CoreCompileInputs.cache
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.RazorAssemblyInfo.cache
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.RazorAssemblyInfo.cs
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.AssemblyInfoInputs.cache
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.AssemblyInfo.cs
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.RazorTargetAssemblyInfo.cache
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.dll
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.pdb
+D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Domain.dll
+D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Domain.pdb
+D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.csproj.CopyComplete

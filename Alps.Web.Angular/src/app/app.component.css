@@ -1,0 +1,23 @@
+.app-container {
+    -height: 100%;
+    min-height: 100vh;
+  }
+  
+  .app-sidenav {
+    width: 200px;
+    box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  }
+  .app-content-container
+  {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+  }
+  .app-content
+  {
+flex: 1;
+padding: 32px;
+  }
+  .mat-toolbar{
+      flex:0;
+  }

@@ -1,0 +1,12 @@
+D:\AlpsV6\alps.domain.service\bin\Debug\netstandard2.0\Alps.Domain.Service.deps.json
+D:\AlpsV6\alps.domain.service\bin\Debug\netstandard2.0\Alps.Domain.Service.dll
+D:\AlpsV6\alps.domain.service\bin\Debug\netstandard2.0\Alps.Domain.Service.pdb
+D:\AlpsV6\alps.domain.service\bin\Debug\netstandard2.0\Alps.Domain.dll
+D:\AlpsV6\alps.domain.service\bin\Debug\netstandard2.0\Alps.Domain.pdb
+D:\AlpsV6\alps.domain.service\obj\Debug\netstandard2.0\Alps.Domain.Service.csprojAssemblyReference.cache
+D:\AlpsV6\alps.domain.service\obj\Debug\netstandard2.0\Alps.Domain.Service.csproj.CoreCompileInputs.cache
+D:\AlpsV6\alps.domain.service\obj\Debug\netstandard2.0\Alps.Domain.Service.AssemblyInfoInputs.cache
+D:\AlpsV6\alps.domain.service\obj\Debug\netstandard2.0\Alps.Domain.Service.AssemblyInfo.cs
+D:\AlpsV6\alps.domain.service\obj\Debug\netstandard2.0\Alps.Domain.Service.csproj.CopyComplete
+D:\AlpsV6\alps.domain.service\obj\Debug\netstandard2.0\Alps.Domain.Service.dll
+D:\AlpsV6\alps.domain.service\obj\Debug\netstandard2.0\Alps.Domain.Service.pdb
