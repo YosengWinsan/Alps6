@@ -1,3 +1,11 @@
-<p>
-  edit works!
-</p>
+<form [formGroup]="catagoryForm" class="form-container">
+  <mat-form-field >
+    <input matInput placeholder="名称"  formControlName="name">
+  </mat-form-field>
+  <mat-form-field >
+    <input matInput placeholder="全称"  formControlName="fullName">
+  </mat-form-field>
+    <button mat-button (click)="save()">
+      <mat-icon>save</mat-icon>提交
+    </button>
+</form>

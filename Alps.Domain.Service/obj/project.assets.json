@@ -3123,11 +3123,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\AlpsV6\\alps.domain.service\\Alps.Domain.Service.csproj",
+      "projectUniqueName": "D:\\AlpsV6\\Alps.Domain.Service\\Alps.Domain.Service.csproj",
       "projectName": "Alps.Domain.Service",
-      "projectPath": "D:\\AlpsV6\\alps.domain.service\\Alps.Domain.Service.csproj",
+      "projectPath": "D:\\AlpsV6\\Alps.Domain.Service\\Alps.Domain.Service.csproj",
       "packagesPath": "C:\\Users\\Winsan\\.nuget\\packages\\",
-      "outputPath": "D:\\AlpsV6\\alps.domain.service\\obj\\",
+      "outputPath": "D:\\AlpsV6\\Alps.Domain.Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

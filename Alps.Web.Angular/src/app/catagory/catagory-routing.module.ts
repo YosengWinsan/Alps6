@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {ListComponent  } from "./list/list.component";
+import { ListComponent } from "./list/list.component";
 import { EditComponent } from "./edit/edit.component";
 const routes: Routes = [
-  {path:"",redirectTo:"list",pathMatch:"full"},
-  {path:"list",component:ListComponent},
-{path:"edit",component:EditComponent}
+  { path: "", redirectTo: "list", pathMatch: "full" },
+  { path: "list", component: ListComponent },
+  { path: "list/:id", component: ListComponent },
+  { path: "edit", component: EditComponent },
+  { path: "edit/:id", component: EditComponent }
 ];
 
 @NgModule({

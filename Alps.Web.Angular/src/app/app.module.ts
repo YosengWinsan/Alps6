@@ -7,6 +7,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule } from '@angular/material';
 import {  AppRoutingModule} from "./app-routing.module";
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HttpClientModule } from "@angular/common/http";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +22,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule,AppRoutingModule, MatGridListModule, MatCardModule, MatMenuModule
+    MatListModule,AppRoutingModule, MatGridListModule, MatCardModule, MatMenuModule,HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

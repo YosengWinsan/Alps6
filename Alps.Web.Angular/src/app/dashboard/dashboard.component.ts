@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { DashboardService } from "./dashboard.service";
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
@@ -12,7 +12,14 @@ export class DashboardComponent {
     { title: 'Card 3', cols: 1, rows: 2 },
     { title: 'Card 4', cols: 1, rows: 1 }
   ];
-  constructor(){
-    console.info("F");
+  constructor(private dasboardService: DashboardService) {
+    
+  }
+  initDatabase() {
+    console.info(this.dasboardService);
+    this.dasboardService.initDatabase().subscribe(data => {
+      if (data)
+        alert("初始化成功");
+    });
   }
 }

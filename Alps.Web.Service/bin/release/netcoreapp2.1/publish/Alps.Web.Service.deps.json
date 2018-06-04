@@ -25,6 +25,7 @@
       "Alps.Web.Service/1.0.0": {
         "dependencies": {
           "Alps.Domain": "1.0.0",
+          "Alps.Domain.Service": "1.0.0",
           "Microsoft.AspNetCore.App": "2.1.0",
           "Microsoft.NETCore.App": "2.1.0"
         },
@@ -216,6 +217,17 @@
         },
         "compile": {
           "Alps.Domain.dll": {}
+        }
+      },
+      "Alps.Domain.Service/1.0.0": {
+        "dependencies": {
+          "Alps.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Alps.Domain.Service.dll": {}
+        },
+        "compile": {
+          "Alps.Domain.Service.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.4": {
@@ -3219,6 +3231,11 @@
       "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
     },
     "Alps.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Alps.Domain.Service/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

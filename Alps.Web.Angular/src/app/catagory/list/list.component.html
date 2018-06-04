@@ -1,3 +1,47 @@
-<p>
-  list works!
-</p>
+
+  <a routerLink="./"  >所有</a>&gt;&gt;
+  <span *ngFor="let path of catagoryPath">
+    <a routerLink="./" [queryParams]="{id:path.id}" >{{path.name}}</a>&gt;&gt;
+  </span>
+  <!-- <hr>
+  <hr>
+  <table class="table  table-hover">
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th><a routerLink="../edit" class="table-action-add">添加</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of catagoryData">
+        <td>{{row.name}}</td>
+        <td>
+          <a routerLink="./" [queryParams]="{'id':row.id}" class="table-action-edit">明细</a>
+        </td>
+      </tr>
+    </tbody>
+  </table> -->
+
+  <mat-table #table [dataSource]="catagoryData" matSort aria-label="Elements">
+
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>操作</mat-header-cell>
+      <mat-cell *matCellDef="let row"><a routerLink="./" [queryParams]="{'id':row.id}" class="table-action-edit"><mat-icon>input</mat-icon></a>
+        &nbsp;<a routerLink="../edit/{{row.id}}"  class="table-action-edit"><mat-icon>edit</mat-icon></a>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>

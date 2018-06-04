@@ -3,7 +3,7 @@ using Alps.Domain.StockMgr;
 using Alps.Domain;
 using System;
 using Microsoft.EntityFrameworkCore;
-namespace Alps.Domain.Service.ERP
+namespace Alps.Domain.Service
 {
     public class StockService
     {

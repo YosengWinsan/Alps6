@@ -15,3 +15,5 @@ D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.pdb
 D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Domain.dll
 D:\AlpsV6\Alps.Web.Service\bin\Debug\netcoreapp2.1\Alps.Domain.pdb
 D:\AlpsV6\Alps.Web.Service\obj\Debug\netcoreapp2.1\Alps.Web.Service.csproj.CopyComplete
+D:\AlpsV6\Alps.web.service\bin\Debug\netcoreapp2.1\Alps.Domain.Service.dll
+D:\AlpsV6\Alps.web.service\bin\Debug\netcoreapp2.1\Alps.Domain.Service.pdb
