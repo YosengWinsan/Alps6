@@ -1,11 +1,20 @@
+
+  <button mat-icon-button (click)="back()"  >
+    <mat-icon> arrow_back</mat-icon></button>
+  
+
 <form [formGroup]="catagoryForm" class="form-container">
   <mat-form-field >
     <input matInput placeholder="名称"  formControlName="name">
   </mat-form-field>
   <mat-form-field >
-    <input matInput placeholder="全称"  formControlName="fullName">
+    <input matInput placeholder="所属类别"  formControlName="parentID">
   </mat-form-field>
     <button mat-button (click)="save()">
       <mat-icon>save</mat-icon>提交
     </button>
 </form>
+
+<button mat-button (click)="toggleBottomSheet()">
+  <mat-icon>save</mat-icon>测试
+</button>

@@ -14,5 +14,4 @@ export class DashboardService extends RepositoryService {
   {
     return this.query("InitDatabase");
   }
-
 }

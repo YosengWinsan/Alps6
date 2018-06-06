@@ -4,8 +4,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { CatagoryRoutingModule } from './catagory-routing.module';
 import { ListComponent } from './list/list.component';
 import { EditComponent } from './edit/edit.component';
-import { TtComponent } from './tt/tt.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule ,MatButtonModule} from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule ,MatButtonModule,MatDividerModule,MatToolbarModule
+,MatBottomSheetModule,MatDialogModule
+} from '@angular/material';
+import { ParentSelectorComponent } from './edit/parent-selector/parent-selector.component';
 
 @NgModule({
   imports: [
@@ -13,8 +15,9 @@ import { MatTableModule, MatPaginatorModule, MatSortModule,MatFormFieldModule,Ma
     CatagoryRoutingModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule,ReactiveFormsModule,MatButtonModule
+    MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule,ReactiveFormsModule,MatButtonModule,MatDividerModule,MatToolbarModule,MatBottomSheetModule,MatDialogModule
   ],
-  declarations: [ListComponent, EditComponent, TtComponent]
+  declarations: [ListComponent, EditComponent, ParentSelectorComponent],
+  entryComponents:[ParentSelectorComponent]
 })
 export class CatagoryModule { }
