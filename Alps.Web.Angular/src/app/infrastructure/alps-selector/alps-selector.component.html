@@ -1,4 +1,2 @@
-<button (click)="open()">{{value}}</button>
-<p>
-  <input [(ngModel)]="value"/>
-</p>
+<label *ngIf="_placeholder!==''" class="alps-selector-label">{{_placeholder}}</label>
+<button mat-button (click)="open()" style="width: 100%">{{_displayValue}}</button>

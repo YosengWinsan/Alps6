@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RepositoryService } from "../infrastructure/repository.service";
+import {RepositoryService } from "../infrastructure/infrastructure.module";
 import { HttpClient } from "@angular/common/http";
 import { supportsPassiveEventListeners } from '@angular/cdk/platform'; 
 

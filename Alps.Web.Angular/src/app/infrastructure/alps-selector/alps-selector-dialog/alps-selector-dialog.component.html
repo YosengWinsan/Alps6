@@ -1,16 +1,6 @@
-<div matDialogTitle>Title</div>
-<div matDialogContent>  alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>alps-selector-dialog works!
-  <br>
+  <div ><a *ngFor="let path of selectedOptions" (click)="selectPath(path)">{{path.displayValue}}>></a></div>
+  <hr>
+  <div>
+    <button mat-button *ngFor="let option of currentOptions" (click)="select(option)">{{option.displayValue}}</button>
+  </div>
 
-</div>
-
-  <div matDialogActions>ff</div>

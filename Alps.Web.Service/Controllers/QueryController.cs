@@ -49,6 +49,15 @@ namespace Alps.Web.Service.Controllers
       //var query=
       return Ok(catagories);
     }
+    [HttpGet("CatagoryOptions")]
+    public IActionResult CatagoryOptions()
+    {
+      var unionQuery =_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID });
+      var catagories = BuildTree(unionQuery.ToList(), null);
+      
+      //var query=
+      return Ok(catagories);
+    }
     class TreeNode
     {
       public Guid ID { get; set; }
@@ -72,6 +81,7 @@ namespace Alps.Web.Service.Controllers
       return list;
 
     }
+
     [HttpGet("DepartmentOptions")]
     public IActionResult DepartmentOptions()
     {

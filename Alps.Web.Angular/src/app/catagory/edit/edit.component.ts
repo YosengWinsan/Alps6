@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CatagoryService } from "../catagory.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AlpsActionResponse, AlpsActionResultCode } from "../../infrastructure/alpsActionResponse";
-import { MatBottomSheet,MatBottomSheetRef, MatDialog } from "@angular/material";
-import { ParentSelectorComponent } from './parent-selector/parent-selector.component';
-
+import { AlpsActionResponse, AlpsActionResultCode,QueryService } from "../../infrastructure/infrastructure.module";
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -14,10 +11,11 @@ import { ParentSelectorComponent } from './parent-selector/parent-selector.compo
 export class EditComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private catagoryService: CatagoryService, private formBuilder: FormBuilder
-    , private bottomSheet: MatBottomSheet,private dialog:MatDialog) {
+    ,private queryService:QueryService    ) {
     this.catagoryForm = formBuilder.group({ name: [, Validators.required], id: [], parentID: [] });
 
   }
+  catagoryOptions;
   catagoryForm: FormGroup;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -27,8 +25,10 @@ export class EditComponent implements OnInit {
       }
       this.catagoryService.get(id).subscribe((data: any) => {
         this.catagoryForm.patchValue(data);
-      }
-      );
+        this.queryService.GetCatagoryOptions().subscribe((res)=>{
+          this.catagoryOptions=res;
+        });
+      }  );
     });
   }
   save() {
@@ -46,22 +46,5 @@ export class EditComponent implements OnInit {
 
     history.back();
   }
-  toggleBottomSheet() {
-//this.bottomSheet.open(ParentSelectorComponent);
-this.dialog.open(ParentSelectorComponent);
-  }
-
 }
 
-// @Component({
-//   selector: 'bottom-sheet-overview-example-sheet',
-//   templateUrl: './a.html',
-// })
-// export class BottomSheetOverviewExampleSheet {
-//   constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>) {}
-
-//   openLink(event: MouseEvent): void {
-//     this.bottomSheetRef.dismiss();
-//     event.preventDefault();
-//   }
-// }

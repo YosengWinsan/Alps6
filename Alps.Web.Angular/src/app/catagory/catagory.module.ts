@@ -4,10 +4,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { CatagoryRoutingModule } from './catagory-routing.module';
 import { ListComponent } from './list/list.component';
 import { EditComponent } from './edit/edit.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule ,MatButtonModule,MatDividerModule,MatToolbarModule
-,MatBottomSheetModule,MatDialogModule
+import { MatTableModule, MatPaginatorModule, MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule ,MatButtonModule 
+
 } from '@angular/material';
-import { ParentSelectorComponent } from './edit/parent-selector/parent-selector.component';
+import { InfrastructureModule  } from "../infrastructure/infrastructure.module";
 
 @NgModule({
   imports: [
@@ -15,9 +15,8 @@ import { ParentSelectorComponent } from './edit/parent-selector/parent-selector.
     CatagoryRoutingModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule,ReactiveFormsModule,MatButtonModule,MatDividerModule,MatToolbarModule,MatBottomSheetModule,MatDialogModule
+    MatSortModule,MatFormFieldModule,MatInputModule,MatIconModule,ReactiveFormsModule,MatButtonModule,InfrastructureModule
   ],
-  declarations: [ListComponent, EditComponent, ParentSelectorComponent],
-  entryComponents:[ParentSelectorComponent]
+  declarations: [ListComponent, EditComponent]
 })
 export class CatagoryModule { }

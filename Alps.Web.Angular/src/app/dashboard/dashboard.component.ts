@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DashboardService } from "./dashboard.service";
+import {QueryService  } from "../infrastructure/infrastructure.module";
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
@@ -13,13 +13,17 @@ export class DashboardComponent {
     { title: 'Card 4', cols: 1, rows: 1 }
   ];
   
-name="winsan";
+name="b3d1411b-e0d4-cada-4c9c-08d5cbbc6faf";
+options;
 test()
 {
   this.name="test";
 }
-  constructor(private dasboardService: DashboardService) {
-    
+  constructor(private dasboardService: QueryService) {
+    this.dasboardService.query("ProductSkuOptions").subscribe((res)=>
+    {
+      this.options=res;
+    });
   }
   initDatabase() {
     console.info(this.dasboardService);

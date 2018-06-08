@@ -9,11 +9,10 @@ export const COMPONENT_NAME_VALUE_ACCESSOR: any = {
   multi: true
 };
 
-interface AlpsSelectorNode
-{
-  id:string;
-  name:string;
-  children:AlpsSelectorNode[];
+interface AlpsSelectorNode {
+  id: string;
+  name: string;
+  children: AlpsSelectorNode[];
 }
 
 @Component({
@@ -24,19 +23,58 @@ interface AlpsSelectorNode
 })
 export class AlpsSelectorComponent implements OnInit, ControlValueAccessor {
 
-  private _selectedNode:AlpsSelectorNode;
-  private _value: any;
-constructor(private matDialog:MatDialog)
-{
+  private _selectedNode: AlpsSelectorNode;
+  private _value: any = "";
+   _displayValue: string = "请选择";
+  private _options: any[] = [];
+   _placeholder: string = "";
+  @Input()
+  set options(newOptions) {
+    if (newOptions)
+      if (this._options !== newOptions) {
+        this._options = newOptions;
+        this.initDisplayValue();
+      }
+  }
+  @Input()
+  set placeholder(placeholder) {
+    if (placeholder)
+      if (this._placeholder !== placeholder) {
+        this._placeholder = placeholder;
+      }
+  }
+  //get options(): AlpsSelectItem[] { return this._options; }
+  constructor(private matDialog: MatDialog) {
+  }
 
-}
-
-open()
-{
-this.matDialog.open(AlpsSelectorDialogComponent).afterClosed().subscribe(
-(result)=>console.info(result)
-);
-}
+  open() {
+    this.matDialog.open(AlpsSelectorDialogComponent, { data: this._options, minWidth: "90vw" }).afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.value = result.value;
+          this._displayValue = result.displayValue;
+        }
+      }
+    );
+  }
+  initDisplayValue() {
+    if (this._value && this._value !== "" && this._options && this._options.length > 0) {
+      var displayValue = this.searchOption(this._options, this._value);
+      this._displayValue=displayValue===""?this._value:displayValue;
+    }
+  }
+  searchOption(options: any[], value: string) {
+    var result;
+    for (let option of options) {
+      result = this.searchOption(option.children, value);
+      if (result !== "")
+        return result;
+      if (option.value == value) {
+        return option.displayValue;
+      }
+    }
+    return "";
+  }
 
   set value(value: any) {
     this._value = value;
@@ -58,11 +96,13 @@ this.matDialog.open(AlpsSelectorDialogComponent).afterClosed().subscribe(
   }
 
   ngOnInit(): void {
-    
+
   }
 
   writeValue(obj: any): void {
     this.value = obj;
+
+    this.initDisplayValue();
   }
 
   registerOnChange(fn: any): void {

@@ -1,8 +1,0 @@
-<a mat-mini-fab (click)="select('')">
-  所有</a>&gt;
-<span *ngFor="let path of catagoryPath">
-  <a mat-mini-fab (click)="select(path.id)">{{path.name}}</a>&gt;
-</span>
-<div>
-  <a mat-button *ngFor="let item of catagoryList" (click)="select(item.id)">{{item.name}}</a>
-</div>
