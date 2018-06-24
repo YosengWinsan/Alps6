@@ -1,2 +1,9 @@
 Alps.Web.Service/msdeploy.bat
 Alps.Web.Service/gc.bat
+Alps.Web.Service/wwwroot
+Alps.Web.Service/bin
+Alps.Web.Service/obj
+Alps.Domain/bin
+Alps.Domain/obj
+Alps.Domain.Service/bin
+Alps.Domain.Service/obj
