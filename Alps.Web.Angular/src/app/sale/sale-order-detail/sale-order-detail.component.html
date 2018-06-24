@@ -1,0 +1,32 @@
+<mat-grid-list cols=4 rowHeight="40">
+  <mat-grid-tile>
+    <button mat-button (click)="back()">返回</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-button (click)="edit(saleOrder.id)" [disabled]="editable">编辑</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-button (click)="delete(saleOrder.id)" [disabled]="editable">删除</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-button (click)="submit(saleOrder.id)" [disabled]="editable">提交</button>
+  </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>
+<div style="padding-top: 20px">
+<alps-info-chip label="客户" [value]="saleOrder.customer"></alps-info-chip>
+<alps-info-chip label="状态" [value]="saleOrder.status"></alps-info-chip>
+<alps-info-chip label="总数量" [value]="saleOrder.totalQuantity"></alps-info-chip>
+<alps-info-chip label="总辅数" [value]="saleOrder.totalAuxiliaryQuantity"></alps-info-chip>
+<alps-info-chip label="总金额" [value]="saleOrder.totalAmount"></alps-info-chip>
+</div>
+  <mat-divider></mat-divider>
+<mat-table #itemTable [dataSource]="saleOrder.items" matSort aria-label="Elements">
+
+  <ng-container matColumnDef="{{col}}" *ngFor="let col of saleOrderItemColumns|ngForObj">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{saleOrderItemColumns[col]}}</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="saleOrderItemColumns|ngForObj"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: saleOrderItemColumns|ngForObj;"></mat-row>
+</mat-table> 

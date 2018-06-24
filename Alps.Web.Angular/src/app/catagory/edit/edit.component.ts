@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CatagoryService } from "../catagory.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AlpsActionResponse, AlpsActionResultCode,QueryService } from "../../infrastructure/infrastructure.module";
+import { QueryService } from "../../infrastructure/infrastructure.module";
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -25,7 +25,7 @@ export class EditComponent implements OnInit {
       }
       this.catagoryService.get(id).subscribe((data: any) => {
         this.catagoryForm.patchValue(data);
-        this.queryService.GetCatagoryOptions().subscribe((res)=>{
+        this.queryService.getCatagoryOptions().subscribe((res)=>{
           this.catagoryOptions=res;
         });
       }  );
@@ -34,12 +34,9 @@ export class EditComponent implements OnInit {
   save() {
     var self = this;
     if (this.catagoryForm.valid) {
-      this.catagoryService.createAndUpdate(this.catagoryForm.value).subscribe(
-        (res: AlpsActionResponse) => {
-          if (res.resultCode == AlpsActionResultCode.Ok)
+      this.catagoryService.createAndUpdate(this.catagoryForm.value).subscribe(res=>{
             self.router.navigate(["./"], { relativeTo: self.activatedRoute.parent, queryParams: { id: self.activatedRoute.snapshot.queryParams["listID"] } });
-        }
-      );
+      });
     }
   }
   back() {

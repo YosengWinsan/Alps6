@@ -136,7 +136,7 @@ namespace Alps.Domain
             modelBuilder.Entity<StockInVoucher>().HasOne(p => p.Department).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<StockInVoucherItem>().HasKey(p => new { p.ID, p.StockInVoucherID });
 
-            modelBuilder.Entity<SaleOrderItem>().OwnsOne(p => p.Quantity);
+            //modelBuilder.Entity<SaleOrderItem>().OwnsOne(p => p.Quantity);
             modelBuilder.Entity<DistributionMgr.DistributionVoucherItem>().OwnsOne(p => p.Quantity);
             modelBuilder.Entity<DeliveryVoucherItem>().OwnsOne(p => p.ProductSkuInfo);
             modelBuilder.Entity<MaterialRequisitionItem>().OwnsOne(p => p.ProductSkuInfo);
@@ -145,6 +145,7 @@ namespace Alps.Domain
             modelBuilder.Entity<PurchaseOrderItem>().OwnsOne(p => p.ProductSkuInfo);
 
             modelBuilder.Entity<StockInVoucher>().HasMany(p => p.Items).WithOne(p => p.StockInVoucher);
+            modelBuilder.Entity<SaleOrder>().HasMany(p=>p.Items).WithOne(p=>p.SaleOrder);
 
             modelBuilder.Entity<ProductStock>().HasKey(p => new { p.OwnerID, p.PositionID, p.ProductSkuID, p.SerialNumber });
 
@@ -319,9 +320,9 @@ namespace Alps.Domain
                 #region 初始化产品
                 Product product = null;
                 Catagory associatedCatagory = context.Catagories.FirstOrDefault(p => p.Name == "5#");
-                for(int i=13; i<30;i=i+2)
+                for (int i = 13; i < 30; i = i + 2)
                 {
-                    product = Product.Create(associatedCatagory.Name+ i.ToString()+"-"+(i+1).ToString()+"Kg", 
+                    product = Product.Create(associatedCatagory.Name + i.ToString() + "-" + (i + 1).ToString() + "Kg",
                         associatedCatagory.Name + i.ToString() + "-" + (i + 1).ToString() + "Kg", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
                     product.SetCatagory(associatedCatagory);
                     context.Products.Add(product);
@@ -400,8 +401,8 @@ namespace Alps.Domain
                 ProductSku sku = null;
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "5#"))
                 {
-                        sku = ProductSku.Create(p.ID,p.Name + "*6米*144", 0, PricingMethod.PricingByQuantity, 2000);
-                        context.ProductSkus.Add(sku);
+                    sku = ProductSku.Create(p.ID, p.Name + "*6米*144", 0, PricingMethod.PricingByQuantity, 2000);
+                    context.ProductSkus.Add(sku);
                 }
                 gcSkuID = sku.ID;
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "6.3#"))
@@ -601,11 +602,24 @@ namespace Alps.Domain
             }
             void SaleMgrSeed(AlpsContext context)
             {
-                var goods = Commodity.Create(productID, "5#4Kg", "槽钢", 1700, 100);
-                context.Commodities.Add(goods);
+                var quantity = 100;
+                foreach (var sku in context.ProductSkus)
+                {
+                    context.Commodities.Add(Commodity.Create(sku.ID, sku.Name, sku.Description, 3800,quantity*3, quantity++));
+
+                }
+                context.SaveChanges();
                 var saleOrder = SaleOrder.Create(customerID);
+                foreach (var commodity in context.Commodities.Take(5))
+                {
+                    saleOrder.AddItem(commodity.ID,12, 2000, "#");
+                }
                 context.SaleOrders.Add(saleOrder);
-                saleOrder = SaleOrder.Create(customerID, saleOrder);
+                saleOrder = SaleOrder.Create(customerID);
+                foreach (var commodity in context.Commodities.OrderByDescending(p=>p.ID).Take(5))
+                {
+                    saleOrder.AddItem(commodity.ID,1, 3000, "#");
+                }
                 context.SaleOrders.Add(saleOrder);
 
                 context.SaveChanges();

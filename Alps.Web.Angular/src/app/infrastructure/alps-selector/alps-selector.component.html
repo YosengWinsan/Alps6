@@ -1,2 +1,4 @@
-<label *ngIf="_placeholder!==''" class="alps-selector-label">{{_placeholder}}</label>
-<button mat-button (click)="open()" style="width: 100%">{{_displayValue}}</button>
+<div style="display: inline-block;">
+<label *ngIf="_placeholder!==''" class="alps-selector-label" >{{_placeholder}}</label>
+<button mat-button (click)="open()"  style="display: block;min-width: 175px;">{{_displayValue}}</button>
+</div>

@@ -36,6 +36,7 @@ namespace Alps.Web.Service.Model
 
     public bool Deprecated { get; set; }
     public bool EnableAuxiliaryQuantity { get; set; }
+    public Guid CatagoryID{get;set;}
   }
 
   public class ProductskuListDto

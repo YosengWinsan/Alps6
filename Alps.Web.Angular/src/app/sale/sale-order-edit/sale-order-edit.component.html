@@ -1,0 +1,29 @@
+<alps-edit-toolbar title="客户订单编辑" (save)="save()"></alps-edit-toolbar>
+<form [formGroup]="saleOrderForm">
+  <alps-selector formControlName="customerID" [options]="customerOptions"></alps-selector>
+<mat-table #itemTable [dataSource]="saleOrderForm.controls['items'].value" matSort aria-label="Elements">
+
+  <ng-container matColumnDef="{{col}}" *ngFor="let col of saleOrderItemColumns|ngForObj">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{saleOrderItemColumns[col]}}</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>
+      <a (click)="addItem()">
+      <mat-icon>add</mat-icon>
+    </a></mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a (click)="editItem(row)">
+        <mat-icon>edit</mat-icon>
+      </a>&nbsp;<a (click)="deleteItem(row)">
+          <mat-icon>delete</mat-icon>
+        </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table> 
+
+</form>

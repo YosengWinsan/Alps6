@@ -28,7 +28,7 @@ export class ListComponent implements OnInit {
         id = "";
       }
       this.listID=id;
-      this.catagoryService.getListByParentID(id).subscribe((data: { path, data }) => {
+      this.catagoryService.getListByParentID(id).subscribe((data: any) => {
         this.catagoryPath = data.path;
         this.catagoryData = data.data;
         this.displayedData=this.catagoryData;

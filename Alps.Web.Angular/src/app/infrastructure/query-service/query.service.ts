@@ -14,9 +14,21 @@ export class QueryService extends RepositoryService {
   initDatabase() {
     return this.query("InitDatabase");
   }
-  GetCatagoryOptions()
+  getCatagoryOptions()
   {
     return this.query("CatagoryOptions");
+  }
+  getTradeAccountOptions(){
+    return this.query("TradeAccountOptions");
+  }
+  getProductSkuOptions(){
+    return this.query("ProductSkuOptions");
+  }
+  getPositionOptions(){
+    return this.query("PositionOptions")
+  }
+  getCommodityOptions(){
+    return this.query("CommodityOptions");
   }
 }
 

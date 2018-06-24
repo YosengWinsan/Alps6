@@ -1,0 +1,16 @@
+<alps-edit-toolbar (save)="save()" title="商品编辑"></alps-edit-toolbar>
+<form [formGroup]="commodityForm" class="alps-form-container">
+<mat-form-field>
+  <input matInput formControlName="name" placeholder="名称">
+</mat-form-field>
+<mat-form-field>
+    <input matInput formControlName="description" placeholder="简介">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput formControlName="listPrice" placeholder="定价">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput formControlName="quantity" placeholder="数量">
+      </mat-form-field>
+      <alps-selector placeholder="关联产品" formControlName="productSkuID" [options]="productSkuOptions"></alps-selector>
+</form>

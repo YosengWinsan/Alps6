@@ -27,5 +27,8 @@ interface MenuItem {
 }
 const MENU_DATA: MenuItem[] = [
   { path: "dashboard", name: "实时动态" },
-  { path: "catagory", name: "类别管理" }
+  { path: "catagory", name: "类别管理" },
+  { path: "product", name: "产品管理" },
+  { path: "stock", name: "仓库管理" },
+  { path: "sale", name: "销售管理" }
 ]

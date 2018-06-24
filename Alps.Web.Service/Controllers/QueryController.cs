@@ -41,9 +41,9 @@ namespace Alps.Web.Service.Controllers
     [HttpGet("ProductSkuOptions")]
     public IActionResult ProductSkuOptions()
     {
-      var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID })
+      var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID,IsOption=false })
         .Union(_context.ProductSkus.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ProductID }))
-        .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID }));
+        .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID,IsOption=false }));
       var catagories = BuildTree(unionQuery.ToList(), null);
       
       //var query=
@@ -58,11 +58,20 @@ namespace Alps.Web.Service.Controllers
       //var query=
       return Ok(catagories);
     }
+    [HttpGet("CommodityOptions")]
+    public IActionResult CommodityOptions()
+    {
+       return this.AlpsActionOk(_context.Commodities.Select(p=>new AlpsSelectorItemDto{Value=p.ID,DisplayValue=p.Name}));
+    }
     class TreeNode
     {
       public Guid ID { get; set; }
       public Guid? ParentID { get; set; }
       public string Name { get; set; }
+      public bool IsOption{get;set;}
+      public TreeNode(){
+        IsOption=true;
+      }
     }
 
     private IEnumerable< AlpsSelectorItemDto> BuildTree(IEnumerable<TreeNode> treeNodes,Guid? parentID)
@@ -75,6 +84,7 @@ namespace Alps.Web.Service.Controllers
         AlpsSelectorItemDto dto = new AlpsSelectorItemDto();
         dto.Value = treenode.ID;
         dto.DisplayValue = treenode.Name;
+        dto.IsOption=treenode.IsOption;
         dto.Children = BuildTree(treeNodes, treenode.ID);
         list.Add(dto);
       }

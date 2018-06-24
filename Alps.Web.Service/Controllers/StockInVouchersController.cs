@@ -61,13 +61,17 @@ namespace Alps.Web.Service.Controllers
                 SourceID = k.SourceID,
                 Status = (int)k.Status,
                 Items = from i in _context.StockInVoucherItems
-                        where i.StockInVoucherID == k.ID
+                from sku in _context.ProductSkus
+                from p in _context.Positions
+                        where i.StockInVoucherID == k.ID && i.ProductSkuID==sku.ID&& i.PositionID==p.ID
                         select new StockInVoucherItemDto
                         {
                           ID = i.ID,
                           ProductSkuID = i.ProductSkuID,
+                          ProductSku=sku.Name,
                           SerialNumber = i.SerialNumber,
                           PositionID = i.PositionID,
+                          Position=p.Name,
                           AuxiliaryQuantity = i.AuxiliaryQuantity,
                           Quantity = i.Quantity,
                           Price = i.Price
@@ -82,9 +86,46 @@ namespace Alps.Web.Service.Controllers
       {
         return BadRequest(ModelState);
       }
-      return Ok(GetStockInVoucherEditDto(id));
+      return this.AlpsActionOk(GetStockInVoucherEditDto(id));
     }
-
+[HttpGet("detail/{id}")]
+public IActionResult Detail(Guid id)
+{
+  if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+      var detail=(from k in _context.StockInVouchers
+              where k.ID == id
+              select new StockInVoucherDetailDto
+              {
+                Department = k.Department.Name,
+                ID = k.ID,
+                Source = k.Source.Name,
+                StatusValue = (int)k.Status,
+                Status=EnumHelper.GetDisplayValue(typeof(StockInVoucherStatus), k.Status.ToString("G")),
+                TotalAmount=k.TotalAmount ,
+                TotalAuxiliaryQuantity=k.TotalAuxiliaryQuantity,
+                TotalQuantity=k.TotalQuantity,
+                Items = from i in _context.StockInVoucherItems
+                from sku in _context.ProductSkus
+                from p in _context.Positions
+                        where i.StockInVoucherID == k.ID && i.ProductSkuID==sku.ID&& i.PositionID==p.ID
+                        select new StockInVoucherItemDto
+                        {
+                          ID = i.ID,
+                          ProductSkuID = i.ProductSkuID,
+                          ProductSku=sku.Name,
+                          SerialNumber = i.SerialNumber,
+                          PositionID = i.PositionID,
+                          Position=p.Name,
+                          AuxiliaryQuantity = i.AuxiliaryQuantity,
+                          Quantity = i.Quantity,
+                          Price = i.Price
+                        }
+              }).FirstOrDefault();
+      return this.AlpsActionOk(detail);
+}
     // POST: api/StockInVouchers
     [HttpPost]
     public IActionResult Post([FromBody]StockInVoucherEditDto dto)
@@ -96,7 +137,7 @@ namespace Alps.Web.Service.Controllers
       voucher.UpdateItems(dto.Items);
       _context.StockInVouchers.Add(voucher);
       _context.SaveChanges();
-      return Ok(GetStockInVoucherEditDto(voucher.ID));
+      return this.AlpsActionOk();
     }
 
     // PUT: api/StockInVouchers/5
@@ -114,7 +155,8 @@ namespace Alps.Web.Service.Controllers
       voucher.SourceID = dto.SourceID;
       voucher.UpdateItems(dto.Items);
       _context.SaveChanges();
-      return Ok(GetStockInVoucherEditDto(id));
+      return this.AlpsActionOk();
+      //return Ok(GetStockInVoucherEditDto(id));
     }
 
     // DELETE: api/ApiWithActions/5
@@ -128,7 +170,8 @@ namespace Alps.Web.Service.Controllers
       if (voucher == null)
         return BadRequest();
       _context.StockInVouchers.Remove(voucher);
-      return Ok(new { ActionDone = true });
+      _context.SaveChanges();
+      return this.AlpsActionOk();// Ok(new { ActionDone = true });
     }
     [HttpPost("Submit/{id}")]
     public IActionResult Submit(Guid id)

@@ -1,0 +1,75 @@
+<mat-grid-list cols=4 rowHeight="40">
+  <mat-grid-tile>
+    <button mat-button (click)="back()">返回</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-button (click)="edit(stockInVoucher.id)" [disabled]="editable">编辑</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-button (click)="delete(stockInVoucher.id)" [disabled]="editable">删除</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-button (click)="submit(stockInVoucher.id)" [disabled]="editable">提交</button>
+  </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>
+<div style="padding-top: 20px">
+<alps-info-chip label="来源" [value]="stockInVoucher.source"></alps-info-chip>
+<alps-info-chip label="采购部门" [value]="stockInVoucher.department"></alps-info-chip>
+<alps-info-chip label="状态" [value]="stockInVoucher.status"></alps-info-chip>
+<alps-info-chip label="总数量" [value]="stockInVoucher.totalQuantity"></alps-info-chip>
+<alps-info-chip label="总辅数" [value]="stockInVoucher.totalAuxiliaryQuantity"></alps-info-chip>
+<alps-info-chip label="总金额" [value]="stockInVoucher.totalAmount"></alps-info-chip>
+</div>
+  <mat-divider></mat-divider>
+<!-- <div>
+  <label>来源:</label>{{stockInVoucher.source}}
+  <br>
+  <label>采购部门:</label>{{stockInVoucher.department}}
+  <br>
+  <label>状态:</label>{{stockInVoucher.status}}
+  <br>
+  <label>总数量:</label>{{stockInVoucher.totalQuantity}}
+  <br>
+  <label>总辅数:</label>{{stockInVoucher.totalAuxiliaryQuantity}}
+  <br>
+  <label>总金额:</label>{{stockInVoucher.totalAmount}}
+</div> -->
+<mat-table #table [dataSource]="stockInVoucher.items" matSort aria-label="Elements">
+
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="productSku">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>品名</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.productSku}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>单价</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.price}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="auxiliaryQuantity">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>辅助数量</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.auxiliaryQuantity}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="quantity">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>数量</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.quantity}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="position">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>仓位</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.position}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="serialNumber">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>序列号</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.serialNumber}}</mat-cell>
+  </ng-container>
+
+
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

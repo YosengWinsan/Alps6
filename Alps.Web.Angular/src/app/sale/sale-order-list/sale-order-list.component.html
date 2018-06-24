@@ -1,0 +1,23 @@
+<mat-table #table [dataSource]="saleOrders" matSort aria-label="Elements">
+  <!-- Id Column -->
+  <ng-container matColumnDef="{{col}}" *ngFor="let col of saleOrderColumns|ngForObj">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{saleOrderColumns[col]}}</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="orderTime">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>下单时间</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.orderTime|date:"MM-dd hh:mm"}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a  routerLink="../saleorderdetail" [queryParams]="{id:row.id}">
+        <mat-icon>list</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

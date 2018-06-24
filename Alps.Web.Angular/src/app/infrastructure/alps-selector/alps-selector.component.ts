@@ -25,9 +25,9 @@ export class AlpsSelectorComponent implements OnInit, ControlValueAccessor {
 
   private _selectedNode: AlpsSelectorNode;
   private _value: any = "";
-   _displayValue: string = "请选择";
+  _displayValue: string = "请选择";
   private _options: any[] = [];
-   _placeholder: string = "";
+  _placeholder: string = "";
   @Input()
   set options(newOptions) {
     if (newOptions)
@@ -57,19 +57,29 @@ export class AlpsSelectorComponent implements OnInit, ControlValueAccessor {
       }
     );
   }
+  getDisplayValue(){
+    return this._displayValue;
+  }
   initDisplayValue() {
-    if (this._value && this._value !== "" && this._options && this._options.length > 0) {
-      var displayValue = this.searchOption(this._options, this._value);
-      this._displayValue=displayValue===""?this._value:displayValue;
+    if (this._value && this._value !== "") {
+
+      if (this._options && this._options.length > 0) {
+        var displayValue = this.searchOption(this._options, this._value);
+        this._displayValue = displayValue === "" ? this._value : displayValue;
+      }
+      // else
+      // this._displayValue=this._value;
     }
+
   }
   searchOption(options: any[], value: string) {
-    var result;
+    var result="";
     for (let option of options) {
+      if(option && option.children && option.children.length>0)
       result = this.searchOption(option.children, value);
       if (result !== "")
         return result;
-      if (option.value == value) {
+      if (option.isOption && option.value == value) {
         return option.displayValue;
       }
     }

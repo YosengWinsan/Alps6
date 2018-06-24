@@ -10,5 +10,9 @@ namespace Alps.Web.Service.Model
     public Guid Value { get; set; }
     public string DisplayValue { get; set; }
     public IEnumerable<AlpsSelectorItemDto> Children { get; set; }
+    public bool IsOption{get;set;} 
+    public AlpsSelectorItemDto(){
+      IsOption=true;
+    }
   }
 }

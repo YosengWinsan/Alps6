@@ -1,11 +1,8 @@
 <button mat-button (click)="initDatabase()">初始化样本数据库</button>
-<alps-selector [(ngModel)]="name" [options]="options"></alps-selector>
-<p style="font-family: robotoregular">{{name}}</p>
-<button (click)="test()">Test</button>
-
+{{cw}}*{{ch}}
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="2" rowHeight="350px">
+  <h1 class="mat-h1">信息面板</h1>
+  <mat-grid-list cols="2" rowHeight="200px">
     <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
       <mat-card class="dashboard-card">
         <mat-card-header>
@@ -21,7 +18,7 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
+          <div></div>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

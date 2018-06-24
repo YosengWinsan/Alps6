@@ -6,27 +6,33 @@ namespace Alps.Domain.SaleMgr
 {
     public class Commodity : EntityBase
     {
-        [Display(Name="商品名")]
+
+
+        [Display(Name = "商品名")]
         public string Name { get; set; }
-        [Display(Name="包装数量")]
-        public decimal PackingQuantity { get; set; }
-        [Display(Name="商品描述")]
+        [Display(Name = "商品描述")]
         public string Description { get; set; }
-        [Display(Name="库存数量")]
-        public decimal StockQuantity { get; set; }
-        public Unit Unit { get; set; }
-        [Display(Name="定价")]
+        public Guid ProductSkuID { get; set; }
+        [Display(Name = "定价")]
         public decimal ListPrice { get; set; }
-        [Display(Name="物料名")]
-        public Guid MaterialID { get; set; }
-        [Display(Name="期货否")]
+        [Display(Name = "库存数量")]
+        public decimal StockQuantity { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal SellableQuantity { get; set; }
+        public decimal OrderedQuantity { get; set; }
+        public decimal StockAuxiliaryQuantity { get; set; }
+        public decimal AuxiliayQuantity { get; set; }
+        public decimal OrderedAuxiliaryQuantity { get; set; }
+        public decimal SellableAuxiliaryQuantity { get; set; }
+
+        [Display(Name = "期货否")]
         public bool IsFutures { get; set; }
-        [Display(Name="交货日期")]
+        [Display(Name = "交货日期")]
         public DateTime? DateOfDelivery { get; set; }
 
-        public static Commodity Create(Guid materialID, string name, string description, decimal listPrice, decimal stockQuantity)
+        public static Commodity Create(Guid productSkuID, string name, string description, decimal listPrice, decimal quantity, decimal auxiliaryQuantity)
         {
-            return new Commodity() { MaterialID = materialID, Name = name, Description = description, ListPrice = listPrice, StockQuantity = stockQuantity };
+            return new Commodity() { ProductSkuID = productSkuID, Name = name, Description = description, ListPrice = listPrice, Quantity = quantity, AuxiliayQuantity = auxiliaryQuantity };
         }
 
     }

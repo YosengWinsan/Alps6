@@ -14,7 +14,11 @@ namespace Alps.Domain.SaleMgr
         [Display(Name="下单时间")]
         public DateTime OrderTime { get; set; }
         [Display(Name="订单状态")]
-        public SaleOrderState State { get; set; }
+        public SaleOrderStatus Status { get; set; }
+        public decimal TotalQuantity{get;set;}
+        public decimal TotalAuxiliaryQuantity{get;set;}
+        public decimal TotalAmount{get;set;}
+
         [Display(Name="配送地址")]
         public string DeliveryAddress { get; set; }
         public  ICollection<SaleOrderItem> Items { get; set; }
@@ -36,38 +40,39 @@ namespace Alps.Domain.SaleMgr
             return saleOrder;
         }
 
-        public void UpdateItems(Guid commodityID, decimal count, decimal weight, Guid unitID, decimal price)
+        public void UpdateItems(Guid commodityID, decimal quantity, decimal auxiliaryQuantity, Guid unitID, decimal price)
         {
             SaleOrderItem existingItem = this.Items.FirstOrDefault(p => p.CommodityID == commodityID);
             if (existingItem == null)
             {
                 existingItem = new SaleOrderItem();
                 this.Items.Add(existingItem);
-            }
+            } 
             existingItem.CommodityID = commodityID;
-            existingItem.Quantity += new Quantity(count, weight);
-            existingItem.UnitID = unitID;
+            existingItem.Quantity += quantity;//new Quantity(count, weight);
+            existingItem.AuxiliaryQuantity+=auxiliaryQuantity;
+            //existingItem.UnitID = unitID;
             existingItem.Price = price;
 
-            if (existingItem.Quantity.Count == 0)
+            if (existingItem.AuxiliaryQuantity == 0)
             {
                 this.Items.Remove(existingItem);
             }
-            if (existingItem.Quantity.IsNegative())
+            if (existingItem.AuxiliaryQuantity<0)
                 throw new DomainException("订单数量不能小于零");
         }
         
         public void Confirm()
-        {
-            this.State = SaleOrderState.Confirm;
+        { 
+            this.Status = SaleOrderStatus.Confirm;
         }
-        public void AddItem(Guid commodityID,Quantity quantity,decimal price,string remark)
+        public void AddItem(Guid commodityID,decimal quantity,decimal price,string remark)
         {
             var item=new SaleOrderItem(){CommodityID=commodityID,Quantity=quantity,Price=price,Remark=remark};
             this.Items.Add(item);
 
         }
-        public void RemoveItem(Guid commodityID,Quantity quantity)
+        public void RemoveItem(Guid commodityID)
         {
             var item=this.Items.FirstOrDefault(p => p.CommodityID == commodityID);
             if (item == null)
@@ -75,7 +80,7 @@ namespace Alps.Domain.SaleMgr
             this.Items.Remove(item);
             
         }
-        private void UpdateItem(Guid itemID,Guid commodityID,Quantity quantity,decimal price,string remark)
+        private void UpdateItem(Guid itemID,Guid commodityID,decimal quantity,decimal price,string remark)
         {
             if (itemID == Guid.Empty)
                 throw new ArgumentException("参数不含主键");

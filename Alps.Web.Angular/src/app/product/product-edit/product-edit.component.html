@@ -1,0 +1,16 @@
+
+<div class="alps-edit-toolbar">
+  <button mat-icon-button (click)="back()"  >
+    <mat-icon> arrow_back</mat-icon></button>
+    <div class="alps-edit-toolbar-title">产品设置</div>
+    <button mat-icon-button (click)="save()"  >
+      <mat-icon> done</mat-icon></button>
+  </div>
+
+<form [formGroup]="productForm" class="form-container">
+  <mat-form-field >
+    <input matInput placeholder="名称"  formControlName="name">
+  </mat-form-field>
+     <alps-selector placeholder='所属类别' formControlName="catagoryID" [options]="catagoryOptions"></alps-selector>
+
+</form>

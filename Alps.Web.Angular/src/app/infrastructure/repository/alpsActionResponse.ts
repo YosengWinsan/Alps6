@@ -7,6 +7,6 @@ export enum AlpsActionResultCode
 
   export class AlpsActionResponse{
       resultCode:AlpsActionResultCode;
-      message:string[];
+      messages:string[];
       data:any;
   } 

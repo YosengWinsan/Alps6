@@ -34,7 +34,22 @@ namespace Alps.Web.Service.Controllers
         
             } );
         }
-
+        [Route("getProductByCatagoryID/{id}")]
+        [HttpGet]
+        public IEnumerable<Model.ProductListDto> GetProductByCatagoryID(Guid id)
+        {
+            return _context.Products.Where(f=>f.CatagoryID==id).Select(p=> new Model.ProductListDto {
+              Catagory=p.Catagory.Name,
+              Name=p.Name,
+              FullName=p.FullName,
+              FullDescription=p.FullDescription,
+              ShortDescription=p.ShortDescription,
+              EnableAuxiliaryQuantity=p.EnableAuxiliaryUnit,
+              Deprecated=p.Deleted,
+              ID=p.ID
+        
+            } );
+        }
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct([FromRoute] Guid id)
@@ -55,11 +70,11 @@ namespace Alps.Web.Service.Controllers
         ID = product.ID,
         Name = product.Name,
         FullName = product.FullName,
-        ShortDescription = product.ShortDescription
-      ,
+        ShortDescription = product.ShortDescription      ,
         FullDescription = product.FullDescription,
         Deprecated = product.Deleted,
-        EnableAuxiliaryQuantity=product.EnableAuxiliaryUnit
+        EnableAuxiliaryQuantity=product.EnableAuxiliaryUnit,
+        CatagoryID=product.CatagoryID
       };
             return Ok(result);
         }

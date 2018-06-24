@@ -1,0 +1,8 @@
+<mat-grid-list cols=5 rowHeight="4:1"> 
+    <mat-grid-tile ><a  [routerLink]="[ './stockin']">入库</a></mat-grid-tile>
+    <mat-grid-tile ><a  [routerLink]="[ './stockout']">出库</a></mat-grid-tile>
+    <mat-grid-tile ><a  [routerLink]="[ './stockinfo']">库存明细</a></mat-grid-tile>
+    <mat-grid-tile ><a  [routerLink]="[ './stockinlist']">入库明细</a></mat-grid-tile>
+    <mat-grid-tile ><a  [routerLink]="[ './stockoutlist']">出库明细</a></mat-grid-tile>
+</mat-grid-list>
+<router-outlet></router-outlet>

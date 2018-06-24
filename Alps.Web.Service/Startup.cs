@@ -31,6 +31,7 @@ namespace Alps.Web.Service
             {
                 options.UseSqlServer(Configuration.GetConnectionString("AlpsContext"));
             });
+            services.AddScoped<Alps.Domain.Service.StockService>();
             services.AddSpaStaticFiles(
                 Configuration => { Configuration.RootPath = "wwwroot/alpsWebAngular"; }
             );

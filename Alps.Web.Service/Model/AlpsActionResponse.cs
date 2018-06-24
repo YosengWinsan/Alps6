@@ -32,19 +32,19 @@ namespace Alps.Web.Service.Model
   }
   public static class ControllerHelper
   {
-    public static IActionResult AlpsActionOk(this Controller controller,object data=null)
+    public static IActionResult AlpsActionOk(this ControllerBase controller,object data=null)
     {
       AlpsActionResponse response = new AlpsActionResponse(AlpsActionResultCode.Ok);
       response.Data = data;
       return controller.Ok(response);
     }
-    public static IActionResult AlpsActionError(this Controller controller, string message = "")
+    public static IActionResult AlpsActionError(this ControllerBase controller, string message = "")
     {
       AlpsActionResponse response = new AlpsActionResponse(AlpsActionResultCode.Error);
       response.AddMessage(message);
       return controller.Ok(response);
     }
-    public static IActionResult AlpsActionWarning(this Controller controller, string message = "")
+    public static IActionResult AlpsActionWarning(this ControllerBase controller, string message = "")
     {
       AlpsActionResponse response = new AlpsActionResponse(AlpsActionResultCode.Warning);
       response.AddMessage(message);

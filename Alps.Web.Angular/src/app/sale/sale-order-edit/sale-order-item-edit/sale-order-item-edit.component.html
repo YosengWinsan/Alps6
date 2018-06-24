@@ -1,0 +1,20 @@
+<form [formGroup]="itemForm" class="form-container">
+  <alps-selector #commoditySelector placeholder='品名' formControlName="commodityID" [options]="commodityOptions"></alps-selector>
+  <mat-form-field>
+    <input matInput placeholder="数量" formControlName="quantity">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="辅助数量" formControlName="auxiliaryQuantity">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="单价" formControlName="price">
+    </mat-form-field> 
+   
+      <mat-form-field>
+          <input matInput placeholder="序列号" formControlName="serialNumber">
+        </mat-form-field>
+</form>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">取消</button>
+  <button mat-button (click)="confirm()">确认</button>
+</div>

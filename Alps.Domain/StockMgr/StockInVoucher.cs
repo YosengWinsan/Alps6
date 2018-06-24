@@ -7,8 +7,6 @@ namespace Alps.Domain.StockMgr
 {
     public class StockInVoucher : EntityBase
     {
-
-
         public Guid SourceID { get; set; }
         public Guid DepartmentID { get; set; }
         public decimal TotalAuxiliaryQuantity { get; set; }
