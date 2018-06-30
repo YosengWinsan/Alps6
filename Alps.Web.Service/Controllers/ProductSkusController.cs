@@ -42,23 +42,21 @@ namespace Alps.Web.Service.Controllers
         return BadRequest(ModelState);
       }
 
-      var productSku = await _context.ProductSkus.SingleOrDefaultAsync(m => m.ID == id);
+      var productSku = await _context.ProductSkus.Select(p=>new ProductskuEditDto
+      {
+        Name = p.Name,
+        ID = p.ID,
+        ProductID = p.ProductID,
+        Product=p.Product.Name,
+        Description = p.Description
+      }).SingleOrDefaultAsync(m => m.ID == id);
 
       if (productSku == null)
       {
         return NotFound();
       }
 
-      return Ok(new ProductskuEditDto
-      {
-        Name = productSku.Name,
-        ID = productSku.ID,
-        ProductID = productSku.ProductID,
-        Price = productSku.Price,
-        AuxiliaryQuantity = productSku.StockQuantity,
-        Quantity = productSku.StockQuantity,
-        Description = productSku.Description
-      });
+      return this.AlpsActionOk(productSku);
     }
 
     // PUT: api/ProductSkus/5
@@ -78,8 +76,6 @@ namespace Alps.Web.Service.Controllers
       if (productsku==null)
         return BadRequest();
       productsku.Name = dto.Name;
-      productsku.Price = dto.Price;
-      productsku.StockQuantity = dto.Quantity;
       productsku.Description = dto.Description;
       productsku.ProductID = dto.ProductID;
       
@@ -111,7 +107,7 @@ namespace Alps.Web.Service.Controllers
       {
         return BadRequest(ModelState);
       }
-      var productSku = ProductSku.Create(dto.ProductID, dto.Name,Convert.ToInt16(dto.Quantity),  PricingMethod.PricingByWeight, dto.Price);
+      var productSku = ProductSku.Create(dto.ProductID, dto.Name,dto.Description,"");
       _context.ProductSkus.Add(productSku);
       await _context.SaveChangesAsync();
 

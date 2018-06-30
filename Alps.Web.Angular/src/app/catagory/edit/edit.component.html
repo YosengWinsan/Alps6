@@ -1,15 +1,7 @@
-<div style="display:flex;flex-direction:row">
-  <button mat-icon-button (click)="back()"  >
-    <mat-icon> arrow_back</mat-icon></button>
-    <div  style="flex:1"></div>
-    <button mat-icon-button (click)="save()"  >
-      <mat-icon> done</mat-icon></button>
-  </div>
-
-<form [formGroup]="catagoryForm" class="form-container">
+<alps-edit-toolbar></alps-edit-toolbar>
+<alps-info-chip label="所属类别" [value]="parentCatagory">fff</alps-info-chip>
+<form [formGroup]="catagoryForm" >
   <mat-form-field >
     <input matInput placeholder="名称"  formControlName="name">
   </mat-form-field>
-     <alps-selector placeholder='所属类别' formControlName="parentID" [options]="catagoryOptions"></alps-selector>
-
 </form>

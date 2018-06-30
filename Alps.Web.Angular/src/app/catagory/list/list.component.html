@@ -19,13 +19,17 @@
     <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="action">
-    <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>
+      <a routerLink="../edit"  [queryParams]="{'parentID':listID}" >
+        <mat-icon>add</mat-icon>
+      </a>
+    </mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <a routerLink="./" [queryParams]="{'id':row.id}" class="table-action-edit">
+      <a routerLink="./" [queryParams]="{'id':row.id}" *ngIf="!isLeaf">
         <mat-icon>view_list</mat-icon>
       </a>
       &nbsp;
-      <a routerLink="../edit" [queryParams]="{id:row.id,listID:listID}" class="table-action-edit">
+      <a routerLink="../edit" [queryParams]="{id:row.id,parentID:listID}">
         <mat-icon>edit</mat-icon>
       </a>
     </mat-cell>

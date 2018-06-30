@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { RepositoryService } from '../repository/repository.service';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QueryService extends RepositoryService {
 
-  constructor(http: HttpClient) {
-    super(http);
+  constructor(injector: Injector) {
+    super(injector);
     this.setBaseUrl("api/query");
   }
   initDatabase() {
@@ -29,6 +28,14 @@ export class QueryService extends RepositoryService {
   }
   getCommodityOptions(){
     return this.query("CommodityOptions");
+  }
+  getCatagoryOption(id)
+  {
+return this.query("CatagoryOption/"+id);
+  }
+  getProductOption(id)
+  {
+return this.query("ProductOption/"+id);
   }
 }
 

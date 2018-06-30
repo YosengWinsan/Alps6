@@ -1,33 +1,61 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, filter, map } from 'rxjs/operators';
+import { catchError, filter, map, tap } from 'rxjs/operators';
 import { throwError } from "rxjs";
 import { AlpsConst } from '../alps-const';
 import { AlpsActionResponse, AlpsActionResultCode } from './alpsActionResponse';
+import { AlpsLoadingBarService } from '../service/alps-loading-bar.service';
 
 @Injectable()
 export class RepositoryService {
   _baseUrl: string = "api";
-  constructor(protected httpClient: HttpClient) { }
+  protected httpClient:HttpClient;
+protected loadingBarService:AlpsLoadingBarService;
+  constructor(protected injector:Injector) {
+    this.httpClient=this.injector.get(HttpClient);
+    this.loadingBarService=this.injector.get(AlpsLoadingBarService);
+   }
+   private startLoad(){
+    setTimeout(() => {
+      this.loadingBarService.open();
+    }, 0);
+   }
+   private finishLoad(){
+     setTimeout(() => {
+      this.loadingBarService.close();      
+     }, 0);
+   }
+   private queryError(){
+    setTimeout(() => {
+     this.loadingBarService.error();      
+    }, 0);
+  }
   setBaseUrl(url: string) {
     this._baseUrl = url;
   }
+  processPipe(ob)
+  {
+    return ob.pipe(tap(()=>{this.finishLoad();}), catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
+  }
   getall() {
-    return this.httpClient.get(this._baseUrl).pipe(catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
+   this.startLoad();
+    return this.processPipe(this.httpClient.get(this._baseUrl));
   }
   get(id: string) {
-    return this.httpClient.get(this._baseUrl + "/" + id).pipe(catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
+    this.startLoad();
+    return this.processPipe(this.httpClient.get(this._baseUrl + "/" + id));
   }
   query(action: string) {
+    this.startLoad();
     var self = this;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.get(this._baseUrl + "/" + action, { headers: headers }).pipe(catchError((err) => self.handleError(err)
-    ), filter(this.filterError), map(this.upPackResponse));
+    return this.processPipe(this.httpClient.get(this._baseUrl + "/" + action, { headers: headers }));
   }
   action(action: string, param?: any) {
+    this.startLoad();
     let body = JSON.stringify(param);
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.post(this._baseUrl + "/" + action, body, { headers: headers }).pipe(catchError((err) => this.handleError(err)), filter(this.filterError));
+    return this.processPipe(this.httpClient.post(this._baseUrl + "/" + action, body, { headers: headers }));
   }
 
   createAndUpdate(entity) {
@@ -40,24 +68,26 @@ export class RepositoryService {
       return this.create(entity);
   }
   create(entity) {
+    this.startLoad();
     if (!entity.id || entity.id === "")
       entity.id = AlpsConst.GUID_EMPTY;
     let body = JSON.stringify(entity);
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.post(this._baseUrl, body, { headers: headers }).pipe(catchError((err) => this.handleError(err)), filter(this.filterError));
+    return this.processPipe(this.httpClient.post(this._baseUrl, body, { headers: headers }));
   }
   update(entity, id: string) {
+    this.startLoad();
     let body = JSON.stringify(entity);
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.put(this._baseUrl + "/" + id, body, { headers: headers }).pipe(catchError((err) => this.handleError(err)), filter(this.filterError));
+    return this.processPipe(this.httpClient.put(this._baseUrl + "/" + id, body, { headers: headers }));
   }
   delete(id: string) {
-    return this.httpClient.delete(this._baseUrl + "/" + id).pipe(catchError((err) => this.handleError(err)), filter(this.filterError));
+    this.startLoad();
+    return this.processPipe(this.httpClient.delete(this._baseUrl + "/" + id));
   }
   protected handleError(error) {
-    console.info('与服务器交互失败！');
-
-    return throwError(error.message || '与服务器交互失败！');
+this.queryError();
+    return throwError( '与服务器交互失败！');
   }
   protected filterError(res) {
     if (res && (res.resultCode) && res.resultCode !== AlpsActionResultCode.Ok) {

@@ -11,7 +11,8 @@ export class AlpsInfoChipComponent implements OnInit {
   label;
   @Input("value")
   value;
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit() {
   }

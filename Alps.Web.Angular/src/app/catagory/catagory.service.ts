@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import {RepositoryService } from "../infrastructure/infrastructure.module";
-import { HttpClient } from "@angular/common/http";
 import { supportsPassiveEventListeners } from '@angular/cdk/platform'; 
 
 @Injectable({
@@ -8,8 +7,8 @@ import { supportsPassiveEventListeners } from '@angular/cdk/platform';
 })
 export class CatagoryService extends RepositoryService {
 
-  constructor( http: HttpClient) {
-    super(http);    
+  constructor( injector:Injector) {
+    super(injector);    
     this.setBaseUrl( "api/catagories");
   }
   getListByParentID(id: string) {

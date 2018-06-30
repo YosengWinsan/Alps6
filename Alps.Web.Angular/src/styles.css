@@ -2,3 +2,10 @@
 
 body { margin: 0;
 }
+
+
+.nobackground-dialog .mat-dialog-container{
+    background:rgba(255, 0, 0, 0);   
+    box-shadow: 0 0; 
+    }
+    

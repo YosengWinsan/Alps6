@@ -12,8 +12,9 @@ import { QueryService, } from '../../infrastructure/infrastructure.module';
 export class ProductEditComponent implements OnInit {
   catagoryOptions;
   productForm: FormGroup;
+  
   constructor(private productService: ProductService, private queryService: QueryService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,private router:Router) {
-    this.productForm = formBuilder.group({ id: [], name: [], fullName: [], catagoryID: [] });
+    this.productForm = formBuilder.group({ id: [], name: [], fullName: [], catagoryID: []});
   }
 
   ngOnInit() {
@@ -27,7 +28,6 @@ export class ProductEditComponent implements OnInit {
         this.queryService.getCatagoryOptions().subscribe(options => {
           this.catagoryOptions = options;
         });
-
       });
     });
 
@@ -39,7 +39,7 @@ export class ProductEditComponent implements OnInit {
     if(this.productForm.valid)
     this.productService.createAndUpdate(this.productForm.value).subscribe(
       (res) => {
-          this.router.navigate(["./"], { relativeTo: this.activatedRoute.parent});
+          this.router.navigate(["./productdetail"], { relativeTo: this.activatedRoute.parent,queryParams:{id:this.productForm.controls["id"].value}});
     });
   }
 

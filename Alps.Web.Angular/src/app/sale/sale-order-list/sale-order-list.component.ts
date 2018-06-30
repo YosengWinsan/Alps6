@@ -11,8 +11,8 @@ export class SaleOrderListComponent implements OnInit {
   constructor(private slaeService: SaleService) { }
   saleOrders;
   //displayedColumns=["orderTime","customer","totalQuantity","totalAuxiliaryQuantity","totalAmount","status","action"];
-  saleOrderColumns={customer:"客户",totalQuantity:"数量",totalAuxiliaryQuantity:"辅助数量",totalAmount:"金额",status:"状态"};
-  displayedColumns=(Object.keys(this.saleOrderColumns));
+  saleOrderColumns = { customer: "客户", totalQuantity: "数量", totalAuxiliaryQuantity: "辅助数量", totalAmount: "金额", status: "状态" };
+  displayedColumns = (Object.keys(this.saleOrderColumns));
   ngOnInit() {
     this.displayedColumns.unshift("orderTime");
     this.displayedColumns.push("action");

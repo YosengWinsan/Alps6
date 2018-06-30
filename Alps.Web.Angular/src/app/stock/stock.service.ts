@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { RepositoryService } from '../infrastructure/infrastructure.module';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StockService extends RepositoryService {
 
-  constructor(http: HttpClient) {
-    super(http);
+  constructor(injector: Injector) {
+    super(injector);
   }
   private setStockIn() { this.setBaseUrl("api/StockInVouchers"); }
   private setStockOut() { this.setBaseUrl("api/stockoutvouchers"); }

@@ -7,42 +7,54 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 })
 export class AlpsSelectorDialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) private options: AlpsSelectorOption[], private dialog: MatDialogRef<AlpsSelectorDialogComponent>) {
-    this.currentOptions = this.options;
+  constructor(@Inject(MAT_DIALOG_DATA) private optionsData:AlpsSelectorData, private dialog: MatDialogRef<AlpsSelectorDialogComponent>) {
+if(this.optionsData.selectedOption)
+this.selectedValue=this.optionsData.selectedOption.value;
+    this.optionsPath.push( ...this.optionsData.optionsPath);
+    this.setCurrentOptions();
   }
 
   ngOnInit() {
-
   }
-  selectedOptions: AlpsSelectorOption[] = [];
-  currentOptions;
+  selectedValue;
+  optionsPath: AlpsSelectorOption[] = [];
+  optionsList;
   select(option: AlpsSelectorOption) {
     if (option.children && option.children.length > 0) {
-      this.selectedOptions.push(option);
-      this.currentOptions = option.children;
+      this.optionsPath.push(option);
+      this.optionsList = option.children;
     }
     else {
       if (option.isOption)
+      {
+        this.optionsData.optionsPath.splice(0,this.optionsData.optionsPath.length,...this.optionsPath);
         this.dialog.close(option);
+      }
     }
 
   }
   selectPath(path: AlpsSelectorOption) {
-    var i = this.selectedOptions.indexOf(path);
-    this.selectedOptions.splice(i, this.selectedOptions.length - i);
-    if (i === 0)
-      this.currentOptions = this.options;
-    else
-      this.currentOptions = this.selectedOptions[i - 1].children;
+    var i = this.optionsPath.indexOf(path);
+    this.optionsPath.splice(i, this.optionsPath.length - i);
+    this.setCurrentOptions();
 
   }
+  private setCurrentOptions() {
+    if (this.optionsPath.length === 0)
+      this.optionsList = this.optionsData.options;
+    else
+      this.optionsList = this.optionsPath[this.optionsPath.length - 1].children;
+  }
 }
-
-
-interface AlpsSelectorOption {
+export class AlpsSelectorData
+{
+  options:AlpsSelectorOption[];
+  selectedOption:AlpsSelectorOption;  
+  optionsPath:AlpsSelectorOption[];
+}
+export interface AlpsSelectorOption {
   value: string;
   displayValue: string;
+  isOption:boolean;
   children: AlpsSelectorOption[];
-  isOption: boolean;
-
 }

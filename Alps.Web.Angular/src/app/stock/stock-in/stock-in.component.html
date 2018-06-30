@@ -44,15 +44,15 @@
   
     <ng-container matColumnDef="action">
       <mat-header-cell *matHeaderCellDef>
-        <a (click)="addItem()">
-        <mat-icon>add</mat-icon>
-      </a></mat-header-cell>
+        <button mat-icon-button (click)="addItem()">
+        <mat-icon  >add</mat-icon>
+      </button></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <a (click)="editItem(row)">
+        <button mat-icon-button (click)="editItem(row)">
           <mat-icon>edit</mat-icon>
-        </a>&nbsp;<a (click)="deleteItem(row)">
+        </button>&nbsp;<button mat-icon-button  (click)="deleteItem(row)">
             <mat-icon>delete</mat-icon>
-          </a>
+          </button>
       </mat-cell>
     </ng-container>
   

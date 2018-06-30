@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SaleService } from '../sale.service';
+import { AlpsLoadingBarService } from '../../infrastructure/service/alps-loading-bar.service';
 
 @Component({
   selector: 'app-commodity-list',
@@ -8,7 +9,7 @@ import { SaleService } from '../sale.service';
 })
 export class CommodityListComponent implements OnInit {
 
-  constructor(private saleService: SaleService) { }
+  constructor(private saleService: SaleService,private loadingBarService :AlpsLoadingBarService) { }
   commodities = [];
   displayedColumns=["name","description","quantity","auxiliaryQuantity","listPrice","action"];
   ngOnInit() {

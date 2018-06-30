@@ -1,0 +1,13 @@
+<alps-edit-toolbar title="产品SKU编辑" (save)="save()"></alps-edit-toolbar>
+<form [formGroup]="productSkuForm">
+<alps-info-chip label="产品名" value="{{product}}"></alps-info-chip>
+  <mat-form-field>
+  <input matInput placeholder="名称" formControlName="name">
+</mat-form-field>
+<mat-form-field>
+  <input matInput placeholder="辅助数量" formControlName="auxiliaryQuantity">
+</mat-form-field>
+<mat-form-field>
+  <input matInput placeholder="数量" formControlName="quantity">
+</mat-form-field>
+</form>

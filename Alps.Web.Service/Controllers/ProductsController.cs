@@ -1,5 +1,6 @@
 using Alps.Domain;
 using Alps.Domain.ProductMgr;
+using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace Alps.Web.Service.Controllers
 {
-  [Produces("application/json")]
+    [Produces("application/json")]
     [Route("api/Products")]
     public class ProductsController : Controller
     {
@@ -23,32 +24,34 @@ namespace Alps.Web.Service.Controllers
         [HttpGet]
         public IEnumerable<Model.ProductListDto> GetProduct()
         {
-            return _context.Products.Select(p=> new Model.ProductListDto {
-              Catagory=p.Catagory.Name,
-              Name=p.Name,
-              FullName=p.FullName,
-              FullDescription=p.FullDescription,
-              ShortDescription=p.ShortDescription,
-              EnableAuxiliaryQuantity=p.EnableAuxiliaryUnit,
-              Deprecated=p.Deleted
-        
-            } );
+            return _context.Products.Select(p => new Model.ProductListDto
+            {
+                Catagory = p.Catagory.Name,
+                Name = p.Name,
+                FullName = p.FullName,
+                FullDescription = p.FullDescription,
+                ShortDescription = p.ShortDescription,
+                EnableAuxiliaryQuantity = p.EnableAuxiliaryUnit,
+                Deprecated = p.Deleted
+
+            });
         }
         [Route("getProductByCatagoryID/{id}")]
         [HttpGet]
         public IEnumerable<Model.ProductListDto> GetProductByCatagoryID(Guid id)
         {
-            return _context.Products.Where(f=>f.CatagoryID==id).Select(p=> new Model.ProductListDto {
-              Catagory=p.Catagory.Name,
-              Name=p.Name,
-              FullName=p.FullName,
-              FullDescription=p.FullDescription,
-              ShortDescription=p.ShortDescription,
-              EnableAuxiliaryQuantity=p.EnableAuxiliaryUnit,
-              Deprecated=p.Deleted,
-              ID=p.ID
-        
-            } );
+            return _context.Products.Where(f => f.CatagoryID == id).Select(p => new Model.ProductListDto
+            {
+                Catagory = p.Catagory.Name,
+                Name = p.Name,
+                FullName = p.FullName,
+                FullDescription = p.FullDescription,
+                ShortDescription = p.ShortDescription,
+                EnableAuxiliaryQuantity = p.EnableAuxiliaryUnit,
+                Deprecated = p.Deleted,
+                ID = p.ID
+
+            });
         }
         // GET: api/Products/5
         [HttpGet("{id}")]
@@ -65,20 +68,51 @@ namespace Alps.Web.Service.Controllers
             {
                 return NotFound();
             }
-      var result = new Model.ProductEditDto()
-      {
-        ID = product.ID,
-        Name = product.Name,
-        FullName = product.FullName,
-        ShortDescription = product.ShortDescription      ,
-        FullDescription = product.FullDescription,
-        Deprecated = product.Deleted,
-        EnableAuxiliaryQuantity=product.EnableAuxiliaryUnit,
-        CatagoryID=product.CatagoryID
-      };
+            var result = new Model.ProductEditDto()
+            {
+                ID = product.ID,
+                Name = product.Name,
+                FullName = product.FullName,
+                ShortDescription = product.ShortDescription,
+                FullDescription = product.FullDescription,
+                Deprecated = product.Deleted,
+                EnableAuxiliaryQuantity = product.EnableAuxiliaryUnit,
+                CatagoryID = product.CatagoryID
+            };
             return Ok(result);
         }
+        [HttpGet("detail/{id}")]
+        public async Task<IActionResult> Detail([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            // var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+
+            // if (product == null)
+            // {
+            //     return NotFound();
+            // }
+            var result = await _context.Products.Select(product => new ProductDetailDto()
+            {
+                ID = product.ID,
+                Name = product.Name,
+                FullName = product.FullName,
+                ShortDescription = product.ShortDescription,
+                FullDescription = product.FullDescription,
+                Deprecated = product.Deleted,
+                Catagory = product.Catagory.Name,
+                ProductSkuList = _context.ProductSkus.Where(p => p.ProductID == id).Select(sku => new ProductskuListDto
+            {
+                ID = sku.ID,
+                Name = sku.Name,
+                Description = sku.Description
+            })
+            }).FirstOrDefaultAsync(p => p.ID == id);
+            return this.AlpsActionOk(result);
+        }
         // PUT: api/Products/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct([FromRoute] Guid id, [FromBody] Product product)

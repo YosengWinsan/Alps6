@@ -59,6 +59,7 @@ namespace Alps.Web.Service.Model
     public Guid? ID { get; set; }
     public string Name { get; set; }
     public Guid ProductID { get; set; }
+    public string Product{get;set;}
 
     public string Description { get; set; }
 
@@ -66,5 +67,16 @@ namespace Alps.Web.Service.Model
     public decimal Quantity { get; set; }
 
     public decimal Price { get; set; }
+  }
+  public class ProductDetailDto
+  {
+    public Guid ID{get;set;}
+    public string Name{get;set;}
+    public string FullName{get;set;}
+    public string ShortDescription{get;set;}
+    public string FullDescription{get;set;}
+    public string Catagory{get;set;}
+    public bool Deprecated{get;set;}
+    public IEnumerable<ProductskuListDto> ProductSkuList{get;set;}
   }
 }

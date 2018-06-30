@@ -1,7 +1,7 @@
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Component, Input, OnInit, forwardRef } from '@angular/core';
 import { MatDialog } from "@angular/material";
-import { AlpsSelectorDialogComponent } from './alps-selector-dialog/alps-selector-dialog.component';
+import { AlpsSelectorDialogComponent, AlpsSelectorOption, AlpsSelectorData } from './alps-selector-dialog/alps-selector-dialog.component';
 
 export const COMPONENT_NAME_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -9,11 +9,7 @@ export const COMPONENT_NAME_VALUE_ACCESSOR: any = {
   multi: true
 };
 
-interface AlpsSelectorNode {
-  id: string;
-  name: string;
-  children: AlpsSelectorNode[];
-}
+
 
 @Component({
   selector: 'alps-selector',
@@ -23,11 +19,13 @@ interface AlpsSelectorNode {
 })
 export class AlpsSelectorComponent implements OnInit, ControlValueAccessor {
 
-  private _selectedNode: AlpsSelectorNode;
+  private _selectedNode: AlpsSelectorOption;
   private _value: any = "";
   _displayValue: string = "请选择";
   private _options: any[] = [];
   _placeholder: string = "";
+  _optionsPath = [];
+_selectedOption;
   @Input()
   set options(newOptions) {
     if (newOptions)
@@ -48,16 +46,21 @@ export class AlpsSelectorComponent implements OnInit, ControlValueAccessor {
   }
 
   open() {
-    this.matDialog.open(AlpsSelectorDialogComponent, { data: this._options, minWidth: "90vw" }).afterClosed().subscribe(
+    var data=new AlpsSelectorData();
+    data.options=this._options;
+    data.optionsPath=this._optionsPath;
+    data.selectedOption=this._selectedOption;
+    this.matDialog.open(AlpsSelectorDialogComponent, { data:data, minWidth: "90vw" }).afterClosed().subscribe(
       (result) => {
         if (result) {
+          this._selectedOption=result;
           this.value = result.value;
-          this._displayValue = result.displayValue;
+          this._displayValue = result.displayValue;          
         }
       }
     );
   }
-  getDisplayValue(){
+  getDisplayValue() {
     return this._displayValue;
   }
   initDisplayValue() {
@@ -65,7 +68,7 @@ export class AlpsSelectorComponent implements OnInit, ControlValueAccessor {
 
       if (this._options && this._options.length > 0) {
         var displayValue = this.searchOption(this._options, this._value);
-        this._displayValue = displayValue === "" ? this._value : displayValue;
+        this._displayValue = displayValue === "" ? this._value : displayValue; 
       }
       // else
       // this._displayValue=this._value;
@@ -73,13 +76,16 @@ export class AlpsSelectorComponent implements OnInit, ControlValueAccessor {
 
   }
   searchOption(options: any[], value: string) {
-    var result="";
+    var result = "";
     for (let option of options) {
-      if(option && option.children && option.children.length>0)
-      result = this.searchOption(option.children, value);
-      if (result !== "")
+      if (option && option.children && option.children.length > 0)
+        result = this.searchOption(option.children, value);
+      if (result !== "") {
+        this._optionsPath.unshift(option);
         return result;
+      }
       if (option.isOption && option.value == value) {
+        this._selectedOption=option;
         return option.displayValue;
       }
     }

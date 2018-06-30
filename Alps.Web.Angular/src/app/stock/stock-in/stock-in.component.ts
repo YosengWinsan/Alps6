@@ -44,7 +44,6 @@ export class StockInComponent implements OnInit {
     });
   }
   save() {
-
     this.stockService.updateStockIn(this.stockInForm.value).subscribe((res) => {
         this.router.navigate(["./stockinlist"], { relativeTo: this.activatedRoute.parent });
     });
@@ -53,8 +52,7 @@ export class StockInComponent implements OnInit {
     this.matDialog.open(StockInItemEditComponent, { data: row, minWidth: "90vw" }).afterClosed().subscribe(res => {
       if (res && res.result) {
         this.combinItem(row, res);
-      }
-    });
+      }    });
   }
   addItem() {
     this.matDialog.open(StockInItemEditComponent, { data: { id: AlpsConst.GUID_EMPTY }, minWidth: "90vw" }).afterClosed().subscribe(res => {

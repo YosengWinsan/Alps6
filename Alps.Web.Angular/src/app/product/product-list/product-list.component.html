@@ -21,8 +21,8 @@
   <ng-container matColumnDef="action">
     <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <a routerLink="../productedit" [queryParams]="{id:row.id}" >
-        <mat-icon>edit</mat-icon>
+      <a routerLink="../productdetail" [queryParams]="{id:row.id}" >
+        <mat-icon>list</mat-icon>
       </a>
     </mat-cell>
   </ng-container>

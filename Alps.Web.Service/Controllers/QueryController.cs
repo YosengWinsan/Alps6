@@ -38,6 +38,11 @@ namespace Alps.Web.Service.Controllers
     {
       return Ok(_context.Products.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
     }
+    [HttpGet("ProductOption/{id}")]
+    public IActionResult ProductOption(Guid id)
+    {
+      return Ok(_context.Products.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }).FirstOrDefault(p=>p.Value==id));
+    }
     [HttpGet("ProductSkuOptions")]
     public IActionResult ProductSkuOptions()
     {
@@ -57,6 +62,13 @@ namespace Alps.Web.Service.Controllers
       
       //var query=
       return Ok(catagories);
+    }
+    [HttpGet("CatagoryOption/{id}")]
+    public IActionResult CatagoryOption(Guid id)
+    {
+      var unionQuery =_context.Catagories.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }).FirstOrDefault(p=>p.Value==id);
+      //var query=
+      return Ok(unionQuery);
     }
     [HttpGet("CommodityOptions")]
     public IActionResult CommodityOptions()

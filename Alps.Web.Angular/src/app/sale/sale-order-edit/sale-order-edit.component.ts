@@ -33,7 +33,6 @@ export class SaleOrderEditComponent implements OnInit {
       var id = param["id"] ? param["id"] : "";
       if (id != "") {
         this.saleService.getSaleOrder(id).subscribe(data => { this.saleOrderForm.patchValue(data);
-        console.info(this.saleOrderForm.value);
         });
       }
     });
