@@ -4,8 +4,8 @@
     <!-- <mat-form-field >
       <input matInput placeholder="名称"  formControlName="name">
     </mat-form-field> -->
-       <alps-selector placeholder='来源' formControlName="sourceID" [options]="supplierOptions"></alps-selector>
-       <alps-selector placeholder='采购部门' formControlName="departmentID" [options]="supplierOptions"></alps-selector>
+       <alps-selector placeholder='来源' formControlName="supplierID" [options]="supplierOptions"></alps-selector>
+       <alps-selector placeholder='采购部门' formControlName="departmentID" [options]="departmentOptions"></alps-selector>
 
 <!-- <input type="hidden" formControlName="items"> -->
       
@@ -48,11 +48,11 @@
         <mat-icon  >add</mat-icon>
       </button></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-icon-button (click)="editItem(row)">
+        <a  (click)="editItem(row)">
           <mat-icon>edit</mat-icon>
-        </button>&nbsp;<button mat-icon-button  (click)="deleteItem(row)">
+        </a>&nbsp;<a  (click)="deleteItem(row)">
             <mat-icon>delete</mat-icon>
-          </button>
+        </a>
       </mat-cell>
     </ng-container>
   

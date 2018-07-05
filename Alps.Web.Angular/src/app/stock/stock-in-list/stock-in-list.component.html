@@ -10,9 +10,9 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header>时间</mat-header-cell>
     <mat-cell *matCellDef="let row">{{row.createTime|date:"yy-MM-dd"}}</mat-cell>
   </ng-container>
-  <ng-container matColumnDef="source">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>来源</mat-header-cell>
-    <mat-cell *matCellDef="let row">{{row.source}}</mat-cell>
+  <ng-container matColumnDef="supplier">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>供应商</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.supplier}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="department">
     <mat-header-cell *matHeaderCellDef mat-sort-header>部门</mat-header-cell>

@@ -1,5 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { RepositoryService } from '../repository/repository.service';
+import { tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,29 +15,44 @@ export class QueryService extends RepositoryService {
   initDatabase() {
     return this.query("InitDatabase");
   }
-  getCatagoryOptions()
-  {
-    return this.query("CatagoryOptions");
+  queryAndCache(url) {
+    const cache =JSON.parse( sessionStorage.getItem(url));
+    return cache ? of(cache) : this.query(url).pipe(tap((res) => {
+      sessionStorage.setItem(url,JSON.stringify( res));
+    }));
   }
-  getTradeAccountOptions(){
-    return this.query("TradeAccountOptions");
+  clearCache(){
+    sessionStorage.clear();
   }
-  getProductSkuOptions(){
-    return this.query("ProductSkuOptions");
+  getCatagoryOptions() {
+    return this.queryAndCache("CatagoryOptions");
   }
-  getPositionOptions(){
-    return this.query("PositionOptions")
+  getTradeAccountOptions() {
+    return this.queryAndCache("TradeAccountOptions");
   }
-  getCommodityOptions(){
-    return this.query("CommodityOptions");
+  getDepartmentOptions() {
+    return this.queryAndCache("DepartmentOptions");
   }
-  getCatagoryOption(id)
-  {
-return this.query("CatagoryOption/"+id);
+  getCustomerOptions() {
+    return this.queryAndCache("CustomerOptions");
   }
-  getProductOption(id)
-  {
-return this.query("ProductOption/"+id);
+  getSupplierOptions() {
+    return this.queryAndCache("SupplierOptions");
+  }
+  getProductSkuOptions() {
+    return this.queryAndCache("ProductSkuOptions");
+  }
+  getPositionOptions() {
+    return this.queryAndCache("PositionOptions")
+  }
+  getCommodityOptions() {
+    return this.queryAndCache("CommodityOptions");
+  }
+  getCatagoryOption(id) {
+    return this.query("CatagoryOption/" + id);
+  }
+  getProductOption(id) {
+    return this.query("ProductOption/" + id);
   }
 }
 

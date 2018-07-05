@@ -14,7 +14,7 @@ export class ProductSkuEditComponent implements OnInit {
   product: string;
   productID: string;
   constructor(private productService: ProductService, private queryService: QueryService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) {
-    this.productSkuForm = formBuilder.group({ id: [], name: [], productID: [], auxiliaryQuantity: [], quantity: [] });
+    this.productSkuForm = formBuilder.group({ id: [], name: [], productID: [],description: [] ,code:[]});
   }
 
   ngOnInit() {

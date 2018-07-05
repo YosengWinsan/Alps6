@@ -15,7 +15,8 @@ import { AlpsConst } from '../../infrastructure/alps-const';
 export class SaleOrderEditComponent implements OnInit {
   saleOrderForm: FormGroup;
   customerOptions;
-  saleOrderItemColumns = { commodity: "品名", quantity: "数量", auxiliaryQuantity: "辅助数量", price: "金额" };
+  saleOrderItemColumns = { commodity: "品名", auxiliaryQuantity: "辅助数量"
+  , quantity: "数量", price: "金额" };
   displayedColumns;
   @ViewChild("itemTable") itemTable;
   constructor(private saleService: SaleService, private activatedRoute: ActivatedRoute, private router: Router, private formBuilder: FormBuilder
@@ -26,7 +27,7 @@ export class SaleOrderEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.queryService.getTradeAccountOptions().subscribe(data => {
+    this.queryService.getCustomerOptions().subscribe(data => {
       this.customerOptions = data;
     });
     this.activatedRoute.queryParams.subscribe(param => {

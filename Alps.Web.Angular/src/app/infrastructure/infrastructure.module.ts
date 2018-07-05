@@ -7,13 +7,16 @@ import { AlpsEditToolbarComponent } from './alps-edit-toolbar/alps-edit-toolbar.
 import { AlpsInfoChipComponent } from './alps-info-chip/alps-info-chip.component';
 import { NgForObjPipe } from './pipe/ng-for-obj.pipe';
 import { AlpsLoadingBarComponent } from './service/alps-loading-bar/alps-loading-bar.component';
+import { EnterToTabDirective } from './directive/enter-to-tab.directive';
 
 @NgModule({
   imports: [
     CommonModule,MatDialogModule,MatButtonModule ,MatIconModule,MatProgressSpinnerModule
   ],
-  exports:[AlpsSelectorComponent,AlpsEditToolbarComponent,AlpsInfoChipComponent,NgForObjPipe],
-  declarations: [AlpsSelectorComponent,AlpsSelectorDialogComponent, AlpsEditToolbarComponent, AlpsInfoChipComponent, NgForObjPipe,AlpsLoadingBarComponent],
+  exports:[AlpsSelectorComponent,AlpsEditToolbarComponent,AlpsInfoChipComponent,NgForObjPipe,EnterToTabDirective],
+  declarations: [AlpsSelectorComponent,AlpsSelectorDialogComponent, AlpsEditToolbarComponent, AlpsInfoChipComponent, NgForObjPipe,AlpsLoadingBarComponent
+,EnterToTabDirective
+  ],
   entryComponents:[AlpsSelectorDialogComponent,AlpsLoadingBarComponent]
 })
 export class InfrastructureModule { }

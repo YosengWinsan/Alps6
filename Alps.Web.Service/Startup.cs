@@ -29,7 +29,7 @@ namespace Alps.Web.Service
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<AlpsContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("AlpsContext"));
+                options.UseSqlServer(Configuration.GetConnectionString("AlpsContext"),b=>b.MigrationsAssembly("Alps.Web.Service"));
             });
             services.AddScoped<Alps.Domain.Service.StockService>();
             services.AddSpaStaticFiles(

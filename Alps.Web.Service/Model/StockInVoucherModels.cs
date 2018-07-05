@@ -10,7 +10,7 @@ namespace Alps.Web.Service.Model
         public Guid ID { get; set; }
         public DateTimeOffset CreateTime { get; set; }
         public DateTimeOffset ConfirmTime { get; set; }
-        public string Source { get; set; }
+        public string Supplier { get; set; }
         public string Department { get; set; }
         public decimal TotalAuxiliaryQuantity { get; set; }
         public decimal TotalQuantity { get; set; }
@@ -34,14 +34,14 @@ namespace Alps.Web.Service.Model
     public class StockInVoucherEditDto
     {
         public Guid ID { get; set; }
-        public Guid SourceID { get; set; }
+        public Guid SupplierID { get; set; }
         public Guid DepartmentID { get; set; }
         public int Status { get; set; }
         public IEnumerable<StockInVoucherItemDto> Items { get; set; }
     }
     public class StockInVoucherDetailDto{
         public Guid ID{get;set;}
-        public string Source{get;set;}
+        public string Supplier{get;set;}
         public string Department{get;set;}
         public int StatusValue{get;set;}
         public string Status{get;set;}

@@ -13,7 +13,7 @@ export class StockInListComponent implements OnInit {
 
   @ViewChild(MatSort) matSort: MatSort;
   stockInList: MatTableDataSource<StockInVoucherListDto>;
-  displayedColumns = ['createTime', 'source', 'department', 'totalQuantity', 'totalAmount', 'status', 'action'];
+  displayedColumns = ['createTime', 'supplier', 'department', 'totalQuantity', 'totalAmount', 'status', 'action'];
   ngOnInit() {
     this.loadData();
   }

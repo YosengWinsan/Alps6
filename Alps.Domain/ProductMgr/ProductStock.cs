@@ -1,5 +1,6 @@
 ﻿using System;
 using Alps.Domain.AccountingMgr;
+using Alps.Domain.Common;
 
 namespace Alps.Domain.ProductMgr
 {
@@ -16,7 +17,7 @@ namespace Alps.Domain.ProductMgr
         public Guid OwnerID { get; set; }
         public string SerialNumber { get; set; }
 
-        public TradeAccount Owner { get; set; }
+        public Department Owner { get; set; }
         public Position Position { get; set; }
         public ProductSku ProductSku { get; set; }
         //public virtual Department Department { get; set; }

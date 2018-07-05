@@ -31,6 +31,10 @@ namespace Alps.Domain
         public DbSet<Department> Departments { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Province> Provinces { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<County> Counties { get; set; }
         #endregion
 
         #region ProductMgr
@@ -132,7 +136,7 @@ namespace Alps.Domain
             modelBuilder.Entity<MaterialRequisition>().HasOne(p => p.RequisitionDepartment).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<MaterialRequisitionItem>().HasKey(p => new { p.ID, p.MaterialRequisitionID });
 
-            modelBuilder.Entity<StockInVoucher>().HasOne(p => p.Source).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<StockInVoucher>().HasOne(p => p.Supplier).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<StockInVoucher>().HasOne(p => p.Department).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<StockInVoucherItem>().HasKey(p => new { p.ID, p.StockInVoucherID });
 
@@ -149,8 +153,11 @@ namespace Alps.Domain
 
             modelBuilder.Entity<ProductStock>().HasKey(p => new { p.OwnerID, p.PositionID, p.ProductSkuID, p.SerialNumber });
 
-            modelBuilder.Entity<StockOutVoucher>().HasOne(p => p.Destination).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<StockOutVoucher>().HasOne(p => p.Customer).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<StockOutVoucher>().HasOne(p => p.Department).WithMany().OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Customer>().OwnsOne(p => p.Address);
+            modelBuilder.Entity<Supplier>().OwnsOne(p => p.Address);
             //modelBuilder.Entity<PurchaseOrderItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
             //modelBuilder.Entity<WarehouseVoucherItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
 
@@ -213,10 +220,35 @@ namespace Alps.Domain
             }
             void CommonMgrSeed(AlpsContext context)
             {
+                #region 初始化地址
+
+                context.Countries.Add(Country.Create("菲律宾"));
+                Country country = Country.Create("中国");
+                context.Countries.Add(country);
+                context.Provinces.Add(Province.Create("浙江省", country.ID));
+                context.Provinces.Add(Province.Create("广东省", country.ID));
+                context.Provinces.Add(Province.Create("江西省", country.ID));
+                context.Provinces.Add(Province.Create("湖南省", country.ID));
+                Province province = Province.Create("福建省", country.ID);
+                context.Provinces.Add(province);
+                context.Cities.Add(City.Create("泉州市", province.ID));
+                context.Cities.Add(City.Create("莆田市", province.ID));
+                context.Cities.Add(City.Create("宁德市", province.ID));
+                City city = City.Create("福州市", province.ID);
+                context.Cities.Add(city);
+                context.Counties.Add(County.Create("福清市", city.ID));
+                context.Counties.Add(County.Create("闽候县", city.ID));
+                context.Counties.Add(County.Create("鼓楼区", city.ID));
+                County county = County.Create("长乐区", city.ID);
+                context.Counties.Add(county);
+                context.SaveChanges();
+
+                #endregion
+
                 #region 初始化部门
                 Department d = Department.Create("供销科");
                 context.Departments.Add(d);
-                d = Department.Create("大槽车间");
+                d = Department.Create("轧钢车间");
                 productDepartmentID = d.ID;
                 context.Departments.Add(d);
                 d = Department.Create("焊管车间");
@@ -228,22 +260,29 @@ namespace Alps.Domain
                 #endregion
 
                 #region 初始化客户
-                Customer c = Customer.Create("江水金");
+                Address address = Address.Create(county, "青口钢材市场");
+                Customer c = Customer.Create("江水金", address);
                 context.Customers.Add(c);
-                c = Customer.Create("陈依寿");
+                address = Address.Create(county, "青口钢材市场");
+                c = Customer.Create("陈依寿", address);
                 context.Customers.Add(c);
-                c = Customer.Create("林光江");
+                address = Address.Create(county, "青口钢材市场");
+                c = Customer.Create("林光江", address);
                 context.Customers.Add(c);
                 context.SaveChanges();
                 customerID = c.ID;
                 #endregion
 
                 #region 初始化供应商
-                Supplier s = Supplier.Create("宏建");
+
+                address = Address.Create(county, "漳州");
+                Supplier s = Supplier.Create("三宝", address);
                 context.Suppliers.Add(s);
-                s = Supplier.Create("恒辉");
+                address = Address.Create(county, "罗源");
+                s = Supplier.Create("亿鑫", address);
                 context.Suppliers.Add(s);
-                s = Supplier.Create("富鑫");
+                address = Address.Create(county, "松下镇");
+                s = Supplier.Create("大东海", address);
                 context.Suppliers.Add(s);
                 context.SaveChanges();
                 supplierID = s.ID;
@@ -394,27 +433,27 @@ namespace Alps.Domain
                 ProductSku sku = null;
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "5#"))
                 {
-                    sku = ProductSku.Create(p.ID, "6米*144条","系统初始化", p.Name + "6米*144条");
+                    sku = ProductSku.Create(p, "6米*144条", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
                 gcSkuID = sku.ID;
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "6.3#"))
                 {
-                    sku = ProductSku.Create(p.ID, "6米*96条","系统初始化", p.Name + "6米*96条");
+                    sku = ProductSku.Create(p, "6米*96条", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "8#"))
                 {
-                    sku = ProductSku.Create(p.ID, "6米*84条","系统初始化", p.Name + "6米*84条");
+                    sku = ProductSku.Create(p, "6米*84条", "系统初始化");
                     context.ProductSkus.Add(sku);
-                    sku = ProductSku.Create(p.ID,  "*9米*64条","系统初始化", p.Name + "9米*64条");
+                    sku = ProductSku.Create(p, "9米*64条", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "连铸坯"))
                 {
-                    sku = ProductSku.Create(p.ID, p.Name + "*6米","系统初始化", p.Name + "*6米" );
+                    sku = ProductSku.Create(p,  "6米", "系统初始化");
                     context.ProductSkus.Add(sku);
-                    sku = ProductSku.Create(p.ID, p.Name + "*12米","系统初始化", p.Name + "*6米");
+                    sku = ProductSku.Create(p,"12米", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
                 gpSkuID = sku.ID;
@@ -549,7 +588,7 @@ namespace Alps.Domain
                 //context.SaveChanges();
                 //#endregion
 
-                var ysjsID = context.TradeAccounts.FirstOrDefault(p => p.Name == "永盛金属").ID;
+                var ysjsID = context.Departments.FirstOrDefault(p => p.Name == "轧钢车间").ID;
                 var cgID = context.ProductSkus.FirstOrDefault().ID;
                 #region 初始化库存
                 context.ProductStocks.Add(ProductStock.Create(ysjsID, positionID, cgID, "900001", 2.5m, 1));
@@ -559,8 +598,8 @@ namespace Alps.Domain
 
                 #region 初始化入库单--StockInVoucher
                 var skuID = context.ProductSkus.Find(gcSkuID).ID;
-                var sID = context.TradeAccounts.FirstOrDefault().ID;
-                var dID = context.TradeAccounts.LastOrDefault().ID;
+                var sID = context.Suppliers.FirstOrDefault().ID;
+                var dID = context.Departments.LastOrDefault().ID;
                 StockInVoucher voucher = StockInVoucher.Create(sID, dID, "系统初始化");
                 voucher.AddItem(positionID, skuID, "12345", 2.3m, 1, 2100);
                 voucher.AddItem(positionID, skuID, "151515", 2.5m, 1, 2100);
@@ -582,12 +621,13 @@ namespace Alps.Domain
                 #endregion
 
                 #region 初始化出库单--StockOutVoucher
-                StockOutVoucher dv = StockOutVoucher.Create(dID, sID, "系统初始化");
+                var cID = context.Customers.FirstOrDefault().ID;
+                StockOutVoucher dv = StockOutVoucher.Create(dID, cID, "系统初始化");
                 skuID = context.ProductSkus.Find(gcSkuID).ID;
                 dv.AddItem(positionID, skuID, "900001", 2.5m, 1, 2000);
                 context.StockOutVouchers.Add(dv);
                 skuID = context.ProductSkus.Find(gpSkuID).ID;
-                dv = StockOutVoucher.Create(dID, sID, "系统初始化");
+                dv = StockOutVoucher.Create(dID, cID, "系统初始化");
                 dv.AddItem(positionID, skuID, "900003", 2.5m, 2, 2000);
                 context.StockOutVouchers.Add(dv);
                 context.SaveChanges();
@@ -598,7 +638,7 @@ namespace Alps.Domain
                 var quantity = 100;
                 foreach (var sku in context.ProductSkus)
                 {
-                    context.Commodities.Add(Commodity.Create(sku.ID, sku.Name, sku.Description, 3800, quantity * 3, quantity++));
+                    context.Commodities.Add(Commodity.Create(sku.ID, sku.FullName, sku.Description, 3800, quantity * 3, quantity++));
 
                 }
                 context.SaveChanges();

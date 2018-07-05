@@ -48,4 +48,29 @@ export class StockService extends RepositoryService {
     this.setStockIn();
     return this.action("Submit/"+id);
   }
+  getStockOutDetail(id:string)
+  {
+    this.setStockOut();
+    return this.query("detail/"+id);
+  }
+  
+  getStockOut(id: string) {
+    this.setStockOut();
+    return this.get(id);
+  }
+  updateStockOut(entity)
+  {
+    this.setStockOut();
+    return this.createAndUpdate(entity);
+  }
+  deleteStockOut(id:string)
+  {
+    this.setStockOut();
+    return this.delete(id);
+  }
+  submitStockOut(id:string)
+  {
+    this.setStockOut();
+    return this.action("Submit/"+id);
+  }
 }

@@ -22,7 +22,7 @@ export class StockInComponent implements OnInit {
 
   constructor(private stockService: StockService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private queryService: QueryService
     , private matDialog: MatDialog, private router: Router) {
-    this.stockInForm = formBuilder.group({ id: [], sourceID: [], departmentID: [], items: [] })
+    this.stockInForm = formBuilder.group({ id: [], supplierID: [], departmentID: [], items: [] })
   }
 
   ngOnInit() {
@@ -31,8 +31,11 @@ export class StockInComponent implements OnInit {
       if (!id) {
         id = "";
       }
-      this.queryService.getTradeAccountOptions().subscribe((res) => {
+      this.queryService.getSupplierOptions().subscribe((res) => {
+        
         this.supplierOptions = res;
+      });
+      this.queryService.getDepartmentOptions().subscribe((res) => {        
         this.departmentOptions = res;
       });
       if (id != "")

@@ -18,18 +18,34 @@ namespace Alps.Domain.ProductMgr
         public DateTime CreatedTime { get; set; }
         [Display(Name = "修改时间")]
         public DateTime ModifiedTime { get; set; }
+        public Boolean Deleted { get; set; }
+        public string Code { get; set; }
         public virtual Product Product { get; set; }
-
-        public static ProductSku Create(Guid productID, string name, string description, string fullName)
+        public static ProductSku Create(Product product, string name, string description)
+        {
+            return ProductSku.Create(product, name, description, "");
+        }
+        public static ProductSku Create(Product product, string name, string description, string code)
         {
             ProductSku sku = new ProductSku();
-            sku.ProductID = productID;
             sku.Name = name;
             sku.Description = description;
-            sku.FullName = fullName;
-            sku.CreatedTime=DateTime.Now;
+            sku.CreatedTime = DateTime.Now;
+            sku.Deleted = false;
+            sku.Code = code;
+            sku.UpdateProduct(product);
             return sku;
         }
+        public void UpdateProduct(Product p)
+        {
+            this.ProductID = p.ID;
+            this.FullName = p.Name + " " + this.Name;
+        }
+        public void MarkAsDeleted()
+        {
+            this.Deleted = true;
+        }
+
         // public static ProductSku Create(Guid productID, string attributes, int stockQuantity, PricingMethod pricingMethod, decimal price)
         // {
         //     ProductSku sku = new ProductSku();

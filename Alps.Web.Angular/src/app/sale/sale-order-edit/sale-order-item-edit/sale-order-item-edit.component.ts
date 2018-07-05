@@ -18,6 +18,7 @@ export class SaleOrderItemEditComponent implements OnInit {
     this.itemForm = formBuilder.group({
       id: [], commodityID: [, [Validators.required]], commodity: [], quantity: [0, [Validators.required, Validators.pattern(AlpsConst.NON_ZERO_NUMBER_PATTERN)]],
       auxiliaryQuantity: [0, [Validators.pattern(AlpsConst.NUMBER_PATTERN)]],  price: [0, [Validators.required, Validators.pattern(AlpsConst.NON_ZERO_NUMBER_PATTERN)]]
+      ,serialNumber:[]
     });
 
 

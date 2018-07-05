@@ -67,8 +67,8 @@ namespace Alps.Domain.Service
                 }
                 else
                 {
-                    productStock.AuxiliaryQuantity += quantity;
-                    productStock.Quantity += auxiliaryQuantity;
+                    productStock.AuxiliaryQuantity += auxiliaryQuantity;
+                    productStock.Quantity +=quantity ;
                 }
             }
         }
@@ -94,22 +94,22 @@ namespace Alps.Domain.Service
             {
                 if (serialNumber != string.Empty)
                 {
-                    if (productStock.AuxiliaryQuantity == quantity && productStock.Quantity == auxiliaryQuantity)
+                    if (productStock.AuxiliaryQuantity == auxiliaryQuantity && productStock.Quantity ==quantity )
                         _context.ProductStocks.Remove(productStock);
                     else
                         throw new DomainException("库存数量已变化");
                 }
                 else
                 {
-                    if (productStock.AuxiliaryQuantity >= quantity && productStock.Quantity >= auxiliaryQuantity)
+                    if (productStock.AuxiliaryQuantity >=auxiliaryQuantity  && productStock.Quantity >= quantity)
                     {
-                        productStock.Quantity -= auxiliaryQuantity;
-                        productStock.AuxiliaryQuantity -= quantity;
+                        productStock.Quantity -= quantity;
+                        productStock.AuxiliaryQuantity -= auxiliaryQuantity;
                     }
                     else
                         throw new DomainException("库存量不足");
-                    productStock.AuxiliaryQuantity -= quantity;
-                    productStock.Quantity -= auxiliaryQuantity;
+                    // productStock.AuxiliaryQuantity -=auxiliaryQuantity ;
+                    // productStock.Quantity -= quantity;
                     if (productStock.AuxiliaryQuantity == 0 && productStock.Quantity == 0)
                         _context.ProductStocks.Remove(productStock);
                 }

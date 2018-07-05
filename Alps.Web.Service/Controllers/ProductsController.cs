@@ -108,7 +108,12 @@ namespace Alps.Web.Service.Controllers
             {
                 ID = sku.ID,
                 Name = sku.Name,
-                Description = sku.Description
+                Description = sku.Description,
+                FullName=sku.FullName,
+                Deleted=sku.Deleted,
+                CreatedTime=sku.CreatedTime,
+                ModifiedTime=sku.ModifiedTime,
+                Code=sku.Code
             })
             }).FirstOrDefaultAsync(p => p.ID == id);
             return this.AlpsActionOk(result);

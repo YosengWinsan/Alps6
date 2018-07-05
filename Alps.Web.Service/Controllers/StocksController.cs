@@ -31,7 +31,7 @@ namespace Alps.Web.Service.Controllers
                   where stock.ProductSkuID == sku.ID && p.ID == stock.PositionID
                   select new StockListDto
                   {
-                    Name = sku.Name,
+                    Name = sku.FullName,
                     AuxiliaryQuantity = stock.AuxiliaryQuantity,
                     Quantity = stock.Quantity,
                     Warehouse = p.Name,

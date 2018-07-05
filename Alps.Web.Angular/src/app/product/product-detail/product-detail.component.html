@@ -16,13 +16,21 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header>描述</mat-header-cell>
     <mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
   </ng-container>
-  <ng-container matColumnDef="auxiliaryQuantity">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>辅助数量</mat-header-cell>
-    <mat-cell *matCellDef="let row">{{row.auxiliaryQuantity}}</mat-cell>
+  <ng-container matColumnDef="fullName">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Sku全名</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.fullName}}</mat-cell>
   </ng-container>
-  <ng-container matColumnDef="quantity">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>数量</mat-header-cell>
-    <mat-cell *matCellDef="let row">{{row.quantity}}</mat-cell>
+  <ng-container matColumnDef="createdTime">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>创建时间</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.createdTime}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="deleted">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>已禁用</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.deleted}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="code">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>助记码</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.code}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="action">
     <mat-header-cell *matHeaderCellDef >

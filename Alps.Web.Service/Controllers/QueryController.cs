@@ -7,119 +7,125 @@ using System.Linq;
 
 namespace Alps.Web.Service.Controllers
 {
-  [Produces("application/json")]
-  [Route("api/Query")]
-  public class QueryController : Controller
-  {
-    private readonly AlpsContext _context;
-    public QueryController(AlpsContext context)
+    [Produces("application/json")]
+    [Route("api/Query")]
+    public class QueryController : Controller
     {
-      _context = context;
-    }
-    [HttpGet("InitDatabase")]
-    public IActionResult InitDatabase()
-    {
-      Alps.Domain.AlpsContext.Initial(_context);
-      //_context.Database.Initialize(true);
-      return Ok(true);
-    }
+        private readonly AlpsContext _context;
+        public QueryController(AlpsContext context)
+        {
+            _context = context;
+        }
+        [HttpGet("InitDatabase")]
+        public IActionResult InitDatabase()
+        {
+            Alps.Domain.AlpsContext.Initial(_context);
+            //_context.Database.Initialize(true);
+            return Ok(true);
+        }
         [HttpGet("TestOptions")]
         public IActionResult TestOptions()
         {
-            return Ok( new { ValueType=1,Name= "Winsan"});
+            return Ok(new { ValueType = 1, Name = "Winsan" });
         }
         [HttpGet("SupplierOptions")]
-    public IActionResult SupplierOptions()
-    {
-      return Ok(_context.Suppliers.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
-    }
-    [HttpGet("ProductOptions")]
-    public IActionResult ProductOptions()
-    {
-      return Ok(_context.Products.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
-    }
-    [HttpGet("ProductOption/{id}")]
-    public IActionResult ProductOption(Guid id)
-    {
-      return Ok(_context.Products.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }).FirstOrDefault(p=>p.Value==id));
-    }
-    [HttpGet("ProductSkuOptions")]
-    public IActionResult ProductSkuOptions()
-    {
-      var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID,IsOption=false })
-        .Union(_context.ProductSkus.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ProductID }))
-        .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID,IsOption=false }));
-      var catagories = BuildTree(unionQuery.ToList(), null);
-      
-      //var query=
-      return Ok(catagories);
-    }
-    [HttpGet("CatagoryOptions")]
-    public IActionResult CatagoryOptions()
-    {
-      var unionQuery =_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID });
-      var catagories = BuildTree(unionQuery.ToList(), null);
-      
-      //var query=
-      return Ok(catagories);
-    }
-    [HttpGet("CatagoryOption/{id}")]
-    public IActionResult CatagoryOption(Guid id)
-    {
-      var unionQuery =_context.Catagories.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }).FirstOrDefault(p=>p.Value==id);
-      //var query=
-      return Ok(unionQuery);
-    }
-    [HttpGet("CommodityOptions")]
-    public IActionResult CommodityOptions()
-    {
-       return this.AlpsActionOk(_context.Commodities.Select(p=>new AlpsSelectorItemDto{Value=p.ID,DisplayValue=p.Name}));
-    }
-    class TreeNode
-    {
-      public Guid ID { get; set; }
-      public Guid? ParentID { get; set; }
-      public string Name { get; set; }
-      public bool IsOption{get;set;}
-      public TreeNode(){
-        IsOption=true;
-      }
-    }
+        public IActionResult SupplierOptions()
+        {
+            return Ok(_context.Suppliers.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
+              [HttpGet("CustomerOptions")]
+        public IActionResult CustomerOptions()
+        {
+            return this.AlpsActionOk(_context.Customers.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
+        [HttpGet("ProductOptions")]
+        public IActionResult ProductOptions()
+        {
+            return Ok(_context.Products.Where(p=>!p.Deleted).Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.FullName }));
+        }
+        [HttpGet("ProductOption/{id}")]
+        public IActionResult ProductOption(Guid id)
+        {
+            return Ok(_context.Products.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }).FirstOrDefault(p => p.Value == id));
+        }
+        [HttpGet("ProductSkuOptions")]
+        public IActionResult ProductSkuOptions()
+        {
+            var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID, IsOption = false })
+              .Union(_context.ProductSkus.Where(k=>!k.Deleted).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
+              .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID, IsOption = false }));
+            var catagories = BuildTree(unionQuery.ToList(), null);
 
-    private IEnumerable< AlpsSelectorItemDto> BuildTree(IEnumerable<TreeNode> treeNodes,Guid? parentID)
-    {
-      List<AlpsSelectorItemDto> list = new List<AlpsSelectorItemDto>();
-      var childTreeNodes = treeNodes.Where(p => p.ParentID == parentID);
+            //var query=
+            return Ok(catagories);
+        }
+        [HttpGet("CatagoryOptions")]
+        public IActionResult CatagoryOptions()
+        {
+            var unionQuery = _context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID });
+            var catagories = BuildTree(unionQuery.ToList(), null);
 
-      foreach(var treenode in childTreeNodes)
-      {
-        AlpsSelectorItemDto dto = new AlpsSelectorItemDto();
-        dto.Value = treenode.ID;
-        dto.DisplayValue = treenode.Name;
-        dto.IsOption=treenode.IsOption;
-        dto.Children = BuildTree(treeNodes, treenode.ID);
-        list.Add(dto);
-      }
-      return list;
+            //var query=
+            return Ok(catagories);
+        }
+        [HttpGet("CatagoryOption/{id}")]
+        public IActionResult CatagoryOption(Guid id)
+        {
+            var unionQuery = _context.Catagories.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }).FirstOrDefault(p => p.Value == id);
+            //var query=
+            return Ok(unionQuery);
+        }
+        [HttpGet("CommodityOptions")]
+        public IActionResult CommodityOptions()
+        {
+            return this.AlpsActionOk(_context.Commodities.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
+        class TreeNode
+        {
+            public Guid ID { get; set; }
+            public Guid? ParentID { get; set; }
+            public string Name { get; set; }
+            public bool IsOption { get; set; }
+            public TreeNode()
+            {
+                IsOption = true;
+            }
+        }
+
+        private IEnumerable<AlpsSelectorItemDto> BuildTree(IEnumerable<TreeNode> treeNodes, Guid? parentID)
+        {
+            List<AlpsSelectorItemDto> list = new List<AlpsSelectorItemDto>();
+            var childTreeNodes = treeNodes.Where(p => p.ParentID == parentID);
+
+            foreach (var treenode in childTreeNodes)
+            {
+                AlpsSelectorItemDto dto = new AlpsSelectorItemDto();
+                dto.Value = treenode.ID;
+                dto.DisplayValue = treenode.Name;
+                dto.IsOption = treenode.IsOption;
+                dto.Children = BuildTree(treeNodes, treenode.ID);
+                list.Add(dto);
+            }
+            return list;
+
+        }
+
+        [HttpGet("DepartmentOptions")]
+        public IActionResult DepartmentOptions()
+        {
+            return Ok(_context.Departments.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
+        [HttpGet("PositionOptions")]
+        public IActionResult PositionOptions()
+        {
+            return Ok(_context.Positions.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
+        [HttpGet("TradeAccountOptions")]
+        public IActionResult TradeAccountOptions([FromBody]int id)
+        {
+            //Where(p=>p.Types.Contains(type))
+            return Ok(_context.TradeAccounts.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
 
     }
-
-    [HttpGet("DepartmentOptions")]
-    public IActionResult DepartmentOptions()
-    {
-      return Ok(_context.Departments.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
-    }
-    [HttpGet("PositionOptions")]
-    public IActionResult PositionOptions()
-    {
-      return Ok(_context.Positions.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
-    }
-    [HttpGet("TradeAccountOptions")]
-    public IActionResult TradeAccountOptions([FromBody]int id)
-    {
-      //Where(p=>p.Types.Contains(type))
-      return Ok(_context.TradeAccounts.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
-    }
-
-  }
 }

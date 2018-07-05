@@ -8,8 +8,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./product-detail.component.css']
 })
 export class ProductDetailComponent implements OnInit {
-  displayedColumns=["name","description","auxiliaryQuantity","quantity","action"];
-  product={};
+  displayedColumns=["name","description","fullName","code","createdTime","deleted","action"];
+  product:any={};
   constructor(private productService: ProductService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {

@@ -20,7 +20,7 @@ export class DashboardComponent {
   cw;
   ch;
   initDatabase() {
-
+this.dasboardService.clearCache();
     this.dasboardService.initDatabase().subscribe(data => {
       if (data)
         alert("初始化成功");

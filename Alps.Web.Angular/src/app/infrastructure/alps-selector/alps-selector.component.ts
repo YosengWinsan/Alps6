@@ -63,7 +63,7 @@ _selectedOption;
   getDisplayValue() {
     return this._displayValue;
   }
-  initDisplayValue() {
+  private initDisplayValue() {
     if (this._value && this._value !== "") {
 
       if (this._options && this._options.length > 0) {

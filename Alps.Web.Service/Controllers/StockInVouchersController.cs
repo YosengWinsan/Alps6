@@ -34,7 +34,7 @@ namespace Alps.Web.Service.Controllers
        {
          ID = p.ID,
          CreateTime = p.CreateTime,
-         Source = p.Source.Name,
+         Supplier = p.Supplier.Name,
          Department = p.Department.Name,
          TotalAuxiliaryQuantity = p.TotalAuxiliaryQuantity,
          TotalQuantity = p.TotalQuantity,
@@ -58,7 +58,7 @@ namespace Alps.Web.Service.Controllers
               {
                 DepartmentID = k.DepartmentID,
                 ID = k.ID,
-                SourceID = k.SourceID,
+                SupplierID = k.SupplierID,
                 Status = (int)k.Status,
                 Items = from i in _context.StockInVoucherItems
                 from sku in _context.ProductSkus
@@ -68,7 +68,7 @@ namespace Alps.Web.Service.Controllers
                         {
                           ID = i.ID,
                           ProductSkuID = i.ProductSkuID,
-                          ProductSku=sku.Name,
+                          ProductSku=sku.FullName,
                           SerialNumber = i.SerialNumber,
                           PositionID = i.PositionID,
                           Position=p.Name,
@@ -101,7 +101,7 @@ public IActionResult Detail(Guid id)
               {
                 Department = k.Department.Name,
                 ID = k.ID,
-                Source = k.Source.Name,
+                Supplier = k.Supplier.Name,
                 StatusValue = (int)k.Status,
                 Status=EnumHelper.GetDisplayValue(typeof(StockInVoucherStatus), k.Status.ToString("G")),
                 TotalAmount=k.TotalAmount ,
@@ -115,7 +115,7 @@ public IActionResult Detail(Guid id)
                         {
                           ID = i.ID,
                           ProductSkuID = i.ProductSkuID,
-                          ProductSku=sku.Name,
+                          ProductSku=sku.FullName,
                           SerialNumber = i.SerialNumber,
                           PositionID = i.PositionID,
                           Position=p.Name,
@@ -132,7 +132,7 @@ public IActionResult Detail(Guid id)
     {
       if (!ModelState.IsValid)
         return BadRequest();
-      var voucher = StockInVoucher.Create(dto.SourceID, dto.DepartmentID, this.User.Identity.Name);
+      var voucher = StockInVoucher.Create(dto.SupplierID, dto.DepartmentID, this.User.Identity.Name);
      
       voucher.UpdateItems(dto.Items);
       _context.StockInVouchers.Add(voucher);
@@ -152,7 +152,7 @@ public IActionResult Detail(Guid id)
       
       var voucher = _context.StockInVouchers.Include(p=>p.Items).SingleOrDefault(p=>p.ID==id);
       voucher.DepartmentID = dto.DepartmentID;
-      voucher.SourceID = dto.SourceID;
+      voucher.SupplierID = dto.SupplierID;
       voucher.UpdateItems(dto.Items);
       _context.SaveChanges();
       return this.AlpsActionOk();

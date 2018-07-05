@@ -3,27 +3,27 @@
     <button mat-button (click)="back()">返回</button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-button (click)="edit(stockInVoucher.id)" [disabled]="editable">编辑</button>
+    <button mat-button (click)="edit(stockOutVoucher.id)" [disabled]="editable">编辑</button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-button (click)="delete(stockInVoucher.id)" [disabled]="editable">删除</button>
+    <button mat-button (click)="delete(stockOutVoucher.id)" [disabled]="editable">删除</button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-button (click)="submit(stockInVoucher.id)" [disabled]="editable">提交</button>
+    <button mat-button (click)="submit(stockOutVoucher.id)" [disabled]="editable">提交</button>
   </mat-grid-tile>
 </mat-grid-list>
 <mat-divider></mat-divider>
 <div style="padding-top: 20px">
-<alps-info-chip label="供应商" [value]="stockInVoucher.supplier"></alps-info-chip>
-<alps-info-chip label="采购部门" [value]="stockInVoucher.department"></alps-info-chip>
-<alps-info-chip label="状态" [value]="stockInVoucher.status"></alps-info-chip>
-<alps-info-chip label="总数量" [value]="stockInVoucher.totalQuantity"></alps-info-chip>
-<alps-info-chip label="总辅数" [value]="stockInVoucher.totalAuxiliaryQuantity"></alps-info-chip>
-<alps-info-chip label="总金额" [value]="stockInVoucher.totalAmount"></alps-info-chip>
+<alps-info-chip label="客户" [value]="stockOutVoucher.customer"></alps-info-chip>
+<alps-info-chip label="部门" [value]="stockOutVoucher.department"></alps-info-chip>
+<alps-info-chip label="状态" [value]="stockOutVoucher.status"></alps-info-chip>
+<alps-info-chip label="总数量" [value]="stockOutVoucher.totalQuantity"></alps-info-chip>
+<alps-info-chip label="总辅数" [value]="stockOutVoucher.totalAuxiliaryQuantity"></alps-info-chip>
+<alps-info-chip label="总金额" [value]="stockOutVoucher.totalAmount"></alps-info-chip>
 </div>
   <mat-divider></mat-divider>
 
-<mat-table #table [dataSource]="stockInVoucher.items" matSort aria-label="Elements">
+<mat-table #table [dataSource]="stockOutVoucher.items" matSort aria-label="Elements">
 
   <ng-container matColumnDef="id">
     <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>

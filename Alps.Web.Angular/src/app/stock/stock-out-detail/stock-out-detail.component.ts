@@ -3,13 +3,13 @@ import { StockService } from '../stock.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-stock-in-detail',
-  templateUrl: './stock-in-detail.component.html',
-  styleUrls: ['./stock-in-detail.component.css']
+  selector: 'app-stock-out-detail',
+  templateUrl: './stock-out-detail.component.html',
+  styleUrls: ['./stock-out-detail.component.css']
 })
-export class StockInDetailComponent implements OnInit {
+export class StockOutDetailComponent implements OnInit {
 
-  stockInVoucher: any = {};
+  stockOutVoucher: any = {};
   editable: boolean = false;
   constructor(private stockService: StockService, private activatedRoute: ActivatedRoute, private router: Router) { }
   displayedColumns = ["productSku", "auxiliaryQuantity", "quantity", "price", "position", "serialNumber"];
@@ -24,25 +24,25 @@ export class StockInDetailComponent implements OnInit {
     if (!id) {
       id = "";
     }
-    this.stockService.getStockInDetail(id).subscribe((res) => {
-      this.stockInVoucher = res;
+    this.stockService.getStockOutDetail(id).subscribe((res) => {
+      this.stockOutVoucher = res;
       this.editable = (res.statusValue > 0);
 
     });
   }
   edit(id) {
-    this.router.navigate(['../stockin'], { relativeTo: this.activatedRoute, queryParams: { id: id } });
+    this.router.navigate(['../stockout'], { relativeTo: this.activatedRoute, queryParams: { id: id } });
   }
   delete(id) {
     if (confirm("确定要删除？"))
-      this.stockService.deleteStockIn(id).subscribe((res) => {
-        this.router.navigate(["../stockinlist"], { relativeTo: this.activatedRoute });
+      this.stockService.deleteStockOut(id).subscribe((res) => {
+        this.router.navigate(["../stockoutlist"], { relativeTo: this.activatedRoute });
 
       });
   }
   submit(id) {
     if (confirm("确定要提交？")) {
-      this.stockService.submitStockIn(id).subscribe((res) => {
+      this.stockService.submitStockOut(id).subscribe((res) => {
         this.loadData(id);
       });
     }

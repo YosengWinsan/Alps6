@@ -14,7 +14,7 @@ export class StockInfoComponent implements OnInit {
 
   @ViewChild(MatSort) matSort:MatSort;
   stockOutList: MatTableDataSource<StockListDto>;
-  displayedColumns=['name','quantity','auxiliaryQuantity','warehouse','owner','serialNumber','action'];
+  displayedColumns=['name','auxiliaryQuantity','quantity','warehouse','owner','serialNumber'];
   ngOnInit() {
     this.stockService.getStocks().subscribe((res: StockListDto[]) => {
       this.stockOutList = new MatTableDataSource<StockListDto>(res);

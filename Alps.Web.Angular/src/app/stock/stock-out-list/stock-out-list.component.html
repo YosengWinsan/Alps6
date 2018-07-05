@@ -11,8 +11,8 @@
     <mat-cell *matCellDef="let row">{{row.createTime|date:"yy-MM-dd"}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="destination">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>去处</mat-header-cell>
-    <mat-cell *matCellDef="let row">{{row.destination}}</mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>客户</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.customer}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="department">
     <mat-header-cell *matHeaderCellDef mat-sort-header>部门</mat-header-cell>
@@ -34,8 +34,8 @@
   <ng-container matColumnDef="action">
     <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <a routerLink="../stockout" [queryParams]="{id:row.id}">
-        <mat-icon>edit</mat-icon>
+      <a routerLink="../stockoutdetail" [queryParams]="{id:row.id}">
+        <mat-icon>list</mat-icon>
       </a>
     </mat-cell>
   </ng-container>

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../product.service';
 import { QueryService } from '../../infrastructure/infrastructure.module';
 import { MatTableDataSource, MatSort } from '@angular/material';
+import { AlpsSelectorComponent } from '../../infrastructure/alps-selector/alps-selector.component';
 
 @Component({
   selector: 'app-product-list',
@@ -13,6 +14,7 @@ export class ProductListComponent implements OnInit {
   constructor(private productService: ProductService, private queryService: QueryService) {
   }
   @ViewChild(MatSort) matSort: MatSort;
+  @ViewChild("catagorySelector") catagorySelector:AlpsSelectorComponent;
   catagoryID;
   catagoryOptions;
   productDataSource: MatTableDataSource<any>;

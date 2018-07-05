@@ -7,6 +7,7 @@ import { StockOutComponent } from './stock-out/stock-out.component';
 import { StockOutListComponent } from './stock-out-list/stock-out-list.component';
 import { StockComponent } from './stock.component';
 import { StockInDetailComponent } from './stock-in-detail/stock-in-detail.component';
+import { StockOutDetailComponent } from './stock-out-detail/stock-out-detail.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
     },
     { path: 'stockin', component: StockInComponent },
     { path: 'stockout', component: StockOutComponent },
-    { path: 'stockindetail', component: StockInDetailComponent }
+    { path: 'stockindetail', component: StockInDetailComponent },
+    { path: 'stockoutdetail', component: StockOutDetailComponent }
 ];
 
 @NgModule({

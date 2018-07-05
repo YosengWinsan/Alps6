@@ -25,6 +25,8 @@ export class AlpsLoadingBarService {
       this.open();      
     }
     this.componentRef.instance.toggleError();
+    
+    this.overlayRef.backdropClick().subscribe(()=>this.close());
   }
   close() {
     this.openCount--;

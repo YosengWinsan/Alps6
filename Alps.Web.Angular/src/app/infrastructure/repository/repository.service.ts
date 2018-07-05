@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, filter, map, tap } from 'rxjs/operators';
-import { throwError } from "rxjs";
+import { throwError, Observable } from "rxjs";
 import { AlpsConst } from '../alps-const';
 import { AlpsActionResponse, AlpsActionResultCode } from './alpsActionResponse';
 import { AlpsLoadingBarService } from '../service/alps-loading-bar.service';
@@ -33,7 +33,7 @@ protected loadingBarService:AlpsLoadingBarService;
   setBaseUrl(url: string) {
     this._baseUrl = url;
   }
-  processPipe(ob)
+  processPipe(ob:Observable<any>):Observable<any>
   {
     return ob.pipe(tap(()=>{this.finishLoad();}), catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
   }

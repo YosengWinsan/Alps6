@@ -1,4 +1,5 @@
 ﻿using Alps.Domain.AccountingMgr;
+using Alps.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Alps.Domain.StockMgr
 {
     public class StockInVoucher : EntityBase
     {
-        public Guid SourceID { get; set; }
+        public Guid SupplierID { get; set; }
         public Guid DepartmentID { get; set; }
         public decimal TotalAuxiliaryQuantity { get; set; }
         public decimal TotalQuantity { get; set; }
@@ -19,18 +20,18 @@ namespace Alps.Domain.StockMgr
         public DateTimeOffset CreateTime { get; set; }
         public virtual ICollection<StockInVoucherItem> Items { get; set; }
 
-        public virtual TradeAccount Source { get; set; }
-        public virtual TradeAccount Department { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public virtual Department Department { get; set; }
 
         public StockInVoucher()
         {
             Items = new HashSet<StockInVoucherItem>();
         }
-        public static StockInVoucher Create(Guid sourceID, Guid departmentID, string creater)
+        public static StockInVoucher Create(Guid supplierID, Guid departmentID, string creater)
         {
             StockInVoucher voucher = new StockInVoucher()
             {
-                SourceID = sourceID,
+                SupplierID = supplierID,
                 DepartmentID = departmentID,
                 Creater = creater,
                 CreateTime = DateTimeOffset.Now
