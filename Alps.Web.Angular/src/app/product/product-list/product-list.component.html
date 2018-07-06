@@ -1,5 +1,7 @@
 
-<alps-selector #catagorySelector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="catagoryID" (ngModelChange) = "onCatagoryChanged($event)"></alps-selector>
+<!-- <alps-selector #catagorySelector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="catagoryID" (ngModelChange) = "onCatagoryChanged($event)"></alps-selector> -->
+
+<alps-menu-selector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="catagoryID" (ngModelChange) = "onCatagoryChanged($event)"></alps-menu-selector>
 
 <mat-table #table [dataSource]="productDataSource" matSort aria-label="Elements">
 

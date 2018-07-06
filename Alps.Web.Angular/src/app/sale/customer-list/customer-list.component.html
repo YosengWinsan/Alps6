@@ -1,0 +1,28 @@
+
+<mat-table #table [dataSource]="customers" matSort aria-label="Elements">
+    <!-- Id Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="contact">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>联系人</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.contact}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="address">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>地址</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.address}}</mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <a routerLink="../customeredit" [queryParams]="{id:row.id}">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>

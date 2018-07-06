@@ -241,6 +241,7 @@ namespace Alps.Domain
                 context.Counties.Add(County.Create("鼓楼区", city.ID));
                 County county = County.Create("长乐区", city.ID);
                 context.Counties.Add(county);
+                
                 context.SaveChanges();
 
                 #endregion

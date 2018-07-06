@@ -1,4 +1,5 @@
 using Alps.Domain;
+using Alps.Domain.SaleMgr;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,8 +21,34 @@ namespace Alps.Web.Service.Controllers
         public IActionResult InitDatabase()
         {
             Alps.Domain.AlpsContext.Initial(_context);
-            //_context.Database.Initialize(true);
+            var addressService = new Alps.Domain.Service.AddressService(_context);
+            foreach (var country in _context.Countries)
+            {
+                addressService.UpdateChildrenFullName(country);
+            }
+            _context.SaveChanges();
+
+
             return Ok(true);
+        }
+
+        [HttpGet("DashboardInfo")]
+        public IActionResult DashboardInfo()
+        {
+            var rst = new
+            {
+                CatagoryCount = _context.Catagories.Count(),
+                ProductCount = _context.Products.Count(),
+                ProductSkuCount = _context.ProductSkus.Count(),
+                ProductStockCount = _context.ProductStocks.Count(),
+                StockInCount = _context.StockInVouchers.Count(),
+                StockOutCount = _context.StockOutVouchers.Count(),
+                CommodityCount = _context.Commodities.Count(),
+                SaleOrderCount = _context.SaleOrders.Count(),
+                SaleOrderConfirmCount = _context.SaleOrders.Where(p => p.Status == SaleOrderStatus.Confirm).Count(),
+
+            };
+            return this.AlpsActionOk(rst);
         }
         [HttpGet("TestOptions")]
         public IActionResult TestOptions()
@@ -33,7 +60,7 @@ namespace Alps.Web.Service.Controllers
         {
             return Ok(_context.Suppliers.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
         }
-              [HttpGet("CustomerOptions")]
+        [HttpGet("CustomerOptions")]
         public IActionResult CustomerOptions()
         {
             return this.AlpsActionOk(_context.Customers.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
@@ -41,7 +68,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("ProductOptions")]
         public IActionResult ProductOptions()
         {
-            return Ok(_context.Products.Where(p=>!p.Deleted).Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.FullName }));
+            return Ok(_context.Products.Where(p => !p.Deleted).Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.FullName }));
         }
         [HttpGet("ProductOption/{id}")]
         public IActionResult ProductOption(Guid id)
@@ -52,7 +79,7 @@ namespace Alps.Web.Service.Controllers
         public IActionResult ProductSkuOptions()
         {
             var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID, IsOption = false })
-              .Union(_context.ProductSkus.Where(k=>!k.Deleted).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
+              .Union(_context.ProductSkus.Where(k => !k.Deleted).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
               .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID, IsOption = false }));
             var catagories = BuildTree(unionQuery.ToList(), null);
 
@@ -125,6 +152,16 @@ namespace Alps.Web.Service.Controllers
         {
             //Where(p=>p.Types.Contains(type))
             return Ok(_context.TradeAccounts.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
+        [HttpGet("CountyOptions")]
+        public IActionResult CountyOptions()
+        {
+            var unionQuery = _context.Countries.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = null, IsOption = false })
+            .Union(_context.Provinces.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CountryID, IsOption = false }))
+             .Union(_context.Cities.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ProvinceID, IsOption = false }))
+              .Union(_context.Counties.Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.CityID }));
+            //Where(p=>p.Types.Contains(type))
+            return this.AlpsActionOk(BuildTree(unionQuery.ToList(), null));
         }
 
     }

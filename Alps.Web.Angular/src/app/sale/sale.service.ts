@@ -15,6 +15,9 @@ export class SaleService extends RepositoryService {
   private setSaleOrder() {
     this.setBaseUrl("api/SaleOrders");
   }
+  private setCustomer() {
+    this.setBaseUrl("api/Customers");
+  }
   getCommodities() {
     this.setCommodity();
     return this.getall();
@@ -31,29 +34,32 @@ export class SaleService extends RepositoryService {
     this.setSaleOrder();
     return this.getall();
   }
-  getSaleOrder(id:string)
-  {
+  getSaleOrder(id: string) {
     this.setSaleOrder();
     return this.get(id);
   }
-  getSaleOrderDetail(id:string)
-  {
+  getSaleOrderDetail(id: string) {
     this.setSaleOrder();
-    return this.query("detail/"+ id);
+    return this.query("detail/" + id);
   }
-  saveSaleOrder(saleOrder)
-  {
+  saveSaleOrder(saleOrder) {
     this.setSaleOrder();
     return this.createAndUpdate(saleOrder);
   }
-  deleteSaleOrder(id)
-  {
+  deleteSaleOrder(id) {
     this.setSaleOrder();
     return this.delete(id);
   }
-  submitSaleOrder(id)
-  {
+  submitSaleOrder(id) {
     this.setSaleOrder();
-    return this.action("Submit/"+id);
+    return this.action("Submit/" + id);
+  }
+  getCustomers() {
+    this.setCustomer();
+    return this.getall();
+  }
+  getCustomer(id) {
+    this.setCustomer();
+    return this.get(id);
   }
 }

@@ -5,6 +5,8 @@ import { CommodityEditComponent } from './commodity-edit/commodity-edit.componen
 import { SaleOrderListComponent } from './sale-order-list/sale-order-list.component';
 import { SaleOrderEditComponent } from './sale-order-edit/sale-order-edit.component';
 import { SaleOrderDetailComponent } from './sale-order-detail/sale-order-detail.component';
+import { CustomerListComponent } from './customer-list/customer-list.component';
+import { CustomerEditComponent } from './customer-edit/customer-edit.component';
 
 const routes: Routes = [
   {path:"",redirectTo:"commoditylist",pathMatch:"full"},
@@ -12,7 +14,9 @@ const routes: Routes = [
   {path:"commodityedit",component:CommodityEditComponent},
   {path:"saleorderlist",component:SaleOrderListComponent},
   {path:"saleorderedit",component:SaleOrderEditComponent},
-  {path:"saleorderdetail",component:SaleOrderDetailComponent}
+  {path:"saleorderdetail",component:SaleOrderDetailComponent},
+  {path:"customerlist",component:CustomerListComponent},
+  {path:"customeredit",component:CustomerEditComponent}
 ];
 
 @NgModule({

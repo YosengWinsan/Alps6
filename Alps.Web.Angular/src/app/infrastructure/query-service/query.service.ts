@@ -15,7 +15,7 @@ export class QueryService extends RepositoryService {
   initDatabase() {
     return this.query("InitDatabase");
   }
-  queryAndCache(url) {
+  private queryAndCache(url) {
     const cache =JSON.parse( sessionStorage.getItem(url));
     return cache ? of(cache) : this.query(url).pipe(tap((res) => {
       sessionStorage.setItem(url,JSON.stringify( res));
@@ -23,6 +23,10 @@ export class QueryService extends RepositoryService {
   }
   clearCache(){
     sessionStorage.clear();
+  }
+  getDashboardInfo()
+  {
+    return this.queryAndCache("DashboardInfo");
   }
   getCatagoryOptions() {
     return this.queryAndCache("CatagoryOptions");
