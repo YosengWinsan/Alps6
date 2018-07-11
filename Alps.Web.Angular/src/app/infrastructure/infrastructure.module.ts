@@ -9,14 +9,15 @@ import { NgForObjPipe } from './pipe/ng-for-obj.pipe';
 import { AlpsLoadingBarComponent } from './service/alps-loading-bar/alps-loading-bar.component';
 import { EnterToTabDirective } from './directive/enter-to-tab.directive';
 import { AlpsMenuSelectorComponent } from './alps-menu-selector/alps-menu-selector.component';
-
+import { AlpsNavBarComponent } from './alps-nav-bar/alps-nav-bar.component';
+import {RouterModule } from '@angular/router';
 @NgModule({
   imports: [
-    CommonModule,MatDialogModule,MatButtonModule ,MatIconModule,MatProgressSpinnerModule,MatMenuModule
+    CommonModule,MatDialogModule,MatButtonModule ,MatIconModule,MatProgressSpinnerModule,MatMenuModule,RouterModule
   ],
-  exports:[AlpsSelectorComponent,AlpsEditToolbarComponent,AlpsInfoChipComponent,NgForObjPipe,EnterToTabDirective,AlpsMenuSelectorComponent],
+  exports:[AlpsSelectorComponent,AlpsEditToolbarComponent,AlpsInfoChipComponent,NgForObjPipe,EnterToTabDirective,AlpsMenuSelectorComponent,AlpsNavBarComponent],
   declarations: [AlpsSelectorComponent,AlpsSelectorDialogComponent, AlpsEditToolbarComponent, AlpsInfoChipComponent, NgForObjPipe,AlpsLoadingBarComponent
-,EnterToTabDirective, AlpsMenuSelectorComponent
+,EnterToTabDirective, AlpsMenuSelectorComponent, AlpsNavBarComponent
   ],
   entryComponents:[AlpsSelectorDialogComponent,AlpsLoadingBarComponent]
 })

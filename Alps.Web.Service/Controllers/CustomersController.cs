@@ -18,18 +18,18 @@ namespace Alps.Web.Service.controllers
         private readonly AlpsContext _context;
 
         public CustomersController(AlpsContext context)
-        { 
-            _context = context; 
+        {
+            _context = context;
         }
 
         // GET: api/Customers
         [HttpGet]
         public IActionResult GetCustomers()
         {
-            var customerList= from c in _context.Customers
-            from a in _context.Counties
-            where a.ID==c.Address.CountyID
-            select new CustomerListDto{Name=c.Name,ID=c.ID,Contact=c.Contact,Address=a.FullName+" "+c.Address.Street} ;
+            var customerList = from c in _context.Customers
+                               from a in _context.Counties
+                               where a.ID == c.Address.CountyID
+                               select new CustomerListDto { Name = c.Name, ID = c.ID, Contact = c.Contact, Address = a.FullName + " " + c.Address.Street };
             return this.AlpsActionOk(customerList);
         }
 
@@ -65,8 +65,11 @@ namespace Alps.Web.Service.controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(customer).State = EntityState.Modified;
+            var existCustomer = _context.Customers.Find(id);
+            existCustomer.Name = customer.Name;
+            existCustomer.Contact = customer.Contact;
+            existCustomer.Address = customer.Address;
+            //_context.Entry(customer).State = EntityState.Modified;
 
             try
             {

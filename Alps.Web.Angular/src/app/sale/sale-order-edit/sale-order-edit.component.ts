@@ -16,7 +16,7 @@ export class SaleOrderEditComponent implements OnInit {
   saleOrderForm: FormGroup;
   customerOptions;
   saleOrderItemColumns = { commodity: "品名", auxiliaryQuantity: "辅助数量"
-  , quantity: "数量", price: "金额" };
+  , quantity: "数量", price: "单价",amount:"金额",remark:"备注" };
   displayedColumns;
   @ViewChild("itemTable") itemTable;
   constructor(private saleService: SaleService, private activatedRoute: ActivatedRoute, private router: Router, private formBuilder: FormBuilder
@@ -69,22 +69,24 @@ deleteItem(item) {
 }
 combinItem(row, res) {
   var item = res.value;
-  row.id = item.id;
-  row.commodityID = item.commodityID;
-  row.commodity = item.commodity;
-  row.quantity = item.quantity;
-  row.auxiliaryQuantity = item.auxiliaryQuantity;
-  row.price = item.price;
-  //row.serialNumber = item.serialNumber;
- // row.positionID = item.positionID;
- // row.position = item.position;
+  Object.assign(row,item);
+  // row.id = item.id;
+  // row.commodityID = item.commodityID;
+  // row.commodity = item.commodity;
+  // row.quantity = item.quantity;
+  // row.auxiliaryQuantity = item.auxiliaryQuantity;
+  // row.price = item.price;
+  // row.amount=item.amount;
+  // row.remark=item.remark;
+  
 }
 save()
 {
   if(this.saleOrderForm.valid)
 {
   this.saleService.saveSaleOrder(this.saleOrderForm.value).subscribe((res) => {
-    this.router.navigate(["./saleorderlist"], { relativeTo: this.activatedRoute.parent });
+    history.back();
+    //this.router.navigate(["./saleorderlist"], { relativeTo: this.activatedRoute.parent });
 });
 }
 }

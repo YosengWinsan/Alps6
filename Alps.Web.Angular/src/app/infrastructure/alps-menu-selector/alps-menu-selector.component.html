@@ -17,7 +17,7 @@
                   <button mat-menu-item (click)="select(option)" *ngIf="!(option.children && option.children.length>0)">{{option.displayValue}}</button>
                   <mat-menu #fourthLevel="matMenu" xPosition="after" yPosition="below" overlapTrigger="false">
                     <ng-container *ngFor="let option of option.children">
-                      <button mat-menu-item>{{option.displayValue}}</button>
+                      <button mat-menu-item (click)="select(option)">{{option.displayValue}}</button>
                     </ng-container>
                   </mat-menu>
               </ng-container>

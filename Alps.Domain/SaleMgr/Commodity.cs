@@ -21,7 +21,7 @@ namespace Alps.Domain.SaleMgr
         public decimal SellableQuantity { get; set; }
         public decimal OrderedQuantity { get; set; }
         public decimal StockAuxiliaryQuantity { get; set; }
-        public decimal AuxiliayQuantity { get; set; }
+        public decimal AuxiliaryQuantity { get; set; }
         public decimal OrderedAuxiliaryQuantity { get; set; }
         public decimal SellableAuxiliaryQuantity { get; set; }
 
@@ -29,10 +29,14 @@ namespace Alps.Domain.SaleMgr
         public bool IsFutures { get; set; }
         [Display(Name = "交货日期")]
         public DateTime? DateOfDelivery { get; set; }
+        public bool IsVirtualCommodity { get; set; }
+        public decimal QuantityRate { get; set; }
 
         public static Commodity Create(Guid productSkuID, string name, string description, decimal listPrice, decimal quantity, decimal auxiliaryQuantity)
         {
-            return new Commodity() { ProductSkuID = productSkuID, Name = name, Description = description, ListPrice = listPrice, Quantity = quantity, AuxiliayQuantity = auxiliaryQuantity };
+            return new Commodity() { ProductSkuID = productSkuID, Name = name, Description = description, ListPrice = listPrice, Quantity = quantity, AuxiliaryQuantity = auxiliaryQuantity 
+            ,QuantityRate=2.5m,IsVirtualCommodity=false
+            };
         }
 
     }

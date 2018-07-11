@@ -24,6 +24,10 @@ export class StockService extends RepositoryService {
     this.setStock();
     return this.getall();
   }
+  getStocksByCatagory(catagoryID){
+    this.setStock();
+    return this.query("GetStocksByCatagory/"+catagoryID);
+  }
   getStockIn(id: string) {
     this.setStockIn();
     return this.get(id);

@@ -1,3 +1,4 @@
+<alps-menu-selector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="selectedCatagory" (ngModelChange)="onCatagoryChange($event)"></alps-menu-selector>
 <mat-table #table [dataSource]="stockOutList" matSort aria-label="Elements">
   'name','quantity','auxiliaryQuantity','warehouse','owner','serialNumber'
   <!-- Id Column -->

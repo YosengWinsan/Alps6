@@ -62,4 +62,9 @@ export class SaleService extends RepositoryService {
     this.setCustomer();
     return this.get(id);
   }
+  saveCustomer(customer)
+  {
+    this.setCustomer();
+    return this.createAndUpdate(customer);
+  }
 }

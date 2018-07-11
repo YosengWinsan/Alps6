@@ -20,7 +20,7 @@ export class AlpsMenuSelectorComponent  implements OnInit, ControlValueAccessor 
   // private _selectedNode: AlpsSelectorOption;
   private _value: any = "";
   _displayValue: string = "请选择";
-  private _options: any[] = [];
+   _options: any[] = [];
   _placeholder: string = "";
   _optionsPath = [];
 _selectedOption;
@@ -120,6 +120,7 @@ select(option){
   }
 
   setDisabledState(isDisabled: boolean): void {
+    
   }
 }
 

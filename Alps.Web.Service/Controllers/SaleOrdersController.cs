@@ -59,7 +59,9 @@ namespace Alps.Web.Service.controllers
                     Commodity = l.Commodity.Name,
                     Quantity = l.Quantity,
                     AuxiliaryQuantity = l.AuxiliaryQuantity,
-                    Price = l.Price
+                    Price = l.Price,
+                    Amount=l.Amount,
+                    Remark=l.Remark
                 })
             }).FirstOrDefaultAsync(p => p.ID == id);
 
@@ -78,7 +80,7 @@ namespace Alps.Web.Service.controllers
                 return BadRequest(ModelState);
             }
 
-            var saleOrder = await _context.SaleOrders.Select(p => new SaleOrderDetailDto
+            var saleOrder = await _context.SaleOrders.Include(l=>l.Items).Select(p => new SaleOrderDetailDto
             {
                 ID = p.ID,
                 Customer = p.Customer.Name,
@@ -94,7 +96,9 @@ namespace Alps.Web.Service.controllers
                     Commodity = l.Commodity.Name,
                     Quantity = l.Quantity,
                     AuxiliaryQuantity = l.AuxiliaryQuantity,
-                    Price = l.Price
+                    Price = l.Price,
+                    Amount=l.Amount,
+                    Remark=l.Remark
                 })
             }).FirstOrDefaultAsync(p => p.ID == id);
 
@@ -107,19 +111,23 @@ namespace Alps.Web.Service.controllers
         }
         // PUT: api/SaleOrders/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSaleOrder([FromRoute] Guid id, [FromBody] SaleOrder saleOrder)
+        public async Task<IActionResult> PutSaleOrder([FromRoute] Guid id, [FromBody] SaleOrderEditDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != saleOrder.ID)
+            if (id != dto.ID)
             {
                 return BadRequest();
             }
+            var saleOrder = _context.SaleOrders.Include(p=>p.Items).FirstOrDefault(p=>p.ID==id);
+            if (saleOrder == null)
+                return BadRequest();
 
-            _context.Entry(saleOrder).State = EntityState.Modified;
+            _context.Entry(saleOrder).CurrentValues.SetValues(dto);
+            saleOrder.UpdateItems(dto.Items);
 
             try
             {
@@ -178,7 +186,7 @@ namespace Alps.Web.Service.controllers
         [HttpPost("Submit/{id}")]
         public async Task<IActionResult> Submit([FromRoute] Guid id)
         {
-            var saleOrderVoucher =await _context.SaleOrders.FindAsync(id);
+            var saleOrderVoucher = await _context.SaleOrders.FindAsync(id);
             if (saleOrderVoucher.Status != SaleOrderStatus.UnConfirm)
             {
                 return this.AlpsActionWarning("单据已提交");

@@ -7,16 +7,20 @@ import { SaleOrderEditComponent } from './sale-order-edit/sale-order-edit.compon
 import { SaleOrderDetailComponent } from './sale-order-detail/sale-order-detail.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerEditComponent } from './customer-edit/customer-edit.component';
+import { SaleComponent } from './sale/sale.component';
 
 const routes: Routes = [
-  {path:"",redirectTo:"commoditylist",pathMatch:"full"},
-  {path:"commoditylist",component:CommodityListComponent},
-  {path:"commodityedit",component:CommodityEditComponent},
-  {path:"saleorderlist",component:SaleOrderListComponent},
-  {path:"saleorderedit",component:SaleOrderEditComponent},
-  {path:"saleorderdetail",component:SaleOrderDetailComponent},
-  {path:"customerlist",component:CustomerListComponent},
-  {path:"customeredit",component:CustomerEditComponent}
+  {
+    path: "", component: SaleComponent, children: [
+      { path: "", redirectTo: "commoditylist", pathMatch: "full" },
+      { path: "commoditylist", component: CommodityListComponent },
+      { path: "commodityedit", component: CommodityEditComponent },
+      { path: "saleorderlist", component: SaleOrderListComponent },
+      { path: "saleorderedit", component: SaleOrderEditComponent },
+      { path: "saleorderdetail", component: SaleOrderDetailComponent },
+      { path: "customerlist", component: CustomerListComponent },
+      { path: "customeredit", component: CustomerEditComponent }]
+  }
 ];
 
 @NgModule({

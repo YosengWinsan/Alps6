@@ -40,7 +40,24 @@ namespace Alps.Web.Service.Controllers
                   };
       return query;
     }
-
+[HttpGet("GetStocksByCatagory/{id}")]
+    public IEnumerable<StockListDto> GetProductStockSByCatagory(Guid id)
+    {
+      var query = from stock in _context.ProductStocks
+                  from sku in _context.ProductSkus
+                  from p in _context.Positions
+                  where stock.ProductSkuID == sku.ID && p.ID == stock.PositionID && sku.Product.CatagoryID==id
+                  select new StockListDto
+                  {
+                    Name = sku.FullName,
+                    AuxiliaryQuantity = stock.AuxiliaryQuantity,
+                    Quantity = stock.Quantity,
+                    Warehouse = p.Name,
+                    Owner = stock.Owner.Name,
+                    SerialNumber=stock.SerialNumber
+                  };
+      return query;
+    }
     // GET: api/Stocks/5
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductStock([FromRoute] Guid id)

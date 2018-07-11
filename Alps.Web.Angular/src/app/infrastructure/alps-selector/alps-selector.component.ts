@@ -63,6 +63,10 @@ _selectedOption;
   getDisplayValue() {
     return this._displayValue;
   }
+  getOptionValue(p:string)
+  {
+    return this._selectedOption[p];
+  }
   private initDisplayValue() {
     if (this._value && this._value !== "") {
 

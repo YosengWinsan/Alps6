@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SaleService } from '../sale.service';
 import { QueryService } from '../../infrastructure/infrastructure.module';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-customer-edit',
@@ -11,10 +11,11 @@ import { FormBuilder } from '@angular/forms';
 })
 export class CustomerEditComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, private saleService: SaleService,private queryService:QueryService,private formBuilder:FormBuilder) { 
-    this.customerForm=formBuilder.group({id:[],name:[],contact:[],address:[]});
+  constructor(private activatedRoute: ActivatedRoute, private saleService: SaleService, private queryService: QueryService, private formBuilder: FormBuilder) {
+    this.customerForm = formBuilder.group({ id: [], name: [], contact: [], address: this.formBuilder.group({ countyID: [], street: [] }) });
   }
-  customerForm;
+  countyOptions;
+  customerForm: FormGroup;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       var id = params["id"] ? params["id"] : null;
@@ -24,6 +25,15 @@ export class CustomerEditComponent implements OnInit {
         });
       }
     });
+    this.queryService.getCountyOptions().subscribe(data => {
+      this.countyOptions = data;
+    });
   }
+  save() {
+    if (this.customerForm.valid)
+      this.saleService.saveCustomer(this.customerForm.value).subscribe((d) => {
+        history.back();
+      });
 
+  }
 }

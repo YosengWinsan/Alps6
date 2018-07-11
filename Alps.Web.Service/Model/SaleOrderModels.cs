@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Alps.Domain.SaleMgr;
 
 namespace Alps.Web.Service.Model
 {
@@ -14,7 +15,7 @@ namespace Alps.Web.Service.Model
         public decimal TotalAmount { get; set; }
 
     }
-    public class SaleOrderItemEditDto
+    public class SaleOrderItemEditDto:ISaleOrderItem
     {
         public Guid ID{get;set;}
         public Guid CommodityID{get;set;}
@@ -22,6 +23,8 @@ namespace Alps.Web.Service.Model
         public decimal Quantity{get;set;}
         public decimal AuxiliaryQuantity{get;set;}
         public decimal Price{get;set;}
+        public string  Remark{get;set;}
+        public decimal Amount{get;set;}
     }
     public class SaleOrderEditDto
     {

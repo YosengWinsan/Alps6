@@ -646,13 +646,13 @@ namespace Alps.Domain
                 var saleOrder = SaleOrder.Create(customerID);
                 foreach (var commodity in context.Commodities.Take(5))
                 {
-                    saleOrder.AddItem(commodity.ID, 12, 2000, "#");
+                    saleOrder.AddItem(commodity.ID, 12, 2000,5, "#");
                 }
                 context.SaleOrders.Add(saleOrder);
                 saleOrder = SaleOrder.Create(customerID);
                 foreach (var commodity in context.Commodities.OrderByDescending(p => p.ID).Take(5))
                 {
-                    saleOrder.AddItem(commodity.ID, 1, 3000, "#");
+                    saleOrder.AddItem(commodity.ID, 1, 3000, 1,"#");
                 }
                 context.SaleOrders.Add(saleOrder);
 

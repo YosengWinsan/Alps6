@@ -58,5 +58,8 @@ export class QueryService extends RepositoryService {
   getProductOption(id) {
     return this.query("ProductOption/" + id);
   }
+  getCountyOptions(){
+    return this.queryAndCache("CountyOptions");
+  }
 }
 

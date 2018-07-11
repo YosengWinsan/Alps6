@@ -7,16 +7,20 @@ export class EnterToTabDirective {
   constructor(private elementRef: ElementRef) {
   }
   @Input() enterToTab: string;
-
+  @HostListener('focusin', ['$event'])
+  onFocus(e)
+  {
+    let control=e.target;
+    if (control.tagName == "INPUT" && control.type == "text")
+    control.select();
+  }
   @HostListener('keydown.enter', ['$event'])
   onEnter(e) {
     e.preventDefault();
     let controls = this.elementRef.nativeElement.querySelectorAll("input,button");
     let moveNext = false;
     for (let i = 0; i < controls.length; i++) {
-      if (moveNext) {
-        if (controls[i].tagName == "INPUT" && controls[i].type == "text")
-          controls[i].select();
+      if (moveNext) {        
         controls[i].focus();
         break;
       }

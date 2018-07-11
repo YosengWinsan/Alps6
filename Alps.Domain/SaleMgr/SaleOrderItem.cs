@@ -17,5 +17,9 @@ namespace Alps.Domain.SaleMgr
         public string Remark { get; set; }
         public decimal Quantity { get; set; }
         public decimal AuxiliaryQuantity{get;set;}
+        public decimal Amount{get{return Math.Round(Price*Quantity,1);}}
+        public void UpdateAmount(){
+            //this.Amount=this.Quantity*this.Price;
+        }
     }
 }

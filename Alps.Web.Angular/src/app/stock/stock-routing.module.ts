@@ -16,12 +16,14 @@ const routes: Routes = [
             { path: '', redirectTo: "stockinfo" },
             { path: 'stockinfo', component: StockInfoComponent },
             { path: 'stockinlist', component: StockInListComponent },
-            { path: 'stockoutlist', component: StockOutListComponent }]
-    },
-    { path: 'stockin', component: StockInComponent },
-    { path: 'stockout', component: StockOutComponent },
-    { path: 'stockindetail', component: StockInDetailComponent },
-    { path: 'stockoutdetail', component: StockOutDetailComponent }
+            { path: 'stockoutlist', component: StockOutListComponent },
+            { path: 'stockout', component: StockOutComponent },
+            { path: 'stockin', component: StockInComponent },
+            { path: 'stockindetail', component: StockInDetailComponent },
+            { path: 'stockoutdetail', component: StockOutDetailComponent }
+        ]
+    }
+   
 ];
 
 @NgModule({

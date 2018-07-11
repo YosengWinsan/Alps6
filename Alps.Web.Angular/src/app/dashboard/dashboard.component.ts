@@ -26,22 +26,23 @@ export class DashboardComponent implements OnInit {
     });
   }
   initDatabase() {
-    if(confirm("确定要初始化？会爆哦！"))
-    this.queryService.initDatabase().subscribe(data => {
-      if (data)
-        alert("初始化成功");
-    });
+    if (confirm("确定要初始化？会爆哦！")) {
+      this.clearCache();
+      this.queryService.initDatabase().subscribe(data => {
+        if (data)
+          alert("初始化成功");
+      });
+    }
   }
   clearCache() {
     this.queryService.clearCache();
   }
-  t(card){
-    card.collapsed=!card.collapsed;
+  t(card) {
+    card.collapsed = !card.collapsed;
     console.info(card);
   }
-  removeCard(card)
-  {
- 
+  removeCard(card) {
+
     //this.cards.splice(this.cards.indexOf(card),1);
   }
 }

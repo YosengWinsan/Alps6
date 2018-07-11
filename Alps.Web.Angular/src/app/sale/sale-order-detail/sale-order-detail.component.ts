@@ -12,7 +12,7 @@ export class SaleOrderDetailComponent implements OnInit {
   saleOrder:any = {};
   editable:boolean=false;
   constructor(private saleService: SaleService, private activatedRoute: ActivatedRoute, private router: Router) { }
-  saleOrderItemColumns = { commodity: "品名", quantity: "数量", auxiliaryQuantity: "辅助数量", price: "金额" };
+  saleOrderItemColumns = { commodity: "品名",auxiliaryQuantity: "辅助数量", quantity: "数量",  price: "单价",amount:"金额" ,remark:"备注"};
   
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {

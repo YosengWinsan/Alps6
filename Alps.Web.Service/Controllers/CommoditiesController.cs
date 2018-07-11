@@ -33,7 +33,7 @@ namespace Alps.Web.Service.controllers
                 Description = p.Description,
                 Quantity = p.Quantity,
                 ListPrice = p.ListPrice,
-                AuxiliaryQuantity = p.AuxiliayQuantity,
+                AuxiliaryQuantity = p.AuxiliaryQuantity,
                 ProductSkuID = p.ProductSkuID
             }));
         }
@@ -54,13 +54,22 @@ namespace Alps.Web.Service.controllers
                 return this.AlpsActionError("无此商品");
                 //return NotFound();
             }
-
-            return this.AlpsActionOk(commodity);
+            CommodityEditDto dto = new CommodityEditDto
+            {
+                ID = commodity.ID,
+                Name = commodity.Name,
+                Description = commodity.Description,
+                ProductSkuID = commodity.ProductSkuID,
+                AuxiliaryQuantity = commodity.AuxiliaryQuantity,
+                Quantity = commodity.Quantity,
+                ListPrice = commodity.ListPrice
+            };
+            return this.AlpsActionOk(dto);
         }
 
         // PUT: api/Commodity/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCommodity([FromRoute] Guid id, [FromBody] Commodity commodity)
+        public async Task<IActionResult> PutCommodity([FromRoute] Guid id, [FromBody] CommodityEditDto commodity)
         {
             if (!ModelState.IsValid)
             {
@@ -80,8 +89,8 @@ namespace Alps.Web.Service.controllers
             existCommodity.Name = commodity.Name;
             existCommodity.Description = commodity.Description;
             existCommodity.Quantity = commodity.Quantity;
-            existCommodity.AuxiliayQuantity = commodity.AuxiliayQuantity;
- 
+            existCommodity.AuxiliaryQuantity = commodity.AuxiliaryQuantity;
+
             //_context.Entry(commodity).State = EntityState.Modified;
 
             try
@@ -108,17 +117,17 @@ namespace Alps.Web.Service.controllers
 
         // POST: api/Commodity
         [HttpPost]
-        public async Task<IActionResult> PostCommodity([FromBody] Commodity commodity)
+        public async Task<IActionResult> PostCommodity([FromBody] CommodityEditDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _context.Commodities.Add(commodity);
+            Commodity c=Commodity.Create(dto.ProductSkuID,dto.Name,dto.Description,dto.ListPrice,dto.Quantity,dto.AuxiliaryQuantity);
+            _context.Commodities.Add(c);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCommodity", new { id = commodity.ID }, commodity);
+            return this.AlpsActionOk();
         }
 
         // DELETE: api/Commodity/5

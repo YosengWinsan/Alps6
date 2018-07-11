@@ -105,7 +105,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("CommodityOptions")]
         public IActionResult CommodityOptions()
         {
-            return this.AlpsActionOk(_context.Commodities.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+            return this.AlpsActionOk(_context.Commodities.Select(p => new  { Value = p.ID, DisplayValue = p.Name ,QuantityRate=p.QuantityRate,IsOption=true}));
         }
         class TreeNode
         {
