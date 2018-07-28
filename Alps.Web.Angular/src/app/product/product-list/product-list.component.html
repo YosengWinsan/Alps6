@@ -1,8 +1,8 @@
 
 <!-- <alps-selector #catagorySelector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="catagoryID" (ngModelChange) = "onCatagoryChanged($event)"></alps-selector> -->
 
-<alps-menu-selector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="catagoryID" (ngModelChange) = "onCatagoryChanged($event)"></alps-menu-selector>
-
+<!-- <alps-menu-selector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="catagoryID" (ngModelChange) = "onCatagoryChanged($event)"></alps-menu-selector> -->
+<alps-commodity-catagory-selector [catagories]="catagoryOptions|async" (selectionChanged)="onCatagoryChanged($event)"></alps-commodity-catagory-selector>
 <mat-table #table [dataSource]="productDataSource" matSort aria-label="Elements">
 
 
@@ -23,7 +23,7 @@
   <ng-container matColumnDef="action">
     <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <a routerLink="../productdetail" [queryParams]="{id:row.id}" >
+      <a mat-icon-button routerLink="../productdetail" [queryParams]="{id:row.id}" >
         <mat-icon>list</mat-icon>
       </a>
     </mat-cell>

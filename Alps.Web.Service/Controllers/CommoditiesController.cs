@@ -26,18 +26,41 @@ namespace Alps.Web.Service.controllers
         public IActionResult GetCommodities()
         {
 
-            return this.AlpsActionOk(_context.Commodities.Select(p => new CommodityListDto
+            return this.AlpsActionOk(_context.ProductSkus.Where(p => p.Vendable).Select(p => new CommodityListDto
             {
                 ID = p.ID,
-                Name = p.Name,
-                Description = p.Description,
-                Quantity = p.Quantity,
+                CommodityName = p.CommodityName,
                 ListPrice = p.ListPrice,
-                AuxiliaryQuantity = p.AuxiliaryQuantity,
-                ProductSkuID = p.ProductSkuID
+                QuantityRate = p.QuantityRate,
+                PreSellQuantity = p.PreSellQuantity,
+                PreSellAuxiliaryQuantity = p.PreSellAuxiliaryQuantity,
+                StockQuantity = p.StockQuantity,
+                StockAuxiliaryQuantity = p.StockAuxiliaryQuantity,
+                OrderedAuxiliaryQuantity = p.OrderedAuxiliaryQuantity,
+                OrderedQuantity = p.OrderedQuantity,
+                SellableQuantity = p.SellableQuantity,
+                SellableAuxiliaryQuantity = p.SellableAuxiliaryQuantity
             }));
         }
-
+        [HttpGet("getCommoditiesByCatagoryID/{id}")]
+        public IActionResult getCommoditiesByCatagoryID(Guid id)
+        {
+            return this.AlpsActionOk(_context.ProductSkus.Where(p => p.Vendable && p.Product.CatagoryID==id).Select(p => new CommodityListDto
+            {
+                ID = p.ID,
+                CommodityName = p.CommodityName,
+                ListPrice = p.ListPrice,
+                QuantityRate = p.QuantityRate,
+                PreSellQuantity = p.PreSellQuantity,
+                PreSellAuxiliaryQuantity = p.PreSellAuxiliaryQuantity,
+                StockQuantity = p.StockQuantity,
+                StockAuxiliaryQuantity = p.StockAuxiliaryQuantity,
+                OrderedAuxiliaryQuantity = p.OrderedAuxiliaryQuantity,
+                OrderedQuantity = p.OrderedQuantity,
+                SellableQuantity = p.SellableQuantity,
+                SellableAuxiliaryQuantity = p.SellableAuxiliaryQuantity
+            }));
+        }
         // GET: api/Commodity/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCommodity([FromRoute] Guid id)
@@ -60,8 +83,8 @@ namespace Alps.Web.Service.controllers
                 Name = commodity.Name,
                 Description = commodity.Description,
                 ProductSkuID = commodity.ProductSkuID,
-                AuxiliaryQuantity = commodity.AuxiliaryQuantity,
-                Quantity = commodity.Quantity,
+                AuxiliaryQuantity = commodity.PreSellAuxiliaryQuantity,
+                Quantity = commodity.PreSellQuantity,
                 ListPrice = commodity.ListPrice
             };
             return this.AlpsActionOk(dto);
@@ -88,8 +111,8 @@ namespace Alps.Web.Service.controllers
             existCommodity.ListPrice = commodity.ListPrice;
             existCommodity.Name = commodity.Name;
             existCommodity.Description = commodity.Description;
-            existCommodity.Quantity = commodity.Quantity;
-            existCommodity.AuxiliaryQuantity = commodity.AuxiliaryQuantity;
+            existCommodity.PreSellQuantity = commodity.Quantity;
+            existCommodity.PreSellAuxiliaryQuantity = commodity.AuxiliaryQuantity;
 
             //_context.Entry(commodity).State = EntityState.Modified;
 
@@ -123,7 +146,7 @@ namespace Alps.Web.Service.controllers
             {
                 return BadRequest(ModelState);
             }
-            Commodity c=Commodity.Create(dto.ProductSkuID,dto.Name,dto.Description,dto.ListPrice,dto.Quantity,dto.AuxiliaryQuantity);
+            Commodity c = Commodity.Create(dto.ProductSkuID, dto.Name, dto.Description, dto.ListPrice, dto.Quantity, dto.AuxiliaryQuantity);
             _context.Commodities.Add(c);
             await _context.SaveChangesAsync();
 

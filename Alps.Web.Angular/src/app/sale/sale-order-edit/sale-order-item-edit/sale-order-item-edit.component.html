@@ -1,5 +1,5 @@
 <form [formGroup]="itemForm" class="form-container" enterToTab>
-  <alps-selector #commoditySelector placeholder='品名' formControlName="commodityID" [options]="commodityOptions"></alps-selector>
+  <alps-selector #commoditySelector placeholder='品名' formControlName="productSkuID" [options]="productSkuOptions"></alps-selector>
 
   <mat-form-field>
     <input matInput placeholder="辅助数量" formControlName="auxiliaryQuantity" readonly>

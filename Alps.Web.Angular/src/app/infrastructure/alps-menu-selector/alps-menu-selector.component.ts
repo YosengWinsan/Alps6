@@ -12,18 +12,18 @@ export const COMPONENT_NAME_VALUE_ACCESSOR: any = {
 @Component({
   selector: 'alps-menu-selector',
   templateUrl: './alps-menu-selector.component.html',
-  styleUrls: ['./alps-menu-selector.component.css'],  
+  styleUrls: ['./alps-menu-selector.component.css'],
   providers: [COMPONENT_NAME_VALUE_ACCESSOR]
 })
-export class AlpsMenuSelectorComponent  implements OnInit, ControlValueAccessor {
+export class AlpsMenuSelectorComponent implements OnInit, ControlValueAccessor {
 
   // private _selectedNode: AlpsSelectorOption;
   private _value: any = "";
   _displayValue: string = "请选择";
-   _options: any[] = [];
+  _options: any[] = [];
   _placeholder: string = "";
   _optionsPath = [];
-_selectedOption;
+  _selectedOption;
 
   @Input()
   set options(newOptions) {
@@ -44,11 +44,11 @@ _selectedOption;
   constructor(//private matDialog: MatDialog
   ) {
   }
-select(option){
-  this._selectedOption=option;
-       this.value = option.value;
-        this._displayValue = option.displayValue;   
-}
+  select(option) {
+    this._selectedOption = option;
+    this._displayValue = option.displayValue;
+    this.value = option.value;
+  }
 
   getDisplayValue() {
     return this._displayValue;
@@ -58,7 +58,7 @@ select(option){
 
       if (this._options && this._options.length > 0) {
         var displayValue = this.searchOption(this._options, this._value);
-        this._displayValue = displayValue === "" ? this._value : displayValue; 
+        this._displayValue = displayValue === "" ? this._value : displayValue;
       }
       // else
       // this._displayValue=this._value;
@@ -75,7 +75,7 @@ select(option){
         return result;
       }
       if (option.isOption && option.value == value) {
-        this._selectedOption=option;
+        this._selectedOption = option;
         return option.displayValue;
       }
     }
@@ -102,7 +102,7 @@ select(option){
   }
 
   ngOnInit(): void {
-    
+
   }
 
   writeValue(obj: any): void {
@@ -120,7 +120,7 @@ select(option){
   }
 
   setDisabledState(isDisabled: boolean): void {
-    
+
   }
 }
 

@@ -16,16 +16,19 @@ export class QueryService extends RepositoryService {
     return this.query("InitDatabase");
   }
   private queryAndCache(url) {
-    const cache =JSON.parse( sessionStorage.getItem(url));
+    const cache = JSON.parse(sessionStorage.getItem(url));
     return cache ? of(cache) : this.query(url).pipe(tap((res) => {
-      sessionStorage.setItem(url,JSON.stringify( res));
+      sessionStorage.setItem(url, JSON.stringify(res));
     }));
   }
-  clearCache(){
-    sessionStorage.clear();
+  clearCache(token?: string) {
+    if (token)
+      sessionStorage.removeItem(token);
+    else
+      sessionStorage.clear();
   }
-  getDashboardInfo()
-  {
+
+  getDashboardInfo() {
     return this.queryAndCache("DashboardInfo");
   }
   getCatagoryOptions() {
@@ -58,7 +61,7 @@ export class QueryService extends RepositoryService {
   getProductOption(id) {
     return this.query("ProductOption/" + id);
   }
-  getCountyOptions(){
+  getCountyOptions() {
     return this.queryAndCache("CountyOptions");
   }
 }

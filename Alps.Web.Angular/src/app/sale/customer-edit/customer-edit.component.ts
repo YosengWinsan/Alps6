@@ -32,8 +32,8 @@ export class CustomerEditComponent implements OnInit {
   save() {
     if (this.customerForm.valid)
       this.saleService.saveCustomer(this.customerForm.value).subscribe((d) => {
+        this.queryService.clearCache("CustomerOptions");
         history.back();
       });
-
   }
 }

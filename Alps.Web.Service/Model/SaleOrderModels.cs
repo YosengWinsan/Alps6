@@ -18,8 +18,9 @@ namespace Alps.Web.Service.Model
     public class SaleOrderItemEditDto:ISaleOrderItem
     {
         public Guid ID{get;set;}
-        public Guid CommodityID{get;set;}
-        public string Commodity{get;set;}
+        public Guid ProductSkuID{get;set;}
+       // public string ProductSkuName{get;set;}
+        public string CommodityName{get;set;}
         public decimal Quantity{get;set;}
         public decimal AuxiliaryQuantity{get;set;}
         public decimal Price{get;set;}

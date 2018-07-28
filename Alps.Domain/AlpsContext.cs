@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Alps.Domain.DistributionMgr;
+
 namespace Alps.Domain
 {
     public class AlpsContext : //IdentityDbContext<AlpsUser>
@@ -141,7 +143,11 @@ namespace Alps.Domain
             modelBuilder.Entity<StockInVoucherItem>().HasKey(p => new { p.ID, p.StockInVoucherID });
 
             //modelBuilder.Entity<SaleOrderItem>().OwnsOne(p => p.Quantity);
-            modelBuilder.Entity<DistributionMgr.DistributionVoucherItem>().OwnsOne(p => p.Quantity);
+            //modelBuilder.Entity<DistributionMgr.DistributionVoucherItem>().OwnsOne(p => p.Quantity);
+            modelBuilder.Entity<DistributionVoucher>().OwnsOne(p => p.DistributionAddress).HasOne(p => p.County).WithMany().OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<DistributionVoucher>().HasOne(p=>p.SaleOrder).WithMany().OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<DeliveryVoucherItem>().OwnsOne(p => p.ProductSkuInfo);
             modelBuilder.Entity<MaterialRequisitionItem>().OwnsOne(p => p.ProductSkuInfo);
             modelBuilder.Entity<MaterialReceiptItem>().OwnsOne(p => p.ProductSkuInfo);
@@ -158,6 +164,10 @@ namespace Alps.Domain
 
             modelBuilder.Entity<Customer>().OwnsOne(p => p.Address);
             modelBuilder.Entity<Supplier>().OwnsOne(p => p.Address);
+
+            modelBuilder.Entity<Commodity>().HasOne(p => p.Sku).WithMany().HasForeignKey(f => f.ID);
+            //modelBuilder.Entity<Commodity>().HasKey(p => new { p.OwnerID, p.ProductSkuID });
+            // modelBuilder.Entity<Commodity>().HasOne(p=>p.ProductSku).WithOne().HasForeignKey("");
             //modelBuilder.Entity<PurchaseOrderItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
             //modelBuilder.Entity<WarehouseVoucherItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
 
@@ -241,7 +251,7 @@ namespace Alps.Domain
                 context.Counties.Add(County.Create("鼓楼区", city.ID));
                 County county = County.Create("长乐区", city.ID);
                 context.Counties.Add(county);
-                
+
                 context.SaveChanges();
 
                 #endregion
@@ -334,8 +344,11 @@ namespace Alps.Domain
                     .AddChildCatagory(Catagory.Create("20#")))
                     .AddChildCatagory(Catagory.Create("角钢")
                     .AddChildCatagory(Catagory.Create("3#")).AddChildCatagory(Catagory.Create("4#"))
-                    .AddChildCatagory(Catagory.Create("5#")).AddChildCatagory(Catagory.Create("6#"))
-                    );
+                    .AddChildCatagory(Catagory.Create("5#")).AddChildCatagory(Catagory.Create("6#")))
+                     .AddChildCatagory(Catagory.Create("工字钢")
+                    .AddChildCatagory(Catagory.Create("10#")).AddChildCatagory(Catagory.Create("12#"))
+                    .AddChildCatagory(Catagory.Create("14#")).AddChildCatagory(Catagory.Create("16#"))
+                    .AddChildCatagory(Catagory.Create("18#")).AddChildCatagory(Catagory.Create("20a#")));
                 context.Catagories.Add(nCatagory);
                 nCatagory = Catagory.Create("坯料").AddChildCatagory(Catagory.Create("连铸坯"));
                 context.Catagories.Add(nCatagory);
@@ -375,6 +388,19 @@ namespace Alps.Domain
                     product.SetCatagory(associatedCatagory);
                     context.Products.Add(product);
                 }
+                foreach (Catagory childCatagory in  context.Catagories.FirstOrDefault(p => p.Name == "工字钢").Children)
+                {
+                    product = Product.Create(childCatagory.Name +"下偏3-5%",childCatagory.Name +"下偏3-5%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
+                    product.SetCatagory(childCatagory);
+                    context.Products.Add(product);
+                    product = Product.Create(childCatagory.Name +"下偏8-10%",childCatagory.Name +"下偏8-10%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
+                    product.SetCatagory(childCatagory);
+                    context.Products.Add(product);
+                    product = Product.Create(childCatagory.Name +"下偏18-20%",childCatagory.Name +"下偏18-20%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
+                    product.SetCatagory(childCatagory);
+                    context.Products.Add(product);
+                }
+               
                 associatedCatagory = context.Catagories.FirstOrDefault(p => p.Name == "连铸坯");
                 product = Product.Create("150*150", "150*150连铸坯", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
                 product.SetCatagory(associatedCatagory);
@@ -383,78 +409,40 @@ namespace Alps.Domain
                 product.SetCatagory(associatedCatagory);
                 context.Products.Add(product);
                 context.SaveChanges();
-                //Catagory associatedCatagory = context.Catagories.Find(caoCatagoryID);
-                //product = Product.Create("5#槽钢", "5#槽钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                //product.SetCatagory(associatedCatagory);
-                //context.Products.Add(product);
-                //productID = product.ID;
-                //product = Product.Create("6#槽钢", "6#槽钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                //product.SetCatagory(associatedCatagory);
-                //context.Products.Add(product);
-                //product = Product.Create("8#槽钢", "8#槽钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                //product.SetCatagory(associatedCatagory);
-                //context.Products.Add(product);
-                //product = Product.Create("10#槽钢", "10#槽钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                //product.SetCatagory(associatedCatagory);
-                //context.Products.Add(product);
-                //product = Product.Create("12#槽钢", "12#槽钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                //product.SetCatagory(associatedCatagory);
-                //context.Products.Add(product);
-                //product = Product.Create("14#槽钢", "14#槽钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                //product.SetCatagory(associatedCatagory);
-                //context.Products.Add(product);
-                // associatedCatagory = context.Catagories.Find(jiaoCatagoryID);
-                // product = Product.Create("3#角钢", "3#角钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                // product.SetCatagory(associatedCatagory);
-                // context.Products.Add(product);
-                // product = Product.Create("4#角钢", "4#角钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                // product.SetCatagory(associatedCatagory);
-                // context.Products.Add(product);
-                // product = Product.Create("5#角钢", "5#角钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                // product.SetCatagory(associatedCatagory);
-                // context.Products.Add(product);
-                // product = Product.Create("6#角钢", "6#角钢", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                // product.SetCatagory(associatedCatagory);
-                // context.Products.Add(product);
-                //product = Product.Create("连铸坯", "连铸坯", "不想多说", PricingMethod.PricingByWeight, 2000, unitID);
-                //context.Products.Add(product);
-                //gpID = product.ID;
-                //product = Product.Create("2极电机", "2极电机", "傻瓜都看的懂", PricingMethod.PricingByQuantity, 4000, unitID);
-                //context.Products.Add(product);
-                //product = Product.Create("4极电机", "4极电机", "傻瓜都看的懂", PricingMethod.PricingByQuantity, 4000, unitID);
-                //context.Products.Add(product);
-                //product = Product.Create("750轧辊", "750轧辊", "傻瓜都看的懂", PricingMethod.PricingByQuantity, 9000, unitID);
-                //context.Products.Add(product);
-                //product = Product.Create("700轧辊", "700轧辊", "傻瓜都看的懂", PricingMethod.PricingByQuantity, 9000, unitID);
-                //context.Products.Add(product);
-                //context.SaveChanges();
+
                 #endregion
 
                 #region 初始化SKU
                 ProductSku sku = null;
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "5#"))
                 {
-                    sku = ProductSku.Create(p, "6米*144条", "系统初始化");
+                    //sku = ProductSku.Create(p, "6米*144条", "系统初始化");
+                    sku = ProductSku.Create(p.ID, p.Name + " " + "6米*144条", "系统初始化", "", true, "", 3800, 2.3m, 0, 0);
                     context.ProductSkus.Add(sku);
                 }
                 gcSkuID = sku.ID;
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "6.3#"))
                 {
-                    sku = ProductSku.Create(p, "6米*96条", "系统初始化");
+                    sku = ProductSku.Create(p.ID, p.Name + " " + "6米*96条", "系统初始化", "", true, "", 3800, 2.3m, 0, 0);
+                    //sku = ProductSku.Create(p, "6米*96条", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "8#"))
                 {
-                    sku = ProductSku.Create(p, "6米*84条", "系统初始化");
+                    sku = ProductSku.Create(p.ID, p.Name + " " + "6米*84条", "系统初始化", "", true, "", 3800, 3.6m, 0, 0);
+                    //sku = ProductSku.Create(p, "6米*84条", "系统初始化");
                     context.ProductSkus.Add(sku);
-                    sku = ProductSku.Create(p, "9米*64条", "系统初始化");
+                    sku = ProductSku.Create(p.ID, p.Name + " " + "6米*64条", "系统初始化", "", true, "", 3800, 3.6m, 0, 0);
+                    //sku = ProductSku.Create(p, "9米*64条", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
                 foreach (Product p in context.Products.Where(p => p.Catagory.Name == "连铸坯"))
                 {
-                    sku = ProductSku.Create(p,  "6米", "系统初始化");
+                    sku = ProductSku.Create(p.ID, p.Name + " " + "6米", "系统初始化", "", false);
+                    //sku = ProductSku.Create(p, "6米", "系统初始化");
                     context.ProductSkus.Add(sku);
-                    sku = ProductSku.Create(p,"12米", "系统初始化");
+                    sku = ProductSku.Create(p.ID, p.Name + " " + "12米", "系统初始化", "", false);
+                    //sku = ProductSku.Create(p, "12米", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
                 gpSkuID = sku.ID;
@@ -493,101 +481,6 @@ namespace Alps.Domain
             }
             void ProductMgrSeed(AlpsContext context)
             {
-                #region 无用
-
-
-                //Catagory newCatagory = Catagory.Create("槽");
-                //var childCatagory = Catagory.Create("8#");
-                //newCatagory.AddChildCatagory(childCatagory);
-                //newCatagory.AddChildCatagory(Catagory.Create("10#"));
-                //newCatagory.AddChildCatagory(Catagory.Create("12#"));
-                //context.Catagories.Add(newCatagory);
-                //newCatagory = Catagory.Create("角");
-                //context.Catagories.Add(newCatagory);
-                //newCatagory.AddChildCatagory(Catagory.Create("3#"));
-                //newCatagory.AddChildCatagory(Catagory.Create("4#"));
-                //newCatagory.AddChildCatagory(Catagory.Create("5#"));
-                //childCatagory = Catagory.Create("6#");
-                //newCatagory.AddChildCatagory(childCatagory);
-                //Product product = null;
-                //childCatagory = context.Catagories.Local.FirstOrDefault(p => p.Name == "8#");
-                //newCatagory = context.Catagories.Local.FirstOrDefault(p => p.Name == "5#");
-                //for (int i = 0; i < 10; i++)
-                //{
-                //    product = Product.Create((i + 20).ToString() + "Kg", "8#槽钢" + (i + 20).ToString() + "Kg", "不想多说", PricingMethod.PricingByQuantity, 2000, unitID);
-                //    context.Products.Add(product);
-                //    product.AddAssociatedCatagory(childCatagory, 0);
-                //    product = Product.Create((i + 5).ToString() + "Kg", "5#角钢" + (i + 5).ToString() + "Kg", "不想多说", PricingMethod.PricingByWeight, 1000, unitID);
-                //    product.AddAssociatedCatagory(newCatagory, 0);
-                //    context.Products.Add(product);
-                //}
-
-                //context.SaveChanges();
-                //productID = product.ID;
-                //product = Product.Create("连铸坯*120*6", "连铸坯*120*6", "连铸坯*120*6", PricingMethod.PricingByWeight, 2000, unitID);
-                //context.Products.Add(product);
-                //context.SaveChanges();
-                //gpID = product.ID;
-                #endregion
-
-                //#region 初始化入库单
-
-                //ProductSku sku = context.ProductSkus.Find(gcSkuID);
-                //WarehouseVoucher voucher = WarehouseVoucher.Create(supplierID, departmentID, "系统初始化");
-                //ProductSkuInfo psi = sku.GetProductSkuInfo();  
-                //voucher.AddItem(psi, 2.3m, 1, 2100, "12345", positionID);
-                //voucher.AddItem(psi, 2.5m, 1, 2100, "151515", positionID);
-                //context.WarehouseVouchers.Add(voucher);         
-                //context.SaveChanges();
-                //voucher = WarehouseVoucher.Create(supplierID, departmentID, "系统初始化2");
-                //voucher.AddItem(psi, 2.4m, 1, 2000, "600001", positionID);
-                //voucher.AddItem(psi, 2.6m, 1, 2000, "600002", positionID);
-                //context.WarehouseVouchers.Add(voucher);
-                //psi = context.ProductSkus.Find(gpSkuID).GetProductSkuInfo();
-                //voucher = WarehouseVoucher.Create(supplierID, departmentID, "系统初始化3");
-                //voucher.AddItem(psi, 1000m, 1500, 1800, "", positionID);
-                //voucher.AddItem(psi, 2000m, 3000, 1700, "", positionID);
-                //context.WarehouseVouchers.Add(voucher);
-                //voucher = WarehouseVoucher.Create(supplierID, departmentID, "系统初始化3");
-                //voucher.AddItem(psi, 500m, 750, 1700, "", positionID);
-                //context.WarehouseVouchers.Add(voucher);
-                //context.SaveChanges();
-
-                //#endregion
-
-                //#region 初始化库存
-                //context.ProductStocks.Add(ProductStock.Create(gcSkuID, 1, 2.5m, departmentID, positionID, "900001"));
-                //context.ProductStocks.Add(ProductStock.Create(gpSkuID, 1, 2.52m, departmentID, positionID, "900002"));
-                //context.SaveChanges();
-                //#endregion
-
-                //#region 初始化领料单
-                //MaterialRequisition r = MaterialRequisition.Create(departmentID, productDepartmentID, "系统");
-                //psi = context.ProductSkus.Find(gpSkuID).GetProductSkuInfo();
-                //r.AddItem(psi, 1500, 1000, 1800, "", positionID);
-                //context.MaterialRequisitions.Add(r);
-                //context.SaveChanges();
-                //#endregion
-
-                //#region 初始化收料单
-                //MaterialReceipt s = MaterialReceipt.Create(departmentID, productDepartmentID, "系统");
-                //psi = context.ProductSkus.Find(gcSkuID).GetProductSkuInfo();
-                //s.AddItem(psi, 1, 2.33m, 1800, "556699", positionID);
-                //context.MaterialReceipts.Add(s);
-                //context.SaveChanges();
-                //#endregion
-
-                //#region 初始化出库单
-                //psi = context.ProductSkus.Find(gcSkuID).GetProductSkuInfo();
-                //DeliveryVoucher dv = DeliveryVoucher.Create(departmentID, customerID, "系统初始化");
-                //dv.AddItem(psi, 1, 2.5m, 2000, "900001", positionID, "");
-                //context.DeliveryVouchers.Add(dv);
-                //psi = context.ProductSkus.Find(gpSkuID).GetProductSkuInfo();
-                //dv = DeliveryVoucher.Create(departmentID, customerID, "系统初始化");
-                //dv.AddItem(psi, 2, 2.5m, 2000, "900003", positionID, "");
-                //context.DeliveryVouchers.Add(dv);
-                //context.SaveChanges();
-                //#endregion
 
                 var ysjsID = context.Departments.FirstOrDefault(p => p.Name == "轧钢车间").ID;
                 var cgID = context.ProductSkus.FirstOrDefault().ID;
@@ -644,16 +537,24 @@ namespace Alps.Domain
                 }
                 context.SaveChanges();
                 var saleOrder = SaleOrder.Create(customerID);
-                foreach (var commodity in context.Commodities.Take(5))
+                // foreach (var commodity in context.Commodities.Take(5))
+                // {
+                //     saleOrder.AddItem(commodity.ID, 12, 2000, 5, "#");
+                // }
+                foreach (var productSku in context.ProductSkus.Take(5))
                 {
-                    saleOrder.AddItem(commodity.ID, 12, 2000,5, "#");
+                    saleOrder.AddItem(productSku.ID, productSku.Name, 12, 2000, 5, "#");
                 }
                 context.SaleOrders.Add(saleOrder);
                 saleOrder = SaleOrder.Create(customerID);
-                foreach (var commodity in context.Commodities.OrderByDescending(p => p.ID).Take(5))
+                foreach (var productSku in context.ProductSkus.OrderByDescending(p => p.ID).Take(5))
                 {
-                    saleOrder.AddItem(commodity.ID, 1, 3000, 1,"#");
+                    saleOrder.AddItem(productSku.ID, productSku.Name, 1, 3000, 1, "#");
                 }
+                // foreach (var commodity in context.Commodities.OrderByDescending(p => p.ID).Take(5))
+                // {
+                //     saleOrder.AddItem(commodity.ID, 1, 3000, 1, "#");
+                // }
                 context.SaleOrders.Add(saleOrder);
 
                 context.SaveChanges();

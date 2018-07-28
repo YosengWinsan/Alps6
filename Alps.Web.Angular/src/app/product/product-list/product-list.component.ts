@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../product.service';
 import { QueryService } from '../../infrastructure/infrastructure.module';
 import { MatTableDataSource, MatSort } from '@angular/material';
-import { AlpsSelectorComponent } from '../../infrastructure/alps-selector/alps-selector.component';
+//import { AlpsSelectorComponent } from '../../infrastructure/alps-selector/alps-selector.component';
 
 @Component({
   selector: 'app-product-list',
@@ -14,15 +14,13 @@ export class ProductListComponent implements OnInit {
   constructor(private productService: ProductService, private queryService: QueryService) {
   }
   @ViewChild(MatSort) matSort: MatSort;
-  @ViewChild("catagorySelector") catagorySelector:AlpsSelectorComponent;
+  //@ViewChild("catagorySelector") catagorySelector:AlpsSelectorComponent;
   catagoryID;
   catagoryOptions;
   productDataSource: MatTableDataSource<any>;
   displayedColumns = ["name", "fullName", "catagory", "action"];
   ngOnInit() {
-    this.queryService.getCatagoryOptions().subscribe(res => {
-      this.catagoryOptions = res;
-    });
+    this.catagoryOptions=this.queryService.getCatagoryOptions();
   }
   onCatagoryChanged(value) {
     if (value && value !== "") {

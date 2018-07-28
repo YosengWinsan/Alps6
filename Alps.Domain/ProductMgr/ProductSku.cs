@@ -5,6 +5,7 @@ namespace Alps.Domain.ProductMgr
 {
     public class ProductSku : EntityBase
     {
+        //TODO:增加SKU所属Department
         //[Display(Name="SKU名")]
         //public string Name { get; set; }
         [Display(Name = "SKU全名")]
@@ -21,19 +22,68 @@ namespace Alps.Domain.ProductMgr
         public Boolean Deleted { get; set; }
         public string Code { get; set; }
         public virtual Product Product { get; set; }
-        public static ProductSku Create(Product product, string name, string description)
+
+        //销售相关信息
+        public bool Vendable { get; set; }
+        public string CommodityName { get; set; }
+        public decimal ListPrice { get; set; }
+        public decimal QuantityRate { get; set; }
+        //Quantity
+        public decimal StockQuantity { get; set; }
+        public decimal PreSellQuantity { get; set; }
+        public decimal OrderedQuantity { get; set; }
+        public decimal SellableQuantity { get { return PreSellQuantity + StockQuantity - OrderedQuantity; } }
+        //AuxiliaryQuantity
+        public decimal StockAuxiliaryQuantity { get; set; }
+        public decimal PreSellAuxiliaryQuantity { get; set; }
+        public decimal OrderedAuxiliaryQuantity { get; set; }
+        public decimal SellableAuxiliaryQuantity { get { return PreSellAuxiliaryQuantity + StockAuxiliaryQuantity - OrderedAuxiliaryQuantity; } }
+        // public static ProductSku Create(Product product, string name, string description)
+        // {
+        //     return ProductSku.Create(product, name, description, "");
+        // }
+        // public static ProductSku Create(Product product, string name, string description, string code)
+        // {
+        //     ProductSku sku = new ProductSku();
+        //     sku.Name = name;
+        //     sku.Description = description;
+        //     sku.CreatedTime = DateTime.Now;
+        //     sku.Deleted = false;
+        //     sku.Code = code;
+        //     sku.UpdateProduct(product);
+        //     return sku;
+        // }
+        public static ProductSku Create(Guid productID, string name, string description, string code, bool vendable)
         {
-            return ProductSku.Create(product, name, description, "");
+            return ProductSku.Create(productID,name,description,code,vendable,"",0,0,0,0);
         }
-        public static ProductSku Create(Product product, string name, string description, string code)
+        public static ProductSku Create(Guid productID, string name, string description, string code, bool vendable, string commodityName, decimal listPrice, decimal quantityRate
+        , decimal preSellQuantity, decimal preSellAuxiliaryQuantity)
         {
             ProductSku sku = new ProductSku();
+            sku.ProductID = productID;
             sku.Name = name;
+            sku.FullName = name;
             sku.Description = description;
-            sku.CreatedTime = DateTime.Now;
-            sku.Deleted = false;
             sku.Code = code;
-            sku.UpdateProduct(product);
+            sku.CreatedTime = DateTime.Now;
+            sku.Vendable = vendable;
+            if (sku.Vendable)
+            {
+                sku.CommodityName=commodityName==string.Empty?name:commodityName;
+                sku.ListPrice = listPrice;
+                sku.QuantityRate = quantityRate;
+                sku.PreSellQuantity = preSellQuantity;
+                sku.PreSellAuxiliaryQuantity = preSellAuxiliaryQuantity;
+            }
+            else
+            {
+                sku.CommodityName = "";
+                sku.ListPrice = 0;
+                sku.QuantityRate = 1;
+                sku.PreSellAuxiliaryQuantity = 0;
+                sku.PreSellQuantity = 0;
+            }
             return sku;
         }
         public void UpdateProduct(Product p)

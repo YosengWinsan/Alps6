@@ -22,6 +22,11 @@ export class SaleService extends RepositoryService {
     this.setCommodity();
     return this.getall();
   }
+  getCommoditiesByCatagoryID(id)
+  {
+    this.setCommodity();
+    return this.query("getCommoditiesByCatagoryID/"+id);
+  }
   getCommodity(id: string) {
     this.setCommodity();
     return this.get(id);

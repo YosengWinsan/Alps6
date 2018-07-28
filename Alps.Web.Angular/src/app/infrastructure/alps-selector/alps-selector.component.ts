@@ -54,8 +54,9 @@ _selectedOption;
       (result) => {
         if (result) {
           this._selectedOption=result;
+          this._displayValue = result.displayValue;  
           this.value = result.value;
-          this._displayValue = result.displayValue;          
+        
         }
       }
     );

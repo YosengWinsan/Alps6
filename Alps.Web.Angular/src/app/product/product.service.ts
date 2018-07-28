@@ -10,12 +10,15 @@ export class ProductService extends RepositoryService {
     super(injector);
     this.setBaseUrl("api/products");
   }
-private product(){
-this.setBaseUrl("api/products");
-return this;
-}
-  private productSku()
-  {
+  private product() {
+    this.setBaseUrl("api/products");
+    return this;
+  }
+  private catagory() {
+    this.setBaseUrl("api/catagories");
+    return this;
+  }
+  private productSku() {
     this.setBaseUrl("api/productskus");
     return this;
   }
@@ -26,15 +29,19 @@ return this;
     return this.product().query("detail/" + id);
   }
   getProductSku(id) {
-    
+
     return this.productSku().get(id);
   }
-  saveProductSku(sku)
-  {
+  saveProductSku(sku) {
     return this.productSku().createAndUpdate(sku);
   }
-  saveProduct(product)
-  {
+  saveProduct(product) {
     return this.product().createAndUpdate(product);
+  }
+
+
+  getListByParentID(id: string) {
+
+    return this.catagory().query("GetListByParentID/" + id);
   }
 }

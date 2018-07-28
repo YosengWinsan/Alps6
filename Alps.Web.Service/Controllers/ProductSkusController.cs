@@ -49,7 +49,12 @@ namespace Alps.Web.Service.Controllers
                 ProductID = p.ProductID,
                 Product = p.Product.Name,
                 Description = p.Description,
-                Code=p.Code
+                Code = p.Code,
+                ListPrice = p.ListPrice,
+                Vendable = p.Vendable,
+                CommodityName = p.CommodityName,
+                PreSellAuxiliaryQuantity = p.PreSellAuxiliaryQuantity,
+                PreSellQuantity = p.PreSellQuantity
             }).SingleOrDefaultAsync(m => m.ID == id);
 
             if (productSku == null)
@@ -79,10 +84,14 @@ namespace Alps.Web.Service.Controllers
             productsku.Name = dto.Name;
             productsku.Description = dto.Description;
             productsku.Code = dto.Code;
-            var p = _context.Products.Find(dto.ProductID);
-            if (p == null)
-                return this.AlpsActionWarning();
-            productsku.UpdateProduct(p);
+            productsku.Vendable = dto.Vendable;
+            productsku.ListPrice = dto.ListPrice;
+            productsku.CommodityName = dto.CommodityName;
+            productsku.PreSellAuxiliaryQuantity = dto.PreSellAuxiliaryQuantity;
+            productsku.PreSellQuantity = dto.PreSellQuantity;
+            productsku.ProductID = dto.ProductID;
+            productsku.FullName = dto.Name;
+            //var p = _context.Products.Find(dto.ProductID);
             try
             {
                 await _context.SaveChangesAsync();
@@ -110,8 +119,10 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Product p = _context.Products.Find(dto.ProductID);
-            var productSku = ProductSku.Create(p, dto.Name, dto.Description,dto.Code);
+            //Product p = _context.Products.Find(dto.ProductID);
+            var productSku = ProductSku.Create(dto.ProductID, dto.Name, dto.Description, dto.Code, dto.Vendable,
+            dto.CommodityName, dto.ListPrice, dto.QuantityRate, dto.PreSellQuantity, dto.PreSellAuxiliaryQuantity);
+
             _context.ProductSkus.Add(productSku);
             await _context.SaveChangesAsync();
 

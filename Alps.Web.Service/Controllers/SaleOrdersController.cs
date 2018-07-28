@@ -55,8 +55,9 @@ namespace Alps.Web.Service.controllers
                 Items = p.Items.Select(l => new SaleOrderItemEditDto
                 {
                     ID = l.ID,
-                    CommodityID = l.CommodityID,
-                    Commodity = l.Commodity.Name,
+                    ProductSkuID=l.ProductSkuID,
+                    //ProductSkuName = l.ProductSku.Name,
+                    CommodityName = l.CommodityName,
                     Quantity = l.Quantity,
                     AuxiliaryQuantity = l.AuxiliaryQuantity,
                     Price = l.Price,
@@ -92,8 +93,9 @@ namespace Alps.Web.Service.controllers
                 Items = p.Items.Select(l => new SaleOrderItemEditDto
                 {
                     ID = l.ID,
-                    CommodityID = l.CommodityID,
-                    Commodity = l.Commodity.Name,
+                    ProductSkuID = l.ProductSkuID,
+                    //ProductSkuName = l.ProductSku.Name,
+                    CommodityName=l.CommodityName,
                     Quantity = l.Quantity,
                     AuxiliaryQuantity = l.AuxiliaryQuantity,
                     Price = l.Price,
@@ -150,17 +152,18 @@ namespace Alps.Web.Service.controllers
 
         // POST: api/SaleOrders
         [HttpPost]
-        public async Task<IActionResult> PostSaleOrder([FromBody] SaleOrder saleOrder)
+        public async Task<IActionResult> PostSaleOrder([FromBody] SaleOrderEditDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            var saleOrder=SaleOrder.Create(dto.CustomerID);
+            saleOrder.UpdateItems(dto.Items);
             _context.SaleOrders.Add(saleOrder);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSaleOrder", new { id = saleOrder.ID }, saleOrder);
+            return this.AlpsActionOk();
         }
 
         // DELETE: api/SaleOrders/5
@@ -186,13 +189,15 @@ namespace Alps.Web.Service.controllers
         [HttpPost("Submit/{id}")]
         public async Task<IActionResult> Submit([FromRoute] Guid id)
         {
-            var saleOrderVoucher = await _context.SaleOrders.FindAsync(id);
-            if (saleOrderVoucher.Status != SaleOrderStatus.UnConfirm)
-            {
-                return this.AlpsActionWarning("单据已提交");
-            }
-            saleOrderVoucher.Status = SaleOrderStatus.Confirm;
 
+            var saleService=new Domain.Service.SaleService(_context);
+            try{
+                saleService.SubmitSaleOrder(id);
+            }
+            catch(DomainException ex)
+            {
+                return this.AlpsActionWarning(ex.Message);
+            }
             await _context.SaveChangesAsync();
             return this.AlpsActionOk();
 

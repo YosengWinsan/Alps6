@@ -3,6 +3,8 @@ using Alps.Domain.StockMgr;
 using Alps.Domain;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
 namespace Alps.Domain.Service
 {
     public class StockService
@@ -22,7 +24,6 @@ namespace Alps.Domain.Service
             {
                 ProductStockIn(stockInVoucher.DepartmentID, item.PositionID, item.ProductSkuID, item.SerialNumber, item.Quantity, item.AuxiliaryQuantity);
             }
-            //return true;
         }
         public void StockOut(StockOutVoucher stockOutVoucher)
         {
@@ -33,31 +34,17 @@ namespace Alps.Domain.Service
             {
                 ProductStockOut(stockOutVoucher.DepartmentID, item.PositionID, item.ProductSkuID, item.SerialNumber, item.Quantity, item.AuxiliaryQuantity);
             }
+
         }
 
-        private void ProductStockIn(Guid ownerID,Guid positionID, Guid skuID, string serialNumber,decimal quantity, decimal auxiliaryQuantity)
+        private void ProductStockIn(Guid ownerID, Guid positionID, Guid skuID, string serialNumber, decimal quantity, decimal auxiliaryQuantity)
         {
             ProductStock productStock = null;
             productStock = _context.ProductStocks.Find(ownerID, positionID, skuID, serialNumber);
-
-            //if (productNumber == string.Empty)
-            //{
-
-            //    productStock = _context.ProductStocks.Find(ownerID, positionID, skuID, productNumber);//.FirstOrDefault(p => p.DepartmentID == ownerID && p.SkuID == skuID && p.PositionID == positionID && p.ProductNumber == productNumber);
-            //    if (productStock == null)
-            //        productStock = db.ProductStocks.FirstOrDefault(p => p.DepartmentID == ownerID && p.SkuID == skuID && p.PositionID == positionID && p.ProductNumber == productNumber);
-            //}
-            //else
-            //{
-            //    productStock = db.ProductStocks.Local.FirstOrDefault(p => p.ProductNumber == productNumber);
-            //    if (productStock == null)
-            //        productStock = db.ProductStocks.FirstOrDefault(p => p.ProductNumber == productNumber);
-            //}
             if (productStock == null)
             {
                 ProductStock newProductStock = ProductStock.Create(ownerID, positionID, skuID, serialNumber, quantity, auxiliaryQuantity);
                 _context.ProductStocks.Add(newProductStock);
-
             }
             else
             {
@@ -68,40 +55,30 @@ namespace Alps.Domain.Service
                 else
                 {
                     productStock.AuxiliaryQuantity += auxiliaryQuantity;
-                    productStock.Quantity +=quantity ;
+                    productStock.Quantity += quantity;
                 }
             }
+            var sku = _context.ProductSkus.Find(skuID);
+            sku.StockAuxiliaryQuantity += auxiliaryQuantity;
+            sku.StockQuantity += quantity;
+
         }
         private void ProductStockOut(Guid ownerID, Guid positionID, Guid skuID, string serialNumber, decimal quantity, decimal auxiliaryQuantity)
         {
             ProductStock productStock = null;
             productStock = _context.ProductStocks.Find(ownerID, positionID, skuID, serialNumber);
-
-            //if (productNumber == string.Empty)
-            //{
-
-            //    productStock = _context.ProductStocks.Find(ownerID, positionID, skuID, productNumber);//.FirstOrDefault(p => p.DepartmentID == ownerID && p.SkuID == skuID && p.PositionID == positionID && p.ProductNumber == productNumber);
-            //    if (productStock == null)
-            //        productStock = db.ProductStocks.FirstOrDefault(p => p.DepartmentID == ownerID && p.SkuID == skuID && p.PositionID == positionID && p.ProductNumber == productNumber);
-            //}
-            //else
-            //{
-            //    productStock = db.ProductStocks.Local.FirstOrDefault(p => p.ProductNumber == productNumber);
-            //    if (productStock == null)
-            //        productStock = db.ProductStocks.FirstOrDefault(p => p.ProductNumber == productNumber);
-            //}
             if (productStock != null)
             {
                 if (serialNumber != string.Empty)
                 {
-                    if (productStock.AuxiliaryQuantity == auxiliaryQuantity && productStock.Quantity ==quantity )
+                    if (productStock.AuxiliaryQuantity == auxiliaryQuantity && productStock.Quantity == quantity)
                         _context.ProductStocks.Remove(productStock);
                     else
                         throw new DomainException("库存数量已变化");
                 }
                 else
                 {
-                    if (productStock.AuxiliaryQuantity >=auxiliaryQuantity  && productStock.Quantity >= quantity)
+                    if (productStock.AuxiliaryQuantity >= auxiliaryQuantity && productStock.Quantity >= quantity)
                     {
                         productStock.Quantity -= quantity;
                         productStock.AuxiliaryQuantity -= auxiliaryQuantity;
@@ -113,11 +90,23 @@ namespace Alps.Domain.Service
                     if (productStock.AuxiliaryQuantity == 0 && productStock.Quantity == 0)
                         _context.ProductStocks.Remove(productStock);
                 }
+                var sku = _context.ProductSkus.Find(skuID);
+                sku.StockAuxiliaryQuantity -= auxiliaryQuantity;
+                sku.StockQuantity -= quantity;
             }
             else
             {
                 throw new DomainException("无此库存");
-                
+            }
+        }
+        public void UpdateProductSkuQuantity()
+        {
+            var stocks = _context.ProductStocks.GroupBy(p => p.ProductSkuID).Select(p => new { ID = p.Key, Quantity = p.Sum(k => k.Quantity), AuxiliaryQuantity = p.Sum(k => k.AuxiliaryQuantity) });
+            foreach (var stock in stocks)
+            {
+                var sku = _context.ProductSkus.Find(stock.ID);
+                sku.StockQuantity = stock.Quantity;
+                sku.StockAuxiliaryQuantity = stock.AuxiliaryQuantity;
             }
         }
         public string StockContext()

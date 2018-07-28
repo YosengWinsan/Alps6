@@ -44,25 +44,25 @@ namespace Alps.Domain.SaleMgr
         {
             this.Status = SaleOrderStatus.Confirm;
         }
-        public void AddItem(Guid commodityID, decimal quantity, decimal price, decimal auxiliaryQuantity, string remark)
+        public void AddItem(Guid productSkuID,string commodityName, decimal quantity, decimal price, decimal auxiliaryQuantity, string remark)
         {
             var item = new SaleOrderItem()
             {
-                CommodityID = commodityID,
+                ProductSkuID = productSkuID,
                 Quantity = quantity,
                 Price = price,
                 Remark = remark,
                 AuxiliaryQuantity = auxiliaryQuantity,
+                CommodityName=commodityName
             };
-            item.UpdateAmount();
             this.Items.Add(item);
             this.TotalAuxiliaryQuantity += item.AuxiliaryQuantity;
             this.TotalQuantity += item.Quantity;
             this.TotalAmount += item.Amount;
         }
-        public void RemoveItem(Guid commodityID)
+        public void RemoveItem(Guid itemID)
         {
-            var item = this.Items.FirstOrDefault(p => p.CommodityID == commodityID);
+            var item = this.Items.FirstOrDefault(p => p.ID==itemID);
             if (item == null)
                 throw new DomainException("订单中无此物品");
             this.Items.Remove(item);
@@ -70,7 +70,7 @@ namespace Alps.Domain.SaleMgr
             this.TotalQuantity -= item.Quantity;
             this.TotalAmount -= item.Amount;
         }
-        private void UpdateItem(Guid itemID, Guid commodityID, decimal quantity, decimal price, decimal auxiliaryQuantity, string remark)
+        private void UpdateItem(Guid itemID, Guid productSkuID,string commodityName, decimal quantity, decimal price, decimal auxiliaryQuantity, string remark)
         {
             if (itemID == Guid.Empty)
                 throw new ArgumentException("参数不含主键");
@@ -78,7 +78,8 @@ namespace Alps.Domain.SaleMgr
             if (existingSaleOrderItem == null)
                 throw new DomainException("无此主键实体");
 
-            existingSaleOrderItem.CommodityID = commodityID;
+            existingSaleOrderItem.ProductSkuID = productSkuID;
+            existingSaleOrderItem.CommodityName=commodityName;
             existingSaleOrderItem.Remark = remark;
             if (existingSaleOrderItem.Quantity != quantity || existingSaleOrderItem.Price != price)
             {
@@ -103,8 +104,8 @@ namespace Alps.Domain.SaleMgr
             var addedItems = items.Where(p => !this.Items.Any(k => k.ID == p.ID)).ToList();
             var deletedItems = this.Items.Where(p => !items.Any(k => k.ID == p.ID)).ToList();
             deletedItems.ForEach(p => this.Items.Remove(p));
-            addedItems.ForEach(p => this.AddItem(p.CommodityID, p.Quantity, p.Price, p.AuxiliaryQuantity, p.Remark));
-            updatedItems.ForEach(p => this.UpdateItem(p.ID, p.CommodityID, p.Quantity, p.Price, p.AuxiliaryQuantity, p.Remark));
+            addedItems.ForEach(p => this.AddItem(p.ProductSkuID,p.CommodityName, p.Quantity, p.Price, p.AuxiliaryQuantity, p.Remark));
+            updatedItems.ForEach(p => this.UpdateItem(p.ID, p.ProductSkuID,p.CommodityName, p.Quantity, p.Price, p.AuxiliaryQuantity, p.Remark));
             //this.UpdateTotalAmount();
         }
        
@@ -118,7 +119,8 @@ namespace Alps.Domain.SaleMgr
     public interface ISaleOrderItem
     {
         Guid ID { get; set; }
-        Guid CommodityID { get; set; }
+        Guid ProductSkuID { get; set; }
+        string CommodityName{get;set;}
         decimal Price { get; set; }
         string Remark { get; set; }
         decimal Quantity { get; set; }

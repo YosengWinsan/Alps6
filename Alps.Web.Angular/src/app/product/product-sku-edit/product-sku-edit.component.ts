@@ -14,7 +14,16 @@ export class ProductSkuEditComponent implements OnInit {
   product: string;
   productID: string;
   constructor(private productService: ProductService, private queryService: QueryService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) {
-    this.productSkuForm = formBuilder.group({ id: [], name: [], productID: [],description: [] ,code:[]});
+    this.productSkuForm = formBuilder.group({
+      id: [], name: [], productID: [], description: [], code: [], vendable: [],
+      commodityName: [], listPrice: [], quantityRate: [], preSellQuantity: [], preSellAuxiliaryQuantity: []
+    });
+    this.productSkuForm.get("vendable").valueChanges.subscribe(value => {
+      if (value && !this.productSkuForm.get("commodityName").value) {
+        this.productSkuForm.get("commodityName").setValue(this.productSkuForm.get("name").value);
+      }
+    });
+
   }
 
   ngOnInit() {
@@ -43,6 +52,8 @@ export class ProductSkuEditComponent implements OnInit {
       this.productID = id;
       this.queryService.getProductOption(id).subscribe(data => {
         this.product = data.displayValue;
+        if (!this.productSkuForm.controls.name.value)
+          this.productSkuForm.controls.name.setValue(this.product);
       });
     }
   }

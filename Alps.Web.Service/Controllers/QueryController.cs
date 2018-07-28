@@ -26,6 +26,8 @@ namespace Alps.Web.Service.Controllers
             {
                 addressService.UpdateChildrenFullName(country);
             }
+            (new Domain.Service.StockService(_context)).UpdateProductSkuQuantity();
+
             _context.SaveChanges();
 
 
@@ -79,11 +81,9 @@ namespace Alps.Web.Service.Controllers
         public IActionResult ProductSkuOptions()
         {
             var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID, IsOption = false })
-              .Union(_context.ProductSkus.Where(k => !k.Deleted).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
+              .Union(_context.ProductSkus.Where(k => !k.Deleted&& k.Vendable).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
               .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID, IsOption = false }));
             var catagories = BuildTree(unionQuery.ToList(), null);
-
-            //var query=
             return Ok(catagories);
         }
         [HttpGet("CatagoryOptions")]
@@ -104,7 +104,7 @@ namespace Alps.Web.Service.Controllers
         }
         [HttpGet("CommodityOptions")]
         public IActionResult CommodityOptions()
-        {
+        {            
             return this.AlpsActionOk(_context.Commodities.Select(p => new  { Value = p.ID, DisplayValue = p.Name ,QuantityRate=p.QuantityRate,IsOption=true}));
         }
         class TreeNode

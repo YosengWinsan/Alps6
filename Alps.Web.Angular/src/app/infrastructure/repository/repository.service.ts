@@ -90,7 +90,7 @@ this.queryError();
     return throwError( '与服务器交互失败！');
   }
   protected filterError(res) {
-    if (res && (res.resultCode) && res.resultCode !== AlpsActionResultCode.Ok) {
+    if (res && (res.hasOwnProperty("resultCode")) && res.resultCode != AlpsActionResultCode.Ok) {
       alert(res.messages);
       return false;
 

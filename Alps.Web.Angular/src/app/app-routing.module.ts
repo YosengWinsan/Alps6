@@ -7,7 +7,8 @@ const routes: Routes = [
 {path:"catagory",loadChildren:"./catagory/catagory.module#CatagoryModule"},
 {path:"product",loadChildren:"./product/product.module#ProductModule"},
 {path:"stock",loadChildren:"./stock/stock.module#StockModule"},
-{path:"sale",loadChildren:"./sale/sale.module#SaleModule"}
+{path:"sale",loadChildren:"./sale/sale.module#SaleModule"},
+{path:"logistics",loadChildren:"./logistics/logistics.module#LogisticsModule"}
 ];
 
 @NgModule({

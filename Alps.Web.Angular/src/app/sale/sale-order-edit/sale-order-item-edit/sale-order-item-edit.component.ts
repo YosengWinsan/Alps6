@@ -13,12 +13,12 @@ import { AlpsConst } from '../../../infrastructure/alps-const';
 export class SaleOrderItemEditComponent implements OnInit {
   @ViewChild('commoditySelector') commoditySelector: AlpsSelectorComponent;
   itemForm: FormGroup;
-  commodityOptions;
+  productSkuOptions;
   constructor(@Inject(MAT_DIALOG_DATA) private formValue, private formBuilder: FormBuilder, private queryService: QueryService, private matDialogRef: MatDialogRef<SaleOrderItemEditComponent>) {
     this.itemForm = formBuilder.group({
-      id: [], commodityID: [, [Validators.required]], commodity: [], quantity: [0, [Validators.required, Validators.pattern(AlpsConst.NON_ZERO_NUMBER_PATTERN)]],
+      id: [], productSkuID: [, [Validators.required]], commodityName: [], quantity: [0, [Validators.required, Validators.pattern(AlpsConst.NON_ZERO_NUMBER_PATTERN)]],
       auxiliaryQuantity: [0, [Validators.pattern(AlpsConst.NUMBER_PATTERN)]], price: [0, [Validators.required, Validators.pattern(AlpsConst.NON_ZERO_NUMBER_PATTERN)]]
-      , remark: [],amount:[]
+      , remark: [], amount: []
     });
 
   }
@@ -26,17 +26,20 @@ export class SaleOrderItemEditComponent implements OnInit {
   ngOnInit() {
     if (this.formValue)
       this.itemForm.patchValue(this.formValue);
-    this.queryService.getCommodityOptions().subscribe(res => {
-      this.commodityOptions = res;     
+    this.queryService.getProductSkuOptions().subscribe(res => {
+      this.productSkuOptions = res;
     });
-    this.itemForm.get("quantity").valueChanges.subscribe(quantity => {   
-      this.itemForm.get("amount").setValue(this.itemForm.get("price").value*quantity);
+    this.itemForm.controls.productSkuID.valueChanges.subscribe(skuID => {
+      if (skuID)
+        this.itemForm.controls.commodityName.setValue(this.commoditySelector.getDisplayValue());
+    });
+    this.itemForm.get("quantity").valueChanges.subscribe(quantity => {
+      this.itemForm.get("amount").setValue(this.itemForm.get("price").value * quantity);
       if (this.commoditySelector.getOptionValue("quantityRate") > 0)
         this.itemForm.get("auxiliaryQuantity").setValue(quantity / this.commoditySelector.getOptionValue("quantityRate"));
     });
-    this.itemForm.get("price").valueChanges.subscribe(price=>
-    {
-      this.itemForm.get("amount").setValue(this.itemForm.get("quantity").value*price);
+    this.itemForm.get("price").valueChanges.subscribe(price => {
+      this.itemForm.get("amount").setValue(this.itemForm.get("quantity").value * price);
     });
   }
 
@@ -54,7 +57,7 @@ export class SaleOrderItemEditComponent implements OnInit {
   }
   confirm() {
     if (this.itemForm.valid) {
-      this.itemForm.patchValue({ commodity: this.commoditySelector.getDisplayValue() });
+      //this.itemForm.patchValue({ commodityName: this.commoditySelector.getDisplayValue() });
       this.matDialogRef.close({ result: true, value: this.itemForm.value });
     }
   }

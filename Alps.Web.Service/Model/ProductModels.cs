@@ -59,6 +59,12 @@ namespace Alps.Web.Service.Model
         public string Product { get; set; }
         public string Description { get; set; }
         public string Code{get;set;}
+        public bool Vendable{get;set;}
+        public string CommodityName{get;set;}
+        public decimal ListPrice{get;set;}
+        public decimal QuantityRate{get;set;}
+        public decimal PreSellQuantity{get;set;} 
+        public decimal PreSellAuxiliaryQuantity { get; set; }
     }
     public class ProductDetailDto
     {
