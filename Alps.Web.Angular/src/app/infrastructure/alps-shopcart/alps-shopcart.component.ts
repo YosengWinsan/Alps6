@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { MatTable, MatExpansionPanel } from '@angular/material';
 import { ShopcartService } from '../service/shopcart.service';
 import { IShopcartItem } from '../infrastructure.module';
@@ -28,7 +28,7 @@ export class AlpsShopcartComponent implements OnInit {
     this._saleOrderID = id;
   }
   _saleOrderID;
-  constructor(private shopcartService: ShopcartService) {
+  constructor(private shopcartService: ShopcartService, private el: ElementRef) {
     this.shopcartService.shopcart.subscribe((data: IShopcartItem[]) => {
       this._shopcart = data;
       this._totalAmount = 0;
@@ -64,7 +64,15 @@ export class AlpsShopcartComponent implements OnInit {
     setTimeout(() => {
       this.shopcartPanel.open();
     }, 100);
-
+  }
+  fixed = false;
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    if (window.scrollY > this.el.nativeElement.offsetTop) {
+      if (!this.fixed) { this.fixed = true; }
+    }
+    else
+      if (this.fixed) { this.fixed = false; }
   }
   remove(item) {
     this.shopcartService.remove(item);
