@@ -8,7 +8,8 @@ const routes: Routes = [
 {path:"product",loadChildren:"./product/product.module#ProductModule"},
 {path:"stock",loadChildren:"./stock/stock.module#StockModule"},
 {path:"sale",loadChildren:"./sale/sale.module#SaleModule"},
-{path:"logistics",loadChildren:"./logistics/logistics.module#LogisticsModule"}
+{path:"logistics",loadChildren:"./logistics/logistics.module#LogisticsModule"},
+{path:"loan",loadChildren:"./loan/loan.module#LoanModule"}
 ];
 
 @NgModule({

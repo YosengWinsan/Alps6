@@ -163,6 +163,12 @@ namespace Alps.Web.Service.Controllers
             //Where(p=>p.Types.Contains(type))
             return this.AlpsActionOk(BuildTree(unionQuery.ToList(), null));
         }
+                [HttpGet("LenderOptions")]
+        public IActionResult LenderOptions()
+        {
+            //Where(p=>p.Types.Contains(type))
+            return Ok(_context.Lenders.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
 
     }
 }

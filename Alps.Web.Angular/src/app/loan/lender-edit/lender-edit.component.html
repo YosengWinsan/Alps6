@@ -1,0 +1,13 @@
+<alps-edit-toolbar (save)="save()"></alps-edit-toolbar>
+
+<form [formGroup]="lenderForm">
+  <mat-form-field>
+    <input matInput placeholder="名称" formControlName="name">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="证件号" formControlName="idNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="手机号" formControlName="mobilePhoneNumber">
+    </mat-form-field>
+</form>

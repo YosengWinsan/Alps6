@@ -31,5 +31,6 @@ const MENU_DATA: MenuItem[] = [
   { path: "product", name: "产品管理" },
   { path: "stock", name: "仓库管理" },
   { path: "sale", name: "销售管理" }  ,
-  { path: "logistics", name: "物流管理" }
+  { path: "logistics", name: "物流管理" },
+  { path: "loan", name: "财务管理" }
 ]

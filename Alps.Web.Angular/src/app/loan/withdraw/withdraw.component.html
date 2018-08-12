@@ -1,0 +1,11 @@
+<alps-info-chip label="存款人" [value]="loanVoucher.name"></alps-info-chip>
+<alps-info-chip label="存款时间" [value]="loanVoucher.date"></alps-info-chip>
+<alps-info-chip label="结算时间" [value]="loanVoucher.interestSettlementDate"></alps-info-chip>
+<alps-info-chip label="金额" [value]="loanVoucher.amount"></alps-info-chip>
+<alps-info-chip label="已存天数" [value]="loanVoucher.interestDays"></alps-info-chip>
+<form [formGroup]="withdrawForm">
+  <mat-form-field>
+    <input matInput placeholder="取款金额" formControlName="amount">
+  </mat-form-field>
+  <button mat-button (click)="confirm()">确认</button>
+</form>

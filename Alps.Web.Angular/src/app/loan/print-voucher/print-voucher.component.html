@@ -1,0 +1,9 @@
+<div id="printDiv">
+    <alps-info-chip label="日期" [value]="printInfo.date|date:'yyyy-MM-dd'"></alps-info-chip>
+    <alps-info-chip label="存款人" [value]="printInfo.name"></alps-info-chip>
+    <alps-info-chip label="金额" [value]="printInfo.amount"></alps-info-chip>
+    <alps-info-chip label="利率" [value]="printInfo.interestRate"></alps-info-chip>
+    <alps-info-chip label="利息" [value]="printInfo.interest"></alps-info-chip>
+    <alps-info-chip label="经办" [value]="printInfo.operator"></alps-info-chip>
+</div>
+<alps-print section="printDiv" color="primary"></alps-print>

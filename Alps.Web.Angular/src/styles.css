@@ -12,3 +12,12 @@ body { margin: 0;
     .mat-column-action {
         flex: 0 0 auto;
       }
+      .mat-form-field
+{
+    width:170px;
+    margin-right: 5px;
+}
+.fullwidth
+{
+    width: 100%;
+}

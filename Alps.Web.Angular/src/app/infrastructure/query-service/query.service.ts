@@ -64,5 +64,8 @@ export class QueryService extends RepositoryService {
   getCountyOptions() {
     return this.queryAndCache("CountyOptions");
   }
+  getLenderOptions(){
+    return this.queryAndCache("LenderOptions");
+  }
 }
 

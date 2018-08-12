@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Alps.Domain.DistributionMgr;
+using Alps.Domain.LoanMgr;
 
 namespace Alps.Domain
 {
@@ -71,6 +72,13 @@ namespace Alps.Domain
         #region AccountingMgr
 
         public DbSet<TradeAccount> TradeAccounts { get; set; }
+        #endregion
+
+        #region LoanMgr
+        public DbSet<Lender> Lenders { get; set; }
+        public DbSet<LoanVoucher> LoanVouchers { get; set; }
+        public DbSet<WithdrawRecord> WithdrawRecords { get; set; }
+
         #endregion
         #endregion
 
@@ -166,6 +174,9 @@ namespace Alps.Domain
             modelBuilder.Entity<Supplier>().OwnsOne(p => p.Address);
 
             modelBuilder.Entity<Commodity>().HasOne(p => p.Sku).WithMany().HasForeignKey(f => f.ID);
+
+            modelBuilder.Entity<LoanVoucher>().Property(p=>p.InterestRate).HasColumnType("decimal(7,4)");
+            modelBuilder.Entity<WithdrawRecord>().Property(p=>p.InterestRate).HasColumnType("decimal(7,4)");
             //modelBuilder.Entity<Commodity>().HasKey(p => new { p.OwnerID, p.ProductSkuID });
             // modelBuilder.Entity<Commodity>().HasOne(p=>p.ProductSku).WithOne().HasForeignKey("");
             //modelBuilder.Entity<PurchaseOrderItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
@@ -227,6 +238,23 @@ namespace Alps.Domain
                 ProductMgrSeed(context);
                 PurchaseMgrSeed(context);
                 SaleMgrSeed(context);
+                LoanMgrSeed(context);
+            }
+            void LoanMgrSeed(AlpsContext context)
+            {
+
+                Lender lender = Lender.Create("张三", "350182123", "13905911234");
+                context.Lenders.Add(lender);
+                lender = Lender.Create("李四", "35018212121213", "13905911231");
+                context.Lenders.Add(lender);
+                lender = Lender.Create("王五", "3501821234121212", "13905911232");
+                context.Lenders.Add(lender);
+
+                LoanVoucher loanvoucher = LoanVoucher.Create(lender.ID, 1000000, 0.006m, "456123",new DateTimeOffset(DateTime.Now.AddMonths(-4)));
+                context.LoanVouchers.Add(loanvoucher);
+                loanvoucher = LoanVoucher.Create(lender.ID, 2000000, 0.006m, "456124");
+                context.LoanVouchers.Add(loanvoucher);
+                context.SaveChanges();
             }
             void CommonMgrSeed(AlpsContext context)
             {
@@ -388,19 +416,19 @@ namespace Alps.Domain
                     product.SetCatagory(associatedCatagory);
                     context.Products.Add(product);
                 }
-                foreach (Catagory childCatagory in  context.Catagories.FirstOrDefault(p => p.Name == "工字钢").Children)
+                foreach (Catagory childCatagory in context.Catagories.FirstOrDefault(p => p.Name == "工字钢").Children)
                 {
-                    product = Product.Create(childCatagory.Name +"下偏3-5%",childCatagory.Name +"下偏3-5%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
+                    product = Product.Create(childCatagory.Name + "下偏3-5%", childCatagory.Name + "下偏3-5%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
                     product.SetCatagory(childCatagory);
                     context.Products.Add(product);
-                    product = Product.Create(childCatagory.Name +"下偏8-10%",childCatagory.Name +"下偏8-10%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
+                    product = Product.Create(childCatagory.Name + "下偏8-10%", childCatagory.Name + "下偏8-10%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
                     product.SetCatagory(childCatagory);
                     context.Products.Add(product);
-                    product = Product.Create(childCatagory.Name +"下偏18-20%",childCatagory.Name +"下偏18-20%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
+                    product = Product.Create(childCatagory.Name + "下偏18-20%", childCatagory.Name + "下偏18-20%", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
                     product.SetCatagory(childCatagory);
                     context.Products.Add(product);
                 }
-               
+
                 associatedCatagory = context.Catagories.FirstOrDefault(p => p.Name == "连铸坯");
                 product = Product.Create("150*150", "150*150连铸坯", "系统创建", PricingMethod.PricingByWeight, 2000, unitID);
                 product.SetCatagory(associatedCatagory);
