@@ -1,7 +1,7 @@
 <div class="login-form-container">
-  <div class="login-form">
+
     <!-- <h1>永盛金属ERP</h1> -->
-    <mat-card>
+    <mat-card class="login-form">
       <mat-card-title>登录</mat-card-title>
       <mat-card-content>
         <form [formGroup]="loginForm">
@@ -18,7 +18,7 @@
           <input matInput formControlName="confirmPassword" placeholder="密码确认">
           </mat-form-field> -->
         </form>
-        <div color="warn">{{errorMsg}}</div>
+        <div class="warn">{{errorMsg}}</div>
       </mat-card-content>
       <mat-card-actions>
         <div class="action">
@@ -33,5 +33,5 @@
         </div>
       </mat-card-actions>
     </mat-card>
-  </div>
+
 </div>

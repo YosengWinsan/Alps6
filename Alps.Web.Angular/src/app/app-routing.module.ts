@@ -10,7 +10,7 @@ const routes: Routes = [
   //{path:"",redirectTo:"dashboard",pathMatch:"full"},
   {
     path: '', component: AppContainerComponent, children: [
-      {path:'',redirectTo:'dashboard',pathMatch:'full'},
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: "dashboard", component: DashboardComponent },
       { path: "catagory", loadChildren: "./catagory/catagory.module#CatagoryModule" },
       { path: "product", loadChildren: "./product/product.module#ProductModule" },
@@ -19,9 +19,11 @@ const routes: Routes = [
       { path: "logistics", loadChildren: "./logistics/logistics.module#LogisticsModule" },
       { path: "loan", loadChildren: "./loan/loan.module#LoanModule" },
       { path: "user", loadChildren: "./user/user.module#UserModule" }
-    ], canActivateChild: [AuthGuard],canActivate: [AuthGuard]
-  },{path:'login',component:LoginComponent},{path:'forgotpassword',component:ForgotPasswordComponent}
-  ,{path:'register',component:RegisterComponent}
+    ], canActivateChild: [AuthGuard], canActivate: [AuthGuard]
+  },
+  { path: 'login', component: LoginComponent },
+  { path: 'forgotpassword', component: ForgotPasswordComponent },
+  { path: 'register', component: RegisterComponent }
 ];
 
 @NgModule({
