@@ -23,5 +23,19 @@ mat-form-field
 
 .login-btn
 {
+    width:100%;
+}
+.action
+{
+    margin:0 auto;
     width:90%;
+}
+.flex-container
+{
+    display: flex;
+    flex-direction: row;
+}
+.flex-div
+{
+    flex:1;
 }

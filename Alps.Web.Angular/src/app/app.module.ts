@@ -13,12 +13,16 @@ import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppContainerComponent } from './app-container/app-container.component';
 import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     AppContainerComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    ForgotPasswordComponent
     //,
   //  AlpsSelectorComponent,
   //  AlpsSelectorDialogComponent

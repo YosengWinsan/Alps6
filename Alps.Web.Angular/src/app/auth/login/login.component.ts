@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit {
     })
   }
   loginSubscription: Subscription = null;
-  errorMsg="";
+  errorMsg = "";
   login() {
-    this.errorMsg="";
+    this.errorMsg = "";
     if (this.loginForm.valid) {
       if (this.loginSubscription)
         this.loginSubscription.unsubscribe();
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl(this.url);
           }
           else
-          this.errorMsg="用户名或密码错误";
+            this.errorMsg = "用户名或密码错误";
         });
 
     }
