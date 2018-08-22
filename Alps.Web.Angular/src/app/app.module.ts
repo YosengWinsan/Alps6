@@ -10,11 +10,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from "@angular/common/http";
 import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 //import { AlpsSelectorComponent } from './infrastructure/alps-selector/alps-selector.component';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { AppContainerComponent } from './app-container/app-container.component';
+import { LoginComponent } from './auth/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    AppContainerComponent,
+    LoginComponent
     //,
   //  AlpsSelectorComponent,
   //  AlpsSelectorDialogComponent
@@ -27,7 +31,7 @@ import { FormsModule } from "@angular/forms";
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule,AppRoutingModule, MatGridListModule, MatCardModule, MatMenuModule,HttpClientModule,FormsModule,MatDialogModule,InfrastructureModule
+    MatListModule,AppRoutingModule, MatGridListModule, MatCardModule, MatMenuModule,HttpClientModule,FormsModule,MatDialogModule,InfrastructureModule,ReactiveFormsModule
   ],
   entryComponents:[],
   providers: [],

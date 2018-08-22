@@ -1,14 +1,20 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Alps.Domain.AccountingMgr
 {
-    public class AlpsUser:EntityBase
+    public class AlpsUser : EntityBase
     {
-        //public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AlpsUser> manager, string authenticationType)
-        //{
-        //    // 请注意，authenticationType 必须与 CookieAuthenticationOptions.AuthenticationType 中定义的相应项匹配
-        //    var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
-        //    // 在此处添加自定义用户声明
-        //    return userIdentity;
-        //}
+        public string IDName { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public ICollection<AlpsRole> Roles { get; set; }
+        public string MobilePhoneNumber { get; set; }
+        public string IdentityNumber { get; set; }
+
+        public static AlpsUser Create(string idName,string password,string identityNumber,string mobilePhoneNumber)
+        {
+            return new AlpsUser(){IDName=idName,Password=password,IdentityNumber=identityNumber,MobilePhoneNumber=mobilePhoneNumber,Roles=new HashSet<AlpsRole>()};
+        }
     }
 }

@@ -12,6 +12,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Alps.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace Alps.Web.Service
 {
     public class Startup
@@ -26,10 +30,24 @@ namespace Alps.Web.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,//是否验证Issuer
+                        ValidateAudience = true,//是否验证Audience
+                        ValidateLifetime = true,//是否验证失效时间
+                        ValidateIssuerSigningKey = true,//是否验证SecurityKey
+                        ValidAudience = "jwttest",//Audience
+                        ValidIssuer = "jwttest",//Issuer，这两项和前面签发jwt的设置一致
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecurityKey"]))//拿到SecurityKey
+                    };
+                });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<AlpsContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("AlpsContext"),b=>b.MigrationsAssembly("Alps.Web.Service"));
+                options.UseSqlServer(Configuration.GetConnectionString("AlpsContext"), b => b.MigrationsAssembly("Alps.Web.Service"));
             });
             services.AddScoped<Alps.Domain.Service.StockService>();
             services.AddSpaStaticFiles(
@@ -49,6 +67,7 @@ namespace Alps.Web.Service
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             // app.UseHttpsRedirection();
             // app.UseStaticFiles();
             app.UseSpaStaticFiles();

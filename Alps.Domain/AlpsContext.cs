@@ -72,6 +72,8 @@ namespace Alps.Domain
         #region AccountingMgr
 
         public DbSet<TradeAccount> TradeAccounts { get; set; }
+        public DbSet<AlpsUser> AlpsUsers{get;set;}
+        public DbSet<AlpsRole> AlpsRoles{get;set;}
         #endregion
 
         #region LoanMgr
@@ -258,6 +260,10 @@ namespace Alps.Domain
             }
             void CommonMgrSeed(AlpsContext context)
             {
+
+                #region 初始化管理员
+                    AlpsUser user=AlpsUser.Create("admin","admin","123456","223344");
+                #endregion
                 #region 初始化地址
 
                 context.Countries.Add(Country.Create("菲律宾"));
