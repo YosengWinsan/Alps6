@@ -14,14 +14,14 @@ export class EnterToTabDirective {
     if (control.tagName == "INPUT" && control.type == "text")
     control.select();
   }
-  @HostListener('keydown.enter', ['$event'])
-  onEnter(e) {
+  @HostListener('keyup.enter', ['$event'])
+  onEnter(e:KeyboardEvent) { 
     e.preventDefault();
     let controls = this.elementRef.nativeElement.querySelectorAll("input,button");
     let moveNext = false;
     for (let i = 0; i < controls.length; i++) {
       if (moveNext) {        
-        controls[i].focus();
+          controls[i].focus();  
         break;
       }
       if (controls[i] == e.srcElement)

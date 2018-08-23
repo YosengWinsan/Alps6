@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Subscription } from 'rxjs';
+import { QueryService } from '../../infrastructure/infrastructure.module';
 
 @Component({
   selector: 'app-login',
@@ -11,15 +12,20 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private authService: AuthService) {
-    this.loginForm = formBuilder.group({ username: [], password: [], confirmPassword: [] });
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private authService: AuthService, private queryService: QueryService) {
+    this.loginForm = formBuilder.group({ username: [,Validators.required], password: [,Validators.required] });
   }
   url = "";
   loginForm: FormGroup;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.url = params['url'] ? params['url'] : "";
-    })
+    });
+  }
+  keyup(e:KeyboardEvent)
+  {
+    if(e.keyCode==13)
+    this.login();
   }
   loginSubscription: Subscription = null;
   errorMsg = "";
@@ -38,5 +44,18 @@ export class LoginComponent implements OnInit {
         });
 
     }
+    else
+    {
+      console.info( this.loginForm);
+    }
+  }
+  initDatabase() {
+    if (confirm("确定要初始化？会爆哦！")) {
+      this.queryService.clearCache();
+      this.queryService.initDatabase().subscribe((d) => {if(d) alert("初始化成功"); });
+    }
+  }
+  clearCache(){
+    this.queryService.clearCache();
   }
 }
