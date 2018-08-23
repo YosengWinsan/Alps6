@@ -1,44 +1,46 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 import { throwError, Observable } from "rxjs";
 import { AlpsConst } from '../alps-const';
 import { AlpsActionResponse, AlpsActionResultCode } from './alpsActionResponse';
 import { AlpsLoadingBarService } from '../service/alps-loading-bar.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class RepositoryService {
   _baseUrl: string = "api";
-  protected httpClient:HttpClient;
-protected loadingBarService:AlpsLoadingBarService;
-  constructor(protected injector:Injector) {
-    this.httpClient=this.injector.get(HttpClient);
-    this.loadingBarService=this.injector.get(AlpsLoadingBarService);
-   }
-   private startLoad(){
+  protected httpClient: HttpClient;
+  protected loadingBarService: AlpsLoadingBarService;
+  protected router:Router;
+  constructor(protected injector: Injector) {
+    this.httpClient = this.injector.get(HttpClient);
+    this.router=this.injector.get(Router);
+    this.loadingBarService = this.injector.get(AlpsLoadingBarService);
+  }
+  private startLoad() {
     setTimeout(() => {
       this.loadingBarService.open();
     }, 0);
-   }
-   private finishLoad(){
-     setTimeout(() => {
-      this.loadingBarService.close();      
-     }, 0);
-   }
-   private queryError(){
+  }
+  private finishLoad() {
     setTimeout(() => {
-     this.loadingBarService.error();      
+      this.loadingBarService.close();
+    }, 0);
+  }
+  private queryError() {
+    setTimeout(() => {
+      this.loadingBarService.error();
     }, 0);
   }
   setBaseUrl(url: string) {
     this._baseUrl = url;
   }
-  processPipe(ob:Observable<any>):Observable<any>
-  {
-    return ob.pipe(tap(()=>{this.finishLoad();}), catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
+  processPipe(ob: Observable<any>): Observable<any> {
+    return ob.pipe(tap(() => { this.finishLoad(); }), catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
   }
   getall() {
-   this.startLoad();
+    this.startLoad();
     return this.processPipe(this.httpClient.get(this._baseUrl));
   }
   get(id: string) {
@@ -85,21 +87,24 @@ protected loadingBarService:AlpsLoadingBarService;
     this.startLoad();
     return this.processPipe(this.httpClient.delete(this._baseUrl + "/" + id));
   }
-  protected handleError(error) {
-this.queryError();
-    return throwError( '与服务器交互失败！');
+  protected handleError(error: HttpErrorResponse) {
+    if (error.status == 401) {
+      this.finishLoad();
+      this.router.navigate(['/login']);
+    }
+    this.queryError();
+    return throwError('与服务器交互失败！');
   }
   protected filterError(res) {
     if (res && (res.hasOwnProperty("resultCode")) && res.resultCode != AlpsActionResultCode.Ok) {
       alert(res.messages);
       return false;
-
     }
     else
       return true;
   }
   protected upPackResponse(res) {
-    if (!!res  && res.resultCode && res.resultCode == AlpsActionResultCode.Ok && res.data)
+    if (!!res && res.resultCode && res.resultCode == AlpsActionResultCode.Ok && res.data)
       return res.data;
     else
       return res;

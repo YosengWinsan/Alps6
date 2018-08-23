@@ -1,6 +1,7 @@
 using Alps.Domain;
 using Alps.Domain.PurchaseMgr;
 using Alps.Web.Service.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Alps.Web.Service.Controllers
 {
+   [Authorize]
   [Produces("application/json")]
   [Route("api/PurchaseOrders")]
   public class PurchaseOrdersController : Controller

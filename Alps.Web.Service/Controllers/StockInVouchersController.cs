@@ -10,9 +10,11 @@ using Alps.Web.Service.Model;
 using Alps.Web.Service.Extensions;
 using Alps.Domain.StockMgr;
 using Alps.Domain.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alps.Web.Service.Controllers
 {
+   [Authorize]
   [Produces("application/json")]
   [Route("api/StockInVouchers")]
   public class StockInVouchersController : Controller

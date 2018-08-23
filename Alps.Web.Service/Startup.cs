@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Alps.Web.Service.Auth;
 
 namespace Alps.Web.Service
 {
@@ -30,6 +31,11 @@ namespace Alps.Web.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var jwtOption=new AlpsJwtOption();
+            jwtOption.SecurityKey=Configuration["JwtOption:SecurityKey"];
+            jwtOption.Audience=Configuration["JwtOption:Audience"];
+            jwtOption.Issuer=Configuration["JwtOption:Issuer"];
+            services.AddSingleton(jwtOption);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -39,9 +45,9 @@ namespace Alps.Web.Service
                         ValidateAudience = true,//是否验证Audience
                         ValidateLifetime = true,//是否验证失效时间
                         ValidateIssuerSigningKey = true,//是否验证SecurityKey
-                        ValidAudience = "jwttest",//Audience
-                        ValidIssuer = "jwttest",//Issuer，这两项和前面签发jwt的设置一致
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecurityKey"]))//拿到SecurityKey
+                        ValidAudience =jwtOption.Audience,//Audience
+                        ValidIssuer = jwtOption.Issuer,//Issuer，这两项和前面签发jwt的设置一致
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption.SecurityKey))//拿到SecurityKey
                     };
                 });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

@@ -9,9 +9,11 @@ using Alps.Domain;
 using Alps.Domain.SaleMgr;
 using Alps.Web.Service.Model;
 using Alps.Web.Service.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alps.Web.Service.controllers
 {
+     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SaleOrdersController : ControllerBase

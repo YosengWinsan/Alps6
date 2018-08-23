@@ -1,6 +1,7 @@
 using Alps.Domain;
 using Alps.Domain.SaleMgr;
 using Alps.Web.Service.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Linq;
 
 namespace Alps.Web.Service.Controllers
 {
+    
+     [Authorize]
     [Produces("application/json")]
     [Route("api/Query")]
     public class QueryController : Controller
@@ -17,6 +20,7 @@ namespace Alps.Web.Service.Controllers
         {
             _context = context;
         }
+        [AllowAnonymous]
         [HttpGet("InitDatabase")]
         public IActionResult InitDatabase()
         {

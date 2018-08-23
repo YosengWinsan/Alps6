@@ -1,5 +1,6 @@
 using Alps.Domain;
 using Alps.Domain.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Alps.Web.Service.Controllers
 {
+     [Authorize]
   [Produces("application/json")]
     [Route("api/Suppliers")]
     public class SuppliersController : Controller

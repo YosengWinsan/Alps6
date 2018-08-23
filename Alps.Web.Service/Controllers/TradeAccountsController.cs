@@ -1,5 +1,6 @@
 using Alps.Domain;
 using Alps.Domain.AccountingMgr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 
 namespace Alps.Web.Service.Controllers
 {
+   [Authorize]
   [Route("api/[controller]")]
   public class TradeAccountsController : Controller
   {

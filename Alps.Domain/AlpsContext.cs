@@ -72,8 +72,8 @@ namespace Alps.Domain
         #region AccountingMgr
 
         public DbSet<TradeAccount> TradeAccounts { get; set; }
-        public DbSet<AlpsUser> AlpsUsers{get;set;}
-        public DbSet<AlpsRole> AlpsRoles{get;set;}
+        public DbSet<AlpsUser> AlpsUsers { get; set; }
+        public DbSet<AlpsRole> AlpsRoles { get; set; }
         #endregion
 
         #region LoanMgr
@@ -177,8 +177,8 @@ namespace Alps.Domain
 
             modelBuilder.Entity<Commodity>().HasOne(p => p.Sku).WithMany().HasForeignKey(f => f.ID);
 
-            modelBuilder.Entity<LoanVoucher>().Property(p=>p.InterestRate).HasColumnType("decimal(7,4)");
-            modelBuilder.Entity<WithdrawRecord>().Property(p=>p.InterestRate).HasColumnType("decimal(7,4)");
+            modelBuilder.Entity<LoanVoucher>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
+            modelBuilder.Entity<WithdrawRecord>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
             //modelBuilder.Entity<Commodity>().HasKey(p => new { p.OwnerID, p.ProductSkuID });
             // modelBuilder.Entity<Commodity>().HasOne(p=>p.ProductSku).WithOne().HasForeignKey("");
             //modelBuilder.Entity<PurchaseOrderItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
@@ -252,7 +252,7 @@ namespace Alps.Domain
                 lender = Lender.Create("王五", "3501821234121212", "13905911232");
                 context.Lenders.Add(lender);
 
-                LoanVoucher loanvoucher = LoanVoucher.Create(lender.ID, 1000000, 0.006m, "456123",new DateTimeOffset(DateTime.Now.AddMonths(-4)));
+                LoanVoucher loanvoucher = LoanVoucher.Create(lender.ID, 1000000, 0.006m, "456123", new DateTimeOffset(DateTime.Now.AddMonths(-4)));
                 context.LoanVouchers.Add(loanvoucher);
                 loanvoucher = LoanVoucher.Create(lender.ID, 2000000, 0.006m, "456124");
                 context.LoanVouchers.Add(loanvoucher);
@@ -262,7 +262,13 @@ namespace Alps.Domain
             {
 
                 #region 初始化管理员
-                    AlpsUser user=AlpsUser.Create("admin","admin","123456","223344");
+                AlpsRole role = AlpsRole.Create("admin", "管理员");
+                context.AlpsRoles.Add(role);
+                context.AlpsRoles.Add(AlpsRole.Create("User", "用户"));
+                AlpsUser user = AlpsUser.Create("a", "a","李", "123456", "223344");
+                user.AddRole(role);
+                context.AlpsUsers.Add(user);
+
                 #endregion
                 #region 初始化地址
 

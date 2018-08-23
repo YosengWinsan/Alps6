@@ -18,6 +18,8 @@ export class AuthService extends RepositoryService {
   //   let token = JSON.parse(localStorage.getItem(this.TOKEN_SIGN));
   //   return token;
   // }
+  private _token:string;
+  get tokenString(){return this._token;}
   private _userName: string;
   get username() { return this._userName; }
   private _roles: string[];
@@ -51,10 +53,12 @@ export class AuthService extends RepositoryService {
     if (token) {
       this._userName = token.username;
       this._roles = token.roles;
+      this._token=tokenString;
     }
     else {
       this._userName = "";
       this._roles = [];
+      this._token="";
     }
 
   }

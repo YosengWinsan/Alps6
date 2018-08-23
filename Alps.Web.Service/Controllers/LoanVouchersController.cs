@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Alps.Domain;
 using Alps.Domain.LoanMgr;
 using Alps.Web.Service.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Alps.Web.Service.controllers
 {
+     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LoanVouchersController : ControllerBase
