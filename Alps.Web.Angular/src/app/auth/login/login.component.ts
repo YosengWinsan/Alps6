@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.errorMsg = "";
     if (this.loginForm.valid) {
+      this.loginForm.markAsUntouched();
       if (this.loginSubscription)
         this.loginSubscription.unsubscribe();
       this.loginSubscription = this.authService.login(this.loginForm.controls.username.value, this.loginForm.controls.password.value).subscribe
@@ -44,11 +45,8 @@ export class LoginComponent implements OnInit {
         });
 
     }
-    else
-    {
-      console.info( this.loginForm);
-    }
   }
+  clearWarn(){this.errorMsg="";}
   initDatabase() {
     if (confirm("确定要初始化？会爆哦！")) {
       this.queryService.clearCache();

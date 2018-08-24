@@ -9,20 +9,20 @@
           <mat-form-field>
             <span matPrefix>
               <mat-icon>person</mat-icon></span>
-            <input matInput formControlName="username" >
+            <input matInput formControlName="username" (focusin)="clearWarn()">
            
           </mat-form-field>
           <div  class="warn" *ngIf=" loginForm.controls.username.invalid &&  !loginForm.controls.username.pristine  && loginForm.controls.username.errors?.required">
               请输入用户名
              </div>
           <mat-form-field>
-            <input matInput formControlName="password" (keyup.enter)="keyup($event)">
+            <input matInput formControlName="password" (keyup.enter)="keyup($event)" (focusin)="clearWarn()">
             <mat-icon matPrefix>lock</mat-icon>
           </mat-form-field>
           <div  class="warn" *ngIf=" loginForm.controls.password.invalid &&  !loginForm.controls.password.pristine  && loginForm.controls.password.errors?.required">
               请输入密码
              </div>
-        <div class="warn">{{errorMsg}}</div>
+        <div class="warn"  >{{errorMsg}}</div>
       </mat-card-content>
       <mat-card-actions>
         <div class="action">
