@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -29,21 +30,23 @@ namespace Alps.Web.Service.controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody]LoginDto dto)
         {
-            AlpsUser user=_context.AlpsUsers.Include(p=>p.Roles).FirstOrDefault(p=>p.IDName==dto.Username&& p.Password==dto.Password);
-            if (user!=null)
+            AlpsUser user = _context.AlpsUsers.Include(p => p.Roles).FirstOrDefault(p => p.IDName == dto.Username && p.Password == dto.Password);
+            if (user != null)
             {
-                var claims = new[]
-                    {
-                   new Claim(ClaimTypes.Name, dto.Username),
-                   new Claim("username",user.Name),
-                   new Claim(ClaimTypes.Role,user.GetRoles())
-               };
-                
+                var claims = new List<Claim> {
+                    new Claim("idName",user.IDName),
+                    new Claim("name",user.Name)
+
+                                };
+                foreach(var role in user.Roles)
+                {
+                    claims.Add(new Claim("role",role.Name));
+                }
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOption.SecurityKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                 var token = new JwtSecurityToken(
                     issuer: _jwtOption.Issuer,
-                    audience:_jwtOption.Audience,
+                    audience: _jwtOption.Audience,
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: creds);

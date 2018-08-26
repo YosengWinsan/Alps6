@@ -263,10 +263,15 @@ namespace Alps.Domain
 
                 #region 初始化管理员
                 AlpsRole role = AlpsRole.Create("admin", "管理员");
-                context.AlpsRoles.Add(role);
-                context.AlpsRoles.Add(AlpsRole.Create("User", "用户"));
+                context.AlpsRoles.Add(role);                
                 AlpsUser user = AlpsUser.Create("a", "a","李", "123456", "223344");
+                
                 user.AddRole(role);
+                role=AlpsRole.Create("User", "用户");
+                context.AlpsRoles.Add(role);
+                user.AddRole(role);
+                
+                
                 context.AlpsUsers.Add(user);
 
                 #endregion

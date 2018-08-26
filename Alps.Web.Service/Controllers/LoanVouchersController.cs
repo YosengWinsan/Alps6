@@ -43,6 +43,8 @@ namespace Alps.Web.Service.controllers
         [HttpGet("getWaterBills")]
         public IActionResult GetWaterBills()
         {
+            var inRole=User.IsInRole("admin");
+            
             return this.AlpsActionOk(((_context.LoanVouchers.Where(p => p.ModifyDate.Date == DateTime.Now.Date)
             .Select(l => new WaterBillDto() { ID = l.ID, Date = l.DepositDate, Name = l.Lender.Name, Amount = l.Amount, InterestRate = l.InterestRate, Type = OperateType.Deposit }))
             .Union(_context.WithdrawRecords.Where(p => p.ModifyDate.Date == DateTime.Now.Date && p.Amount > 0)

@@ -47,8 +47,10 @@ namespace Alps.Web.Service
                         ValidateIssuerSigningKey = true,//是否验证SecurityKey
                         ValidAudience =jwtOption.Audience,//Audience
                         ValidIssuer = jwtOption.Issuer,//Issuer，这两项和前面签发jwt的设置一致
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption.SecurityKey))//拿到SecurityKey
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption.SecurityKey)),//拿到SecurityKey
+                        NameClaimType="idName"
                     };
+                    
                 });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<AlpsContext>(options =>

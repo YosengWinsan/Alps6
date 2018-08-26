@@ -38,12 +38,14 @@ namespace Alps.Web.Service.controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(Guid id)
         {
-            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.Roles).Select(p=>new UserDetailDto{
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.Roles).Select(p => new UserDetailDto
+            {
                 ID = p.ID,
                 IDName = p.IDName,
                 IdentityNumber = p.IdentityNumber,
                 MobilePhoneNumber = p.MobilePhoneNumber,
-                Name = p.Name,Roles=p.Roles.Select(k=>new RoleDto{ID=k.ID,Name=k.Name})
+                Name = p.Name,
+                Roles = p.Roles.Select(k => new RoleDto { ID = k.ID, Name = k.Name })
             }).FirstOrDefault(p => p.ID == id));
         }
 
