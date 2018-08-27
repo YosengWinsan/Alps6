@@ -36,7 +36,6 @@ namespace Alps.Web.Service.controllers
                 var claims = new List<Claim> {
                     new Claim("idName",user.IDName),
                     new Claim("name",user.Name)
-
                                 };
                 foreach(var role in user.Roles)
                 {

@@ -67,5 +67,8 @@ export class QueryService extends RepositoryService {
   getLenderOptions(){
     return this.queryAndCache("LenderOptions");
   }
+  getRoleOptions(){
+    return this.queryAndCache("RoleOptions");
+  }
 }
 

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../user.service';
 import { ActivatedRoute } from '@angular/router';
+import { QueryService } from '../../infrastructure/infrastructure.module';
+import { MatSelectionList } from '@angular/material';
 
 @Component({
   selector: 'app-authorize',
@@ -9,11 +11,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AuthorizeComponent implements OnInit {
 
-  constructor(private userService: UserService, private activatedRoute: ActivatedRoute) {
+  constructor(private userService: UserService, private activatedRoute: ActivatedRoute, private queryService: QueryService) {
     this.user = {};
   }
 
   user;
+  roleOptions;
+  @ViewChild('roles')
+  roleSelection: MatSelectionList;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       let id = params["id"] ? params["id"] : "";
@@ -23,7 +28,10 @@ export class AuthorizeComponent implements OnInit {
         });
       }
     });
-
+    this.roleOptions = this.queryService.getRoleOptions();
+    this.roleSelection.selectionChange.subscribe(d => {
+      console.info(this.roleSelection.selectedOptions);
+    });
   }
 
 }

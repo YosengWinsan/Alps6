@@ -8,6 +8,7 @@ import { AuthorizeComponent } from './authorize/authorize.component';
 const routes: Routes = [
   {
     path: "", component: UserComponent, children: [
+      { path: '', redirectTo:'userlist',pathMatch:"full" },
       { path: 'info', component: InfoComponent },
       { path: 'userlist', component: UserListComponent },
       { path: 'authorize', component:AuthorizeComponent}

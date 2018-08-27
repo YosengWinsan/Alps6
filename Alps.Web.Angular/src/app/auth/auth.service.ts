@@ -20,8 +20,8 @@ export class AuthService extends RepositoryService {
   // }
   private _token: string;
   get tokenString() { return this._token; }
-  private _idName:string;
-  get IdName(){return this._idName;}
+  private _idName: string;
+  get IdName() { return this._idName; }
   private _userName: string;
   get username() { return this._userName; }
   private _roles: string[];
@@ -54,8 +54,11 @@ export class AuthService extends RepositoryService {
       token = JSON.parse(Base64.decode(tokenString.split('.')[1]));
     if (token) {
       this._userName = token.name;
-      this._idName=token.idName;//['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-      this._roles = token.role;//['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      this._idName = token.idName;//['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+      if (typeof(token.role) =="string")
+        this._roles = [token.role];
+      else
+        this._roles = token.role;//['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       this._token = tokenString;
     }
     else {

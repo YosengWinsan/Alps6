@@ -173,6 +173,11 @@ namespace Alps.Web.Service.Controllers
             //Where(p=>p.Types.Contains(type))
             return Ok(_context.Lenders.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
         }
-
+                [HttpGet("RoleOptions")]
+        public IActionResult RoleOptions()
+        {
+            //Where(p=>p.Types.Contains(type))
+            return Ok(_context.AlpsRoles.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
     }
 }

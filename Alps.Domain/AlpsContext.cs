@@ -262,7 +262,7 @@ namespace Alps.Domain
             {
 
                 #region 初始化管理员
-                AlpsRole role = AlpsRole.Create("admin", "管理员");
+                AlpsRole role = AlpsRole.Create("Admin", "管理员");
                 context.AlpsRoles.Add(role);                
                 AlpsUser user = AlpsUser.Create("a", "a","李", "123456", "223344");
                 
@@ -270,9 +270,15 @@ namespace Alps.Domain
                 role=AlpsRole.Create("User", "用户");
                 context.AlpsRoles.Add(role);
                 user.AddRole(role);
-                
-                
                 context.AlpsUsers.Add(user);
+
+                user=AlpsUser.Create("b","b","张三","112233","789789");
+                user.AddRole(role);
+                context.AlpsUsers.Add(user);
+
+                context.AlpsRoles.Add(AlpsRole.Create("Cashier","出纳"));
+                
+
 
                 #endregion
                 #region 初始化地址

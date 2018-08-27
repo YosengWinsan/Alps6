@@ -7,11 +7,12 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserComponent } from './user/user.component';
 import { InfrastructureModule } from '../infrastructure/infrastructure.module';
 import { AuthorizeComponent } from './authorize/authorize.component';
+import { MatListModule } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
-    UserRoutingModule,InfrastructureModule
+    UserRoutingModule,InfrastructureModule,MatListModule
   ],
   declarations: [InfoComponent, UserListComponent, UserComponent, AuthorizeComponent]
 })
