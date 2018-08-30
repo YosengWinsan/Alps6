@@ -91,6 +91,7 @@ export class RepositoryService {
     if (error.status == 401) {
       this.finishLoad();
       this.router.navigate(['/login']);
+      return throwError("未注册");
     }
     this.queryError();
     return throwError('与服务器交互失败！');

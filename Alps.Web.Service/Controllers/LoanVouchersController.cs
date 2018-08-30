@@ -68,7 +68,9 @@ namespace Alps.Web.Service.controllers
                     Amount = p.Amount,
                     InterestRate = p.InterestRate,
                     Operator = p.Operator,
-                    Interest=0
+                    Interest=0,
+                    VoucherNumber=p.VoucherNumber,
+                    MobilePhoneNumber=p.Lender.MobilePhoneNumber
                 }).FirstOrDefault();
             if (req.Type == OperateType.Withdraw || req.Type==OperateType.SettleInterest)
                 dto = _context.WithdrawRecords.Where(p=>p.ID==req.ID).Select(p => new PrintInfo
@@ -78,7 +80,7 @@ namespace Alps.Web.Service.controllers
                     Amount = p.Amount,
                     InterestRate = p.InterestRate,
                     Operator = p.Operator,
-                    Interest=p.Interest
+                    Interest=p.Interest                    
                 }).FirstOrDefault();
             return this.AlpsActionOk(dto);
         }

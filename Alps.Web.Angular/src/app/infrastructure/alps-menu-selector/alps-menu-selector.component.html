@@ -1,6 +1,6 @@
 <div style="display: inline-block;">
   <label *ngIf="_placeholder!==''" class="alps-selector-label">{{_placeholder}}</label>
-  <button mat-button [matMenuTriggerFor]="firstLevel" style="display: block;min-width: 175px;">{{_displayValue}}</button>
+  <button mat-button type="button" [matMenuTriggerFor]="firstLevel" style="display: block;min-width: 175px;">{{_displayValue}}</button>
 </div>
 <ng-container>
   <mat-menu #firstLevel="matMenu" xPosition="after" yPosition="below" overlapTrigger="false">

@@ -55,6 +55,8 @@ namespace Alps.Web.Service.Model
         public string Operator { get; set; }
         //For Withdraw
         public decimal Interest { get; set; }
+        public string VoucherNumber{get;set;}
+        public string MobilePhoneNumber{get;set;}
 
     }
 }

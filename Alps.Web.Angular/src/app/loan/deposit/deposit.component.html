@@ -1,8 +1,8 @@
-<form [formGroup]="depositForm">
+<form [formGroup]="depositForm" autocomplete="off" enterToTab>
   <mat-form-field>
-    <input matInput [matDatepicker]="picker" placeholder="存款日期"  formControlName="date">
+    <input matInput [matDatepicker]="picker" placeholder="存款日期"  formControlName="date" readonly> 
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker disabled="false"></mat-datepicker>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <alps-menu-selector [options]="lenderOptions|async" placeholder="存款人" formControlName="lenderID"></alps-menu-selector>
   <mat-form-field>
@@ -11,5 +11,5 @@
   <mat-form-field>
     <input matInput placeholder="凭证单号" formControlName="voucherNumber">
   </mat-form-field>
-  <button mat-button (click)="confirm()" class="fullwidth">确认</button>
+  <button mat-button type="button" (click)="confirm()" class="fullwidth">确认</button>
 </form>
