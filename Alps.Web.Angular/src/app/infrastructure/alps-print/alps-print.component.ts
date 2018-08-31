@@ -18,7 +18,7 @@ export class AlpsPrintComponent implements OnInit {
   print() {
     if (this.section && this.section !== undefined && this.section != '') {
       let printContent = document.getElementById(this.section).innerHTML;
-      let styleContent = "@media print{.noprint{display:none}}";
+      let styleContent = "@media print{.noprint{display:none} .noprintcontent{color:transparent}}";
       for (let i = 0; i < document.styleSheets.length; i++) {
         if (document.styleSheets[i].href == null) {
           let rules = (<any>document.styleSheets[i]).rules;

@@ -22,7 +22,6 @@ export class DepositComponent implements OnInit {
     //this.depositForm.patchValue({date:new Date()});
   }
   confirm() {
-    console.info(this.depositForm.value);
     if (this.depositForm.valid) {
       this.loanService.deposit(this.depositForm.value).subscribe((data) => {
         this.router.navigate(['./printvoucher'], { relativeTo: this.activatedRoute.parent,queryParams:{id:data,type:1} });
