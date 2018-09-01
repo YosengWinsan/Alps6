@@ -59,4 +59,11 @@ namespace Alps.Web.Service.Model
         public string MobilePhoneNumber{get;set;}
 
     }
+
+    public class LenderEditDto{
+        public Guid ID{get;set;}
+        public string Name{get;set;}
+        public string IDNumber{get;set;}
+        public string MobilePhoneNumber{get;set;}
+    }
 }

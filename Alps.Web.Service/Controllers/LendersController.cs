@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Alps.Domain;
 using Alps.Domain.LoanMgr;
 using Microsoft.AspNetCore.Authorization;
+using Alps.Web.Service.Model;
 
 namespace Alps.Web.Service.controllers
 {
@@ -39,31 +40,35 @@ namespace Alps.Web.Service.controllers
                 return BadRequest(ModelState);
             }
 
-            var lender = await _context.Lenders.FindAsync(id);
-
+            var lender = await _context.Lenders.Select(p=>new LenderEditDto{ID=p.ID,
+            IDNumber=p.IDNumber,
+            MobilePhoneNumber=p.MobilePhoneNumber,
+            Name=p.Name}).FirstOrDefaultAsync(p=>p.ID==id);
             if (lender == null)
             {
                 return NotFound();
             }
 
-            return Ok(lender);
+            return this.AlpsActionOk(lender);
         }
 
         // PUT: api/Lenders/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLender([FromRoute] Guid id, [FromBody] Lender lender)
+        public async Task<IActionResult> PutLender([FromRoute] Guid id, [FromBody] LenderEditDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != lender.ID)
+            if (id != dto.ID)
             {
                 return BadRequest();
             }
-
-            _context.Entry(lender).State = EntityState.Modified;
+            var lender=_context.Lenders.Find(id);
+            lender.Name=dto.Name;
+            lender.IDNumber=dto.IDNumber;
+            lender.MobilePhoneNumber=dto.MobilePhoneNumber;
 
             try
             {
@@ -81,7 +86,7 @@ namespace Alps.Web.Service.controllers
                 }
             }
 
-            return NoContent();
+            return this.AlpsActionOk();
         }
 
         // POST: api/Lenders

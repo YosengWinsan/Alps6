@@ -9,7 +9,7 @@
           <mat-form-field>
             <span matPrefix>
               <mat-icon>person</mat-icon></span>
-            <input matInput formControlName="username" (focusin)="clearWarn()">
+            <input #usernameInput matInput formControlName="username" (focusin)="clearWarn()">
            
           </mat-form-field>
           <div  class="warn" *ngIf=" loginForm.controls.username.invalid &&  !loginForm.controls.username.pristine  && loginForm.controls.username.errors?.required">

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoanService } from '../loan.service';
-import { FormBuilder } from '../../../../node_modules/@angular/forms';
-import { ActivatedRoute } from '../../../../node_modules/@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-lender-edit',
@@ -10,21 +10,25 @@ import { ActivatedRoute } from '../../../../node_modules/@angular/router';
 })
 export class LenderEditComponent implements OnInit {
 
-  constructor(private loanService: LoanService, private fomrBuilder: FormBuilder,private activatedRoute:ActivatedRoute) { }
-  lenderForm = this.fomrBuilder.group({ name: [], idNumber: [], mobilePhoneNumber: [] });
+  constructor(private loanService: LoanService, private fomrBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) { }
+  lenderForm = this.fomrBuilder.group({ id: [], name: [, Validators.required], idNumber: [, Validators.required], mobilePhoneNumber: [] });
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(param => {
       var id = param["id"] ? param["id"] : "";
       if (id != "") {
         this.loanService.getLender(id).subscribe((res) => {
-            this.lenderForm.patchValue(res);
+          this.lenderForm.patchValue(res);
         });
       }
     });
 
   }
-  save(){
-
+  save() {
+    if (this.lenderForm.valid)
+      this.loanService.saveLender(this.lenderForm.value).subscribe((rst) => {
+        if (rst)
+          this.router.navigate(['lenderlist'], { relativeTo: this.activatedRoute.parent });
+      });
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
@@ -17,10 +17,13 @@ export class LoginComponent implements OnInit {
   }
   url = "";
   loginForm: FormGroup;
+  @ViewChild("usernameInput")
+  usernameInput:ElementRef;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.url = params['url'] ? params['url'] : "";
     });
+    this.usernameInput.nativeElement.focus();
   }
   keyup(e:KeyboardEvent)
   {
