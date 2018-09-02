@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormGroup } from '../../../../node_modules/@an
 import { ActivatedRoute, Router } from '../../../../node_modules/@angular/router';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { PinYinHelper } from '../../extends/PinYinHelper';
 
 @Component({
   selector: 'app-deposit',
@@ -21,15 +22,23 @@ export class DepositComponent implements OnInit {
   depositForm: FormGroup;
   ngOnInit() {
     this.queryService.getLenderOptions().subscribe(data => {
+      for(let item of data)
+      {
+        item.pinyin=PinYinHelper.ConvertPinyin( item.displayValue).toLowerCase();
+      }
       this.lenderOptions = this.depositForm.controls.lenderID.valueChanges.pipe(
         startWith(''), map((v:any)=> typeof v==="string"?v:v.displayValue) ,map(v => this.filterLenderOption(v, data))
       );
     });
     //this.depositForm.patchValue({date:new Date()});
   }
+  lenderInputOut(e){
+    console.info(this.depositForm.controls.lenderID.value);
+    console.info(e);
+  }
   filterLenderOption(name: string, options: any[]) {
     let filterValue = name.toLowerCase();
-    return options.filter(option => option.displayValue.toLowerCase().includes(filterValue));
+    return options.filter(option => option.displayValue.toLowerCase().includes(filterValue)|| option.pinyin.includes(filterValue));
   }
   displayLenderOption(option) {
     return option ? option.displayValue : undefined;

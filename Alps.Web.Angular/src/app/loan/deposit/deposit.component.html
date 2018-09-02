@@ -5,8 +5,8 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <mat-form-field>
-    <input matInput [matAutocomplete]="lenderPicker" placeholder="存款人"  formControlName="lenderID" > 
-    <mat-autocomplete #lenderPicker [displayWith]="displayLenderOption">
+    <input matInput [matAutocomplete]="lenderPicker" placeholder="存款人"  formControlName="lenderID" (focusout)="lenderInputOut($event)" > 
+    <mat-autocomplete #lenderPicker [displayWith]="displayLenderOption" autoActiveFirstOption >
       <mat-option *ngFor="let option of lenderOptions|async" [value]="option">
         {{option.displayValue}}
       </mat-option>
