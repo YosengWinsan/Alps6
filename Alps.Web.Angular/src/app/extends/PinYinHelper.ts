@@ -426,13 +426,14 @@ static ConvertPinyin(ChineseCharacter) {
 
 // 在对象中搜索
 private static arraySearch(litter, phoneticTranscriptionObj) {
+	let finded=false;
 	for (let name in phoneticTranscriptionObj) {
 		if (phoneticTranscriptionObj[name].indexOf(litter) != -1) {
-			return PinYinHelper.ucfirst(name);
+			finded= PinYinHelper.ucfirst(name);
 			break;
 		}
 	}
-	return false;
+	return finded;
 }
 
 // 首字母大写
