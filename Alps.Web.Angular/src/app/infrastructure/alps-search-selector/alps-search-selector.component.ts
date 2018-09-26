@@ -180,4 +180,43 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   private onChange = (_: any) => { };
   private onTouched = () => { };
 
+
+  displayValue(value: any): Observable<AlpsSearchSelectorOption | null> {
+    console.log('finding display value for', value);
+    if (value === '333') {
+      return of(null);
+    }
+    if (value) {
+      let display = '';
+      value = parseInt(value, 10);
+      for (const idx in this.options) {
+        if (this.options[idx] && this.options[idx].value === value) {
+          display = this.options[idx].display;
+          break;
+        }
+      }
+      return of();
+    } else {
+      return of(null);
+    }
+  }
+
+  search(term: string): Observable<OptionEntry[]> {
+    console.log('searching for', term);
+    if (term === 'error') {
+      return _throw('testing');
+    }
+    const lowerTerm = typeof term === 'string' ? term.toLowerCase() : '';
+    return of(this.options
+      .filter(option => option.display.toLowerCase().indexOf(lowerTerm) >= 0)
+    ).pipe(delayWhen(_event =>
+      timer(Math.random() * 300 + 100)
+    ));
+  }
+
+  // This custom match function makes it possible for the user to type "one" to
+  // match an entry "One".
+  match(search: string, entry: OptionEntry) {
+    return entry.display && search.toLowerCase() === entry.display.toLowerCase() || false;
+  }
 }
