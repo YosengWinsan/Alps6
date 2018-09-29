@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 export interface AlpsSearchSelectorOption {
     value: any;
     displayValue: string;
+    pinyin:string;
 }
 export interface AlpsSearchSelectorDataSource {
     displayValue: (value: any) => Observable<AlpsSearchSelectorOption | null>;

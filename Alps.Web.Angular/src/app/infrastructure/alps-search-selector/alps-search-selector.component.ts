@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormControl, ControlValueAccessor } from '@angular/forms';
 import { Observable, timer, EMPTY, combineLatest, Subject, BehaviorSubject, of, Subscription } from 'rxjs';
 import { AlpsSelectorOption } from '../alps-selector/alps-selector-dialog/alps-selector-dialog.component';
-import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take } from 'rxjs/operators';
+import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take, delayWhen } from 'rxjs/operators';
 import { AlpsSearchSelectorDataSource, AlpsSearchSelectorOption } from './alps-search-selector-type';
-import { MatFormFieldControl } from '@angular/material';
+import { PinYinHelper } from '../../extends/PinYinHelper';
 
 interface SearchResult {
   search: string;
@@ -23,13 +23,19 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   @Input() width = '';
   @Input() emptyText = '';
   @Input() autoActiveFirstOption = false;
-  @Input() set dataSource(ds: AlpsSearchSelectorDataSource) { this.incomingDataSources.next(ds); }
+  @Input() set dataSource(ds: AlpsSearchSelectorOption[]) { 
+    for (const option of ds) {
+      if(!(option.pinyin&& option.pinyin!==""))
+      {
+        option.pinyin= PinYinHelper.ConvertPinyin(option.displayValue).toLowerCase();
+      }
+    }
+    this.incomingDataSources.next(ds); }
+
   searchControl = new FormControl();
   private incomingValues = new Subject<any>();
-  private incomingDataSources = new BehaviorSubject<AlpsSearchSelectorDataSource>({
-    displayValue: of,
-    search: () => of([])
-  });
+  private incomingDataSources:BehaviorSubject<AlpsSearchSelectorOption[]> = new BehaviorSubject<AlpsSearchSelectorOption[]>([]);
+
   loading: Observable<boolean>;
   list: Observable<AlpsSearchSelectorOption[] | undefined>;
   empty: Observable<boolean>;
@@ -51,7 +57,7 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
           return EMPTY; // immediate - no debounce for choosing from the list
         })
       );
-    const options: Observable<SearchResult> = combineLatest(
+    const options: Observable<AlpsSearchSelectorOption[]> = combineLatest(
       searches,
       this.incomingDataSources.pipe(filter(ds => !!ds)),
     ).pipe(
@@ -63,20 +69,27 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
         // Typing into input sends strings.
         if (typeof srch === 'string') {
           const search: string = srch;
-          return ds.search(srch).pipe(
-            map(list => ({ search, list })),
-            catchError(errorMessage => of({ search, errorMessage })),
-            startWith({ search })
-          );
+          return of(ds.filter(option=>option.displayValue.toLowerCase().indexOf(<string>srch) >= 0 ||option.pinyin.indexOf(<string>srch) >= 0))
+          .pipe(
+            delayWhen(event=>timer(Math.random()*300+100))
+            //, catchError(errorMessage => of({ search, errorMessage }))
+
+
+          )
+          // return ds.search(srch).pipe(
+          //   map(list => ({ search, list })),
+          //   catchError(errorMessage => of({ search, errorMessage })),
+          //   startWith({ search })
+          // );
         }
 
         // Selecting from Material Option List sends an object, so there is
         // no need to call function to search for it.
-        const entry = srch as AlpsSearchSelectorOption;
-        return of<SearchResult>({
-          search: srch.displayValue,
-          list: [{ ...entry }]
-        });
+        // const entry = srch as AlpsSearchSelectorOption;
+        // return of<AlpsSearchSelectorOption[]>({
+        //   search: srch.displayValue,
+        //   list: [{ ...entry }]
+        // });
       }),
       publishReplay(1),
       refCount()
