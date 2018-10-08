@@ -1,21 +1,22 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormControl, ControlValueAccessor } from '@angular/forms';
+import { Component, OnInit, OnDestroy, Input, forwardRef } from '@angular/core';
+import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, timer, EMPTY, combineLatest, Subject, BehaviorSubject, of, Subscription } from 'rxjs';
-import { AlpsSelectorOption } from '../alps-selector/alps-selector-dialog/alps-selector-dialog.component';
-import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take, delayWhen } from 'rxjs/operators';
-import { AlpsSearchSelectorDataSource, AlpsSearchSelectorOption } from './alps-search-selector-type';
+import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take, delayWhen, tap } from 'rxjs/operators';
+import {  AlpsSearchSelectorOption } from './alps-search-selector-type';
 import { PinYinHelper } from '../../extends/PinYinHelper';
 
-interface SearchResult {
-  search: string;
-  list?: AlpsSearchSelectorOption[];
-  errorMessage?: string;
-}
 
 @Component({
   selector: 'alps-search-selector',
   templateUrl: './alps-search-selector.component.html',
-  styleUrls: ['./alps-search-selector.component.css']
+  styleUrls: ['./alps-search-selector.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AlpsSearchSelectorComponent ),
+      multi: true
+    }]
+
 })
 export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDestroy {
   @Input() placeholder: string;
@@ -23,18 +24,18 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   @Input() width = '';
   @Input() emptyText = '';
   @Input() autoActiveFirstOption = false;
-  @Input() set dataSource(ds: AlpsSearchSelectorOption[]) { 
+  @Input() set dataSource(ds: AlpsSearchSelectorOption[]) {
     for (const option of ds) {
-      if(!(option.pinyin&& option.pinyin!==""))
-      {
-        option.pinyin= PinYinHelper.ConvertPinyin(option.displayValue).toLowerCase();
+      if (!(option.pinyin && option.pinyin !== "")) {
+        option.pinyin = PinYinHelper.ConvertPinyin(option.displayValue).toLowerCase();
       }
     }
-    this.incomingDataSources.next(ds); }
+    this.incomingDataSources.next(ds);
+  }
 
   searchControl = new FormControl();
   private incomingValues = new Subject<any>();
-  private incomingDataSources:BehaviorSubject<AlpsSearchSelectorOption[]> = new BehaviorSubject<AlpsSearchSelectorOption[]>([]);
+  private incomingDataSources: BehaviorSubject<AlpsSearchSelectorOption[]> = new BehaviorSubject<AlpsSearchSelectorOption[]>([]);
 
   loading: Observable<boolean>;
   list: Observable<AlpsSearchSelectorOption[] | undefined>;
@@ -59,8 +60,9 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
       );
     const options: Observable<AlpsSearchSelectorOption[]> = combineLatest(
       searches,
-      this.incomingDataSources.pipe(filter(ds => !!ds)),
+      this.incomingDataSources.pipe(filter(ds => !!ds))
     ).pipe(
+         
       switchMap(([srch, ds]) => {
         // Initial value is sometimes null.
         if (srch === null) {
@@ -68,58 +70,59 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
         }
         // Typing into input sends strings.
         if (typeof srch === 'string') {
-          const search: string = srch;
-          return of(ds.filter(option=>option.displayValue.toLowerCase().indexOf(<string>srch) >= 0 ||option.pinyin.indexOf(<string>srch) >= 0))
-          .pipe(
-            delayWhen(event=>timer(Math.random()*300+100))
-            //, catchError(errorMessage => of({ search, errorMessage }))
-
-
-          )
-          // return ds.search(srch).pipe(
-          //   map(list => ({ search, list })),
-          //   catchError(errorMessage => of({ search, errorMessage })),
-          //   startWith({ search })
-          // );
+          return of(ds.filter(option => option.displayValue.toLowerCase().indexOf(<string>srch) >= 0 || option.pinyin.indexOf(<string>srch) >= 0))
+            .pipe(
+              delayWhen(event => timer(Math.random() * 300 + 100))
+            )
         }
-
-        // Selecting from Material Option List sends an object, so there is
-        // no need to call function to search for it.
-        // const entry = srch as AlpsSearchSelectorOption;
-        // return of<AlpsSearchSelectorOption[]>({
-        //   search: srch.displayValue,
-        //   list: [{ ...entry }]
-        // });
       }),
       publishReplay(1),
       refCount()
     );
 
-    function matcher(search: string, entry: AlpsSearchSelectorOption) {
-      return entry.displayValue === search;
-    }
-
     this.selectedValue = options.pipe(
-      filter(result => !!result.list),
-      withLatestFrom(this.incomingDataSources),
-      map(([result, ds]) => {
-        const list = result.list || []; // appease TS
-        const matchFn = ds.match || matcher;
-        const entry = list.find(option => matchFn(result.search, option));
-        return entry && entry.value || null;
+      filter(result => !!result),
+      withLatestFrom(searches)
+      ,tap((v)=>console.info(v)),
+      
+      map(([ options,search]) => {
+        const option=options.find(option=>{
+          if(option.pinyin==search || option.displayValue.toLowerCase()==search)
+          return true;
+        });
+        
+        // const list = result.list || []; // appease TS
+        // const matchFn = ds.match || matcher;
+        // const entry = list.find(option => matchFn(result.search, option));
+        // return entry && entry.value || null;
+        return option && option.value ||null;
       }),
       distinctUntilChanged()
     );
 
-    this.loading = options.pipe(map(o => !o.list && !o.errorMessage));
-    this.list = options.pipe(map(o => o.list));
-    this.empty = options.pipe(map(o => o.list ? o.list.length === 0 : false));
-    this.errorMessage = options.pipe(map(o => o.errorMessage));
+    // this.loading = options.pipe(map(o => !o.list && !o.errorMessage));
+     this.list = options;
+    // this.empty = options.pipe(map(o => o.list ? o.list.length === 0 : false));
+    // this.errorMessage = options.pipe(map(o => o.errorMessage));
 
     // a value was provided by the form; request the full entry
     this.incomingDataSourcesSub = this.incomingValues.pipe(
       withLatestFrom(this.incomingDataSources),
-      switchMap<[any, AlpsSearchSelectorDataSource], AlpsSearchSelectorOption>(([value, ds]) => ds.displayValue(value))
+      switchMap(([value, options]) => {
+        let finded = false;
+        for (const option of options) {
+          if (option.value == value) {
+            finded = true;
+            break;
+          }
+
+        }
+        if (finded)
+          return of(value);
+        else
+          return of(null);
+      }
+      )
     )
       .subscribe(value => this.searchControl.setValue(value));
   }
@@ -193,43 +196,4 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   private onChange = (_: any) => { };
   private onTouched = () => { };
 
-
-  displayValue(value: any): Observable<AlpsSearchSelectorOption | null> {
-    console.log('finding display value for', value);
-    if (value === '333') {
-      return of(null);
-    }
-    if (value) {
-      let display = '';
-      value = parseInt(value, 10);
-      for (const idx in this.options) {
-        if (this.options[idx] && this.options[idx].value === value) {
-          display = this.options[idx].display;
-          break;
-        }
-      }
-      return of();
-    } else {
-      return of(null);
-    }
-  }
-
-  search(term: string): Observable<OptionEntry[]> {
-    console.log('searching for', term);
-    if (term === 'error') {
-      return _throw('testing');
-    }
-    const lowerTerm = typeof term === 'string' ? term.toLowerCase() : '';
-    return of(this.options
-      .filter(option => option.display.toLowerCase().indexOf(lowerTerm) >= 0)
-    ).pipe(delayWhen(_event =>
-      timer(Math.random() * 300 + 100)
-    ));
-  }
-
-  // This custom match function makes it possible for the user to type "one" to
-  // match an entry "One".
-  match(search: string, entry: OptionEntry) {
-    return entry.display && search.toLowerCase() === entry.display.toLowerCase() || false;
-  }
 }

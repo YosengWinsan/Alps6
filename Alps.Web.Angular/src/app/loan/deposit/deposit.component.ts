@@ -20,7 +20,9 @@ export class DepositComponent implements OnInit {
   }
   lenderOptions: Observable<any>;
   depositForm: FormGroup;
+  lenderDs;
   ngOnInit() {
+    this.lenderDs=this.queryService.getLenderOptions();
     this.queryService.getLenderOptions().subscribe(data => {
       for(let item of data)
       {
