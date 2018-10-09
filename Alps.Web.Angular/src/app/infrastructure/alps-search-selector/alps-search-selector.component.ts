@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, forwardRef } from '@angular/core';
 import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, timer, EMPTY, combineLatest, Subject, BehaviorSubject, of, Subscription } from 'rxjs';
 import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take, delayWhen, tap } from 'rxjs/operators';
-import {  AlpsSearchSelectorOption } from './alps-search-selector-type';
+import { AlpsSearchSelectorOption } from './alps-search-selector-type';
 import { PinYinHelper } from '../../extends/PinYinHelper';
 
 
@@ -13,7 +13,7 @@ import { PinYinHelper } from '../../extends/PinYinHelper';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AlpsSearchSelectorComponent ),
+      useExisting: forwardRef(() => AlpsSearchSelectorComponent),
       multi: true
     }]
 
@@ -25,12 +25,14 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   @Input() emptyText = '';
   @Input() autoActiveFirstOption = false;
   @Input() set dataSource(ds: AlpsSearchSelectorOption[]) {
-    for (const option of ds) {
-      if (!(option.pinyin && option.pinyin !== "")) {
-        option.pinyin = PinYinHelper.ConvertPinyin(option.displayValue).toLowerCase();
+    if (ds instanceof Array) {
+      for (const option of ds) {
+        if (!(option.pinyin && option.pinyin !== "")) {
+          option.pinyin = PinYinHelper.ConvertPinyin(option.displayValue).toLowerCase();
+        }
       }
+      this.incomingDataSources.next(ds);
     }
-    this.incomingDataSources.next(ds);
   }
 
   searchControl = new FormControl();
@@ -48,6 +50,8 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   constructor() {
     const searches: Observable<AlpsSearchSelectorOption | string | null> =
       this.searchControl.valueChanges.pipe(
+        
+      tap((v)=>console.info(v)),
         startWith(this.searchControl.value),
         distinctUntilChanged(),
         debounce(srch => {
@@ -58,11 +62,11 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
           return EMPTY; // immediate - no debounce for choosing from the list
         })
       );
-    const options: Observable<AlpsSearchSelectorOption[]> = combineLatest(
+    const options: Observable<AlpsSearchSelectorOption[]|any> = combineLatest(
       searches,
       this.incomingDataSources.pipe(filter(ds => !!ds))
     ).pipe(
-         
+      tap((v)=>console.info(v)),
       switchMap(([srch, ds]) => {
         // Initial value is sometimes null.
         if (srch === null) {
@@ -75,6 +79,7 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
               delayWhen(event => timer(Math.random() * 300 + 100))
             )
         }
+        return of(null);
       }),
       publishReplay(1),
       refCount()
@@ -83,25 +88,24 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
     this.selectedValue = options.pipe(
       filter(result => !!result),
       withLatestFrom(searches)
-      ,tap((v)=>console.info(v)),
-      
-      map(([ options,search]) => {
-        const option=options.find(option=>{
-          if(option.pinyin==search || option.displayValue.toLowerCase()==search)
-          return true;
+      , tap((v) => console.info(v)),
+
+      map(([options,search]) => {
+        const option = options.find(option => {
+          if (option.pinyin == search || option.displayValue.toLowerCase() == search)
+            return true;
         });
-        
         // const list = result.list || []; // appease TS
         // const matchFn = ds.match || matcher;
         // const entry = list.find(option => matchFn(result.search, option));
         // return entry && entry.value || null;
-        return option && option.value ||null;
+        return option && option.value || null;
       }),
       distinctUntilChanged()
     );
 
     // this.loading = options.pipe(map(o => !o.list && !o.errorMessage));
-     this.list = options;
+    this.list = options;
     // this.empty = options.pipe(map(o => o.list ? o.list.length === 0 : false));
     // this.errorMessage = options.pipe(map(o => o.errorMessage));
 
@@ -110,15 +114,16 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
       withLatestFrom(this.incomingDataSources),
       switchMap(([value, options]) => {
         let finded = false;
+        let displayValue=null;
         for (const option of options) {
           if (option.value == value) {
-            finded = true;
+            displayValue=option.displayValue;
             break;
           }
 
         }
-        if (finded)
-          return of(value);
+        if (displayValue)
+          return of(displayValue);
         else
           return of(null);
       }
@@ -152,6 +157,7 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
     // asynchronously provide a new value when it no longer has focus?
   }
   private checkAndPropagate(value: any) {
+    console.info(value);
     // Only send a change if there really is one.
     if (value !== this.outsideValue) {
       this.outsideValue = value;

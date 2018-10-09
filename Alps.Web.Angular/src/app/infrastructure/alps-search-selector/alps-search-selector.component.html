@@ -14,7 +14,7 @@ matInput
 [autoActiveFirstOption]="autoActiveFirstOption"
 class="bigger-mat-ac">
 <mat-option *ngFor="let option of list | async"
-[value]="option.value">
+[value]="option">
 {{ option.displayValue }}
 </mat-option>
 </mat-autocomplete>

@@ -46,6 +46,7 @@ export class DepositComponent implements OnInit {
     return option ? option.displayValue : undefined;
   }
   confirm() {
+    console.info(this.depositForm.value);
     if (this.depositForm.valid) {
       this.loanService.deposit(this.depositForm.value).subscribe((data) => {
         this.router.navigate(['./printvoucher'], { relativeTo: this.activatedRoute.parent, queryParams: { id: data, type: 1 } });
