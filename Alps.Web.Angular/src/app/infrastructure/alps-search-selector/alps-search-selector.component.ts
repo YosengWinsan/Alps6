@@ -50,8 +50,8 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   constructor() {
     const searches: Observable<AlpsSearchSelectorOption | string | null> =
       this.searchControl.valueChanges.pipe(
-        
-      tap((v)=>console.info(v)),
+
+        tap((v) => console.info(v)),
         startWith(this.searchControl.value),
         distinctUntilChanged(),
         debounce(srch => {
@@ -60,13 +60,15 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
             return timer(this.debounceTime);
           }
           return EMPTY; // immediate - no debounce for choosing from the list
-        })
+        }),
+        tap((v) => console.info(v))
       );
-    const options: Observable<AlpsSearchSelectorOption[]|any> = combineLatest(
+      searches.subscribe(p=>console.info(p));
+    const options: Observable<AlpsSearchSelectorOption[] | any> = combineLatest(
       searches,
       this.incomingDataSources.pipe(filter(ds => !!ds))
     ).pipe(
-      tap((v)=>console.info(v)),
+      tap((v) => console.info(v)),
       switchMap(([srch, ds]) => {
         // Initial value is sometimes null.
         if (srch === null) {
@@ -79,30 +81,30 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
               delayWhen(event => timer(Math.random() * 300 + 100))
             )
         }
-        return of(null);
+        return of(srch);
       }),
       publishReplay(1),
       refCount()
     );
+this.selectedValue=searches.pipe(
+  tap((v) => console.info(v)),
+  filter(s=>!!s && !!(<AlpsSearchSelectorOption>s).value),
+  map(s=>{return (<AlpsSearchSelectorOption>s).value}),
+  distinctUntilChanged()
+);
+    // this.selectedValue = options.pipe(
+    //   filter(result => !!result),
+    //   withLatestFrom(searches),
 
-    this.selectedValue = options.pipe(
-      filter(result => !!result),
-      withLatestFrom(searches)
-      , tap((v) => console.info(v)),
-
-      map(([options,search]) => {
-        const option = options.find(option => {
-          if (option.pinyin == search || option.displayValue.toLowerCase() == search)
-            return true;
-        });
-        // const list = result.list || []; // appease TS
-        // const matchFn = ds.match || matcher;
-        // const entry = list.find(option => matchFn(result.search, option));
-        // return entry && entry.value || null;
-        return option && option.value || null;
-      }),
-      distinctUntilChanged()
-    );
+    //   map(([options, search]) => {
+    //     const option = options.find(option => {
+    //       if (option.pinyin == search || option.displayValue.toLowerCase() == search)
+    //         return true;
+    //     });
+    //     return option && option.value || null;
+    //   }),
+    //   distinctUntilChanged()
+    // );
 
     // this.loading = options.pipe(map(o => !o.list && !o.errorMessage));
     this.list = options;
@@ -114,10 +116,10 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
       withLatestFrom(this.incomingDataSources),
       switchMap(([value, options]) => {
         let finded = false;
-        let displayValue=null;
+        let displayValue = null;
         for (const option of options) {
           if (option.value == value) {
-            displayValue=option.displayValue;
+            displayValue = option.displayValue;
             break;
           }
 
@@ -129,7 +131,8 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
       }
       )
     )
-      .subscribe(value => this.searchControl.setValue(value));
+      .subscribe(value => {this.searchControl.setValue(value);console.info('setValue');});
+      
   }
 
 
