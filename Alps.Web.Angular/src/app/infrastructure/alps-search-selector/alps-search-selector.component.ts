@@ -20,7 +20,7 @@ import { PinYinHelper } from '../../extends/PinYinHelper';
 })
 export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDestroy {
   @Input() placeholder: string;
-  @Input() debounceTime = 100;
+  @Input() debounceTime = 1000;
   @Input() width = '';
   @Input() emptyText = '';
   @Input() autoActiveFirstOption = false;
@@ -50,20 +50,20 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   constructor() {
     const searches: Observable<AlpsSearchSelectorOption | string | null> =
       this.searchControl.valueChanges.pipe(
-
         tap((v) => console.info(v)),
         startWith(this.searchControl.value),
         distinctUntilChanged(),
         debounce(srch => {
+          console.info('debounce'+srch);
           // Typing into input sends strings.
           if (typeof srch === 'string') {
             return timer(this.debounceTime);
           }
+          console.info('EMPTY'+srch);
           return EMPTY; // immediate - no debounce for choosing from the list
         }),
         tap((v) => console.info(v))
       );
-      searches.subscribe(p=>console.info(p));
     const options: Observable<AlpsSearchSelectorOption[] | any> = combineLatest(
       searches,
       this.incomingDataSources.pipe(filter(ds => !!ds))
@@ -75,22 +75,28 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
           srch = '';
         }
         // Typing into input sends strings.
+        if(srch instanceof AlpsSearchSelectorOption)
+        {
+          return of([srch]);
+        }
         if (typeof srch === 'string') {
           return of(ds.filter(option => option.displayValue.toLowerCase().indexOf(<string>srch) >= 0 || option.pinyin.indexOf(<string>srch) >= 0))
             .pipe(
               delayWhen(event => timer(Math.random() * 300 + 100))
             )
         }
-        return of(srch);
+        return of(null);
       }),
       publishReplay(1),
       refCount()
     );
-this.selectedValue=searches.pipe(
+this.selectedValue=//of(1);
+searches.pipe(
   tap((v) => console.info(v)),
   filter(s=>!!s && !!(<AlpsSearchSelectorOption>s).value),
   map(s=>{return (<AlpsSearchSelectorOption>s).value}),
-  distinctUntilChanged()
+  distinctUntilChanged(),
+  tap((v) => console.info(v))
 );
     // this.selectedValue = options.pipe(
     //   filter(result => !!result),
@@ -138,7 +144,13 @@ this.selectedValue=searches.pipe(
 
   focus() {
     // While focused, user selection will be propagated to the form.
-    this.selectedValueSub = this.selectedValue.subscribe(this.checkAndPropagate.bind(this));
+    //this.selectedValueSub = this.selectedValue.subscribe(this.checkAndPropagate.bind(this));
+    //this.selectedValueSub = this.selectedValue.subscribe(()=>console.info('XX'));
+    // let o= this.searchControl.valueChanges.pipe(startWith(this.searchControl.value),map((v)=>{
+    //   console.info('PIPE'+v);
+    //   return v;}));
+    //   o.subscribe((v)=>console.info('1:'+v));
+    //   o.subscribe((v)=>console.info('2:'+v));
   }
 
   blur() {
@@ -152,6 +164,7 @@ this.selectedValue=searches.pipe(
     // asynchronously. We can't force the system to wait for that to happen, we
     // are losing focus right now. But we can subscribe to pick up that one last
     // change and propagate it if/when it arrives.
+    console.info('Blur');
     this.selectedValue
       .pipe(take(1))
       .subscribe(this.checkAndPropagate.bind(this));
@@ -175,6 +188,7 @@ this.selectedValue=searches.pipe(
   writeValue(obj: any): void {
     // Angular sometimes writes a value that didn't really change.
     if (obj !== this.outsideValue) {
+      console.info('WriteValue');
       this.outsideValue = obj;
       this.incomingValues.next(obj);
     }
