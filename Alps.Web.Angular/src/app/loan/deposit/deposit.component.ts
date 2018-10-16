@@ -32,7 +32,7 @@ export class DepositComponent implements OnInit {
         startWith(''), map((v:any)=> typeof v==="string"?v:v.displayValue) ,map(v => this.filterLenderOption(v, data))
       );
     });
-    //this.depositForm.patchValue({date:new Date()});
+    //this.depositForm.patchValue({lenderID:'1fbb3218-775f-45b2-3b59-08d6100ad6bf'});
   }
   lenderInputOut(e){
     console.info(this.depositForm.controls.lenderID.value);

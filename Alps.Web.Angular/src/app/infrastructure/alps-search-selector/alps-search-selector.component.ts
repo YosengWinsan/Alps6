@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input, forwardRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, forwardRef, HostBinding } from '@angular/core';
 import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, timer, EMPTY, combineLatest, Subject, BehaviorSubject, of, Subscription } from 'rxjs';
 import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take, delayWhen, tap } from 'rxjs/operators';
 import { AlpsSearchSelectorOption } from './alps-search-selector-type';
 import { PinYinHelper } from '../../extends/PinYinHelper';
+import { _countGroupLabelsBeforeOption } from '@angular/material';
 
 
 @Component({
@@ -19,10 +20,11 @@ import { PinYinHelper } from '../../extends/PinYinHelper';
 
 })
 export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDestroy {
+  @HostBinding('class') isNgInvalid;
   @Input() placeholder: string;
   @Input() debounceTime = 200;
   @Input() width = '';
-  @Input() emptyText = '';
+  @Input() emptyText = '无匹配项';
   @Input() autoActiveFirstOption = false;
   @Input() set dataSource(ds: AlpsSearchSelectorOption[]) {
     if (ds instanceof Array) {
@@ -54,6 +56,7 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
         startWith(this.searchControl.value),
         distinctUntilChanged(),
         debounce(srch => {
+          console.info(this.isNgInvalid);
           // Typing into input sends strings.
           if (typeof srch === 'string') {
             return timer(this.debounceTime);
@@ -61,51 +64,38 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
           return EMPTY; // immediate - no debounce for choosing from the list
         })
       );
-    const optionsOb: Observable<AlpsSearchSelectorOption[]> = combineLatest(searchesOb, this.incomingDataSources)
-      .pipe(    
+    const optionsOb = combineLatest(searchesOb, this.incomingDataSources)
+      .pipe(
         switchMap(([srch, ds]) => {
           if (srch == null)
             srch = '';
-          if (typeof srch === 'string')
-            return of(ds.filter(option => option.displayValue.toLowerCase().indexOf(<string>srch) >= 0 || option.pinyin.indexOf(<string>srch) >= 0))
+          if (typeof srch === 'string') {
+            let list = ds.filter(option => option.displayValue.toLowerCase().indexOf(<string>srch) >= 0 || option.pinyin.indexOf(<string>srch) >= 0);
+            let value: any = srch;
+            if (list.length == 1 && list[0].displayValue == srch)
+              value = ds[0];
+            return of({ value, list })
               .pipe(
                 delayWhen(event => timer(Math.random() * 300 + 100))
               );
 
-          return of([srch]);
+          }
+          return of({ value: srch, list: [srch] });
         }),
         publishReplay(1),
         refCount()
       );
 
     this.selectedValue =//of(1);
-      searchesOb.pipe(
-        filter(s=>!!s),
-        map(s => {
-          if (!!s && !!(<AlpsSearchSelectorOption>s).value)
-            return (<AlpsSearchSelectorOption>s).value;
-          else
-            return null;
-        }),
+      optionsOb.pipe(
+        filter(o => !!o.value),
+        map(o => { return o.value.value ? o.value.value : null }),
         distinctUntilChanged()
       );
-    // this.selectedValue = options.pipe(
-    //   filter(result => !!result),
-    //   withLatestFrom(searches),
-
-    //   map(([options, search]) => {
-    //     const option = options.find(option => {
-    //       if (option.pinyin == search || option.displayValue.toLowerCase() == search)
-    //         return true;
-    //     });
-    //     return option && option.value || null;
-    //   }),
-    //   distinctUntilChanged()
-    // );
 
     // this.loading = options.pipe(map(o => !o.list && !o.errorMessage));
-    this.list = optionsOb;
-    // this.empty = options.pipe(map(o => o.list ? o.list.length === 0 : false));
+    this.list = optionsOb.pipe(map(o => o.list));
+     this.empty = optionsOb.pipe(map(o => o.list ? o.list.length === 0 : false));
     // this.errorMessage = options.pipe(map(o => o.errorMessage));
 
     // a value was provided by the form; request the full entry
@@ -113,22 +103,19 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
       withLatestFrom(this.incomingDataSources),
       switchMap(([value, options]) => {
         let finded = false;
-        let displayValue = null;
+        let controlValue = null;
         for (const option of options) {
           if (option.value == value) {
-            displayValue = option.displayValue;
+            controlValue = option;
             break;
           }
 
         }
-        if (displayValue)
-          return of(displayValue);
-        else
-          return of(null);
+        return of(controlValue);
       }
       )
     )
-      .subscribe(value => { this.searchControl.setValue(value); console.info('setValue'); });
+      .subscribe(value => { this.searchControl.setValue(value); });
 
   }
 
@@ -136,12 +123,6 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   focus() {
     // While focused, user selection will be propagated to the form.
     this.selectedValueSub = this.selectedValue.subscribe(this.checkAndPropagate.bind(this));
-    //this.selectedValueSub = this.selectedValue.subscribe(()=>console.info('XX'));
-    // let o= this.searchControl.valueChanges.pipe(startWith(this.searchControl.value),map((v)=>{
-    //   console.info('PIPE'+v);
-    //   return v;}));
-    //   o.subscribe((v)=>console.info('1:'+v));
-    //   o.subscribe((v)=>console.info('2:'+v));
   }
   blur() {
     this.onTouched();
@@ -176,7 +157,6 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   writeValue(obj: any): void {
     // Angular sometimes writes a value that didn't really change.
     if (obj !== this.outsideValue) {
-      console.info('WriteValue');
       this.outsideValue = obj;
       this.incomingValues.next(obj);
     }
