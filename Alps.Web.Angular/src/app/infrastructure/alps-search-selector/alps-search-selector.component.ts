@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, forwardRef, HostBinding } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, forwardRef,  ElementRef, HostBinding } from '@angular/core';
 import { FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, timer, EMPTY, combineLatest, Subject, BehaviorSubject, of, Subscription } from 'rxjs';
 import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take, delayWhen, tap } from 'rxjs/operators';
@@ -20,7 +20,6 @@ import { _countGroupLabelsBeforeOption } from '@angular/material';
 
 })
 export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDestroy {
-  @HostBinding('class') isNgInvalid;
   @Input() placeholder: string;
   @Input() debounceTime = 200;
   @Input() width = '';
@@ -49,14 +48,14 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
   private outsideValue: any;
   private selectedValueSub: Subscription;
   private selectedValue: Observable<any>;
-  constructor() {
-    const searches: Observable<AlpsSearchSelectorOption | string | null> = of('p');
+  private isNgInvalid:boolean=true;
+  constructor(el:ElementRef) {
+    
     const searchesOb =
       this.searchControl.valueChanges.pipe(
         startWith(this.searchControl.value),
         distinctUntilChanged(),
         debounce(srch => {
-          console.info(this.isNgInvalid);
           // Typing into input sends strings.
           if (typeof srch === 'string') {
             return timer(this.debounceTime);
@@ -95,7 +94,7 @@ export class AlpsSearchSelectorComponent implements ControlValueAccessor, OnDest
 
     // this.loading = options.pipe(map(o => !o.list && !o.errorMessage));
     this.list = optionsOb.pipe(map(o => o.list));
-     this.empty = optionsOb.pipe(map(o => o.list ? o.list.length === 0 : false));
+     this.empty = optionsOb.pipe(map(o => !(o.value && o.value.value)));//.list ? o.list.length === 0 : false));
     // this.errorMessage = options.pipe(map(o => o.errorMessage));
 
     // a value was provided by the form; request the full entry

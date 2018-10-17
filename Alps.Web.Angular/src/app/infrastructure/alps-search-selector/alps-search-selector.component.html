@@ -1,7 +1,7 @@
-<mat-form-field>
-        <i class="alps-search-selector-no-matches" *ngIf="emptyText && empty | async">{{emptyText}}</i>
+ <mat-form-field class="mat-form-field-invalid"> 
+<i class="alps-search-selector-no-matches" *ngIf="emptyText && empty | async">{{emptyText}}</i>
 <input
-[ngClass]="{'ng-invalid mat-field-form-invalid':isNgInvalid}"
+
 type="text"
 [placeholder]="placeholder"
 [attr.aria-label]="placeholder"
@@ -22,3 +22,4 @@ class="bigger-mat-ac">
 </mat-autocomplete>
 <b>{{ errorMessage | async }}</b>
 </mat-form-field>
+{{class}}
