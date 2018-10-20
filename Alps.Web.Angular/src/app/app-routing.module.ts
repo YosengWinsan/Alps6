@@ -18,7 +18,8 @@ const routes: Routes = [
       { path: "sale", loadChildren: "./sale/sale.module#SaleModule" },
       { path: "logistics", loadChildren: "./logistics/logistics.module#LogisticsModule" },
       { path: "loan", loadChildren: "./loan/loan.module#LoanModule" },
-      { path: "user", loadChildren: "./user/user.module#UserModule" }
+      { path: "user", loadChildren: "./user/user.module#UserModule" },
+      { path: "purchase", loadChildren: "./purchase/purchase.module#PurchaseModule" }
     ], canActivateChild: [AuthGuard], canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },

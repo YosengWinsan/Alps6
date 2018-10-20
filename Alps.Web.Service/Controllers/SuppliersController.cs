@@ -1,5 +1,6 @@
 using Alps.Domain;
 using Alps.Domain.Common;
+using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Alps.Web.Service.Controllers
 {
-     [Authorize]
-  [Produces("application/json")]
+    [Authorize]
+    [Produces("application/json")]
     [Route("api/Suppliers")]
     public class SuppliersController : Controller
     {
@@ -24,9 +25,12 @@ namespace Alps.Web.Service.Controllers
 
         // GET: api/Suppliers
         [HttpGet]
-        public IEnumerable<Supplier> GetSupplier()
+        public IEnumerable<SupplierListDto> GetSupplier()
         {
-            return _context.Suppliers;
+            return from s in _context.Suppliers
+                   from c in _context.Counties
+                   where s.Address.CountyID == c.ID
+                   select new SupplierListDto { ID = s.ID, Name = s.Name, Contact = "", Address = c.FullName + " " + s.Address.Street };
         }
 
         // GET: api/Suppliers/5
@@ -61,8 +65,10 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(supplier).State = EntityState.Modified;
+            var existSupplier=_context.Suppliers.Find(id);
+            existSupplier.Name=supplier.Name;
+            existSupplier.Address=supplier.Address;
+            //_context.Entry(supplier).State = EntityState.Modified;
 
             try
             {

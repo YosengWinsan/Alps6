@@ -36,9 +36,11 @@ interface MenuItem {
   children?: MenuItem[];
 }
 const MENU_DATA: MenuItem[] = [
-  { path: "dashboard", name: "实时动态" },
+  { path: "dashboard", name: "实时动态" },  
+  { path: "crm", name: "客户关系" }, 
   { path: "product", name: "产品管理" },
   { path: "stock", name: "仓库管理" },
+  { path: "purchase", name: "采购管理" },
   { path: "sale", name: "销售管理" },
   { path: "logistics", name: "物流管理" },
   { path: "loan", name: "财务管理" },
