@@ -12,10 +12,10 @@ export class RepositoryService {
   _baseUrl: string = "api";
   protected httpClient: HttpClient;
   protected loadingBarService: AlpsLoadingBarService;
-  protected router:Router;
+  protected router: Router;
   constructor(protected injector: Injector) {
     this.httpClient = this.injector.get(HttpClient);
-    this.router=this.injector.get(Router);
+    this.router = this.injector.get(Router);
     this.loadingBarService = this.injector.get(AlpsLoadingBarService);
   }
   private startLoad() {
@@ -59,8 +59,14 @@ export class RepositoryService {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.processPipe(this.httpClient.post(this._baseUrl + "/" + action, body, { headers: headers }));
   }
-
+  protected checkAndFillID(entity) {
+    if (entity.hasOwnProperty("id")) {
+      if (!entity.id || entity.id === "")
+        entity.id = AlpsConst.GUID_EMPTY;
+    }
+  }
   createAndUpdate(entity) {
+
     if (!entity.hasOwnProperty("id"))
       throw Error("不存在标识");
     if (entity.id && entity.id !== "" && entity.id !== AlpsConst.GUID_EMPTY) {

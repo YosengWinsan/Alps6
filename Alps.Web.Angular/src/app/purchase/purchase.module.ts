@@ -9,12 +9,14 @@ import { SupplierEditComponent } from './supplier-edit/supplier-edit.component';
 import { PurchaseOrderListComponent } from './purchase-order-list/purchase-order-list.component';
 import { PurchaseOrderEditComponent } from './purchase-order-edit/purchase-order-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SupplierClassListComponent } from './supplier-class-list/supplier-class-list.component';
+import { SupplierClassEditComponent } from './supplier-class-edit/supplier-class-edit.component';
 
 @NgModule({
   imports: [
     CommonModule,
     PurchaseRoutingModule,InfrastructureModule,ReactiveFormsModule
   ],
-  declarations: [ PurchaseContainerComponent,  SupplierListComponent, SupplierEditComponent, PurchaseOrderListComponent, PurchaseOrderEditComponent]
+  declarations: [ PurchaseContainerComponent,  SupplierListComponent, SupplierEditComponent, PurchaseOrderListComponent, PurchaseOrderEditComponent, SupplierClassListComponent, SupplierClassEditComponent]
 })
 export class PurchaseModule { }

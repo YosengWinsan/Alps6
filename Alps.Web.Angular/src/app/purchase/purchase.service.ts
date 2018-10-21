@@ -9,16 +9,27 @@ export class PurchaseService extends RepositoryService {
   constructor(injector: Injector) {
     super(injector);
   }
-  public getSuppliers() {
+  private supplier():PurchaseService{
     this.setBaseUrl("api/suppliers")
-    return this.getall();
+    return this;
+  }
+  public getSuppliers() {
+    return this.supplier().getall();
   }
   public getSupplier(id: string) {
-    this.setBaseUrl("api/suppliers");
-    return this.get(id);
+    return this.supplier().get(id);
   }
   public saveSupplier(supplier) {
-    this.setBaseUrl("api/suppliers");
-    return this.createAndUpdate(supplier);
+    return this.supplier().createAndUpdate(supplier);
+  }
+  public getSupplierClasses(){
+    return this.supplier().query("getSupplierClasses");
+  }
+  public getSupplierClass(id){
+    return this.supplier().query("getSupplierClass/"+id);
+  }
+  public saveSupplierClass(supplierClass){
+    this.checkAndFillID(supplierClass);
+    return this.supplier().action("saveSupplierClass",supplierClass);
   }
 }

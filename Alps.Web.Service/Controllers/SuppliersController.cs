@@ -1,5 +1,6 @@
 using Alps.Domain;
 using Alps.Domain.Common;
+using Alps.Domain.PurchaseMgr;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,28 @@ namespace Alps.Web.Service.Controllers
                    where s.Address.CountyID == c.ID
                    select new SupplierListDto { ID = s.ID, Name = s.Name, Contact = "", Address = c.FullName + " " + s.Address.Street };
         }
+        [HttpGet("getSupplierClasses")]
+        public IEnumerable<SupplierClass> GetSupplierClasses()
+        {
+            return _context.SupplierClasses;
+        }
+        [HttpGet("getSupplierClass/{id}")]
+        public async Task<IActionResult> GetSupplierClass([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var supplierClass = await _context.SupplierClasses.SingleOrDefaultAsync(m => m.ID == id);
+
+            if (supplierClass == null)
+            {
+                return NotFound();
+            }
+
+            return this.AlpsActionOk(supplierClass);
+        }
         // GET: api/Suppliers/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSupplier([FromRoute] Guid id)
@@ -51,7 +73,42 @@ namespace Alps.Web.Service.Controllers
 
             return Ok(supplier);
         }
+        [HttpPost("saveSupplierClass")]
+        public async Task<IActionResult> SaveSupplierClass([FromBody] SupplierClass supplierClass)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (supplierClass.ID == Guid.Empty)
+            {
+                var newSupplierClass = SupplierClass.Create(supplierClass.Name);
+                _context.SupplierClasses.Add(newSupplierClass);
+            }
+            else
+            {
+                var existSC = _context.SupplierClasses.Find(supplierClass.ID);
+                existSC.Name = supplierClass.Name;
+            }
 
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (supplierClass.ID != Guid.Empty && !_context.SupplierClasses.Any(e => e.ID == supplierClass.ID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
         // PUT: api/Suppliers/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSupplier([FromRoute] Guid id, [FromBody] Supplier supplier)
@@ -65,9 +122,9 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest();
             }
-            var existSupplier=_context.Suppliers.Find(id);
-            existSupplier.Name=supplier.Name;
-            existSupplier.Address=supplier.Address;
+            var existSupplier = _context.Suppliers.Find(id);
+            existSupplier.Name = supplier.Name;
+            existSupplier.Address = supplier.Address;
             //_context.Entry(supplier).State = EntityState.Modified;
 
             try
@@ -124,7 +181,6 @@ namespace Alps.Web.Service.Controllers
 
             return Ok(supplier);
         }
-
         private bool SupplierExists(Guid id)
         {
             return _context.Suppliers.Any(e => e.ID == id);

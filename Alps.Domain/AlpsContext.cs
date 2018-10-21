@@ -67,6 +67,7 @@ namespace Alps.Domain
         #region PurchaseMgr
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; }
+        public DbSet<SupplierClass> SupplierClasses{get;set;}
         #endregion
 
         #region AccountingMgr
@@ -614,6 +615,12 @@ namespace Alps.Domain
             void PurchaseMgrSeed(AlpsContext context)
             {
                 #region 采购订单初始化
+                SupplierClass sc=SupplierClass.Create("配件供应商");
+                context.SupplierClasses.Add(sc);
+                sc=SupplierClass.Create("煤碳供应商");
+                context.SupplierClasses.Add(sc);
+                sc=SupplierClass.Create("坯料供应商");
+                context.SupplierClasses.Add(sc);
                 // PurchaseOrder purchaseOrder = PurchaseOrder.Create(supplierID, "系统初始化");
                 // ProductSkuInfo gcpsi = context.ProductSkus.Find(gcSkuID).GetProductSkuInfo();
                 // purchaseOrder.AddItem(gcpsi, 10, 3.2m, 2000);

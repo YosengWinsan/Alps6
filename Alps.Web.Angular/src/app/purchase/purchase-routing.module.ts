@@ -5,12 +5,16 @@ import { SupplierListComponent } from './supplier-list/supplier-list.component';
 import { SupplierEditComponent } from './supplier-edit/supplier-edit.component';
 import { PurchaseOrderListComponent } from './purchase-order-list/purchase-order-list.component';
 import { PurchaseOrderEditComponent } from './purchase-order-edit/purchase-order-edit.component';
+import { SupplierClassListComponent } from './supplier-class-list/supplier-class-list.component';
+import { SupplierClassEditComponent } from './supplier-class-edit/supplier-class-edit.component';
 
 const routes: Routes = [{
   path: "", component: PurchaseContainerComponent, children: [
     { path: "", redirectTo: "purchaseorderlist", pathMatch: "full" },
      { path: "supplierlist", component: SupplierListComponent },
      { path: "supplieredit", component: SupplierEditComponent},
+     { path: "supplierclasslist", component: SupplierClassListComponent },
+     { path: "supplierclassedit", component: SupplierClassEditComponent},
      { path: "purchaseorderlist", component: PurchaseOrderListComponent },
      { path: "purchaseorderedit", component: PurchaseOrderEditComponent },
     // { path: "lenderedit", component: LenderEditComponent },
