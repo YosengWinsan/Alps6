@@ -338,14 +338,24 @@ namespace Alps.Domain
 
                 #region 初始化供应商
 
+                SupplierClass sc=SupplierClass.Create("配件供应商");
+                context.SupplierClasses.Add(sc);
+                sc=SupplierClass.Create("煤碳供应商");
+                context.SupplierClasses.Add(sc);
+                SupplierClass gpsc=SupplierClass.Create("坯料供应商");
+                context.SupplierClasses.Add(gpsc);
+
                 address = Address.Create(county, "漳州");
-                Supplier s = Supplier.Create("三宝", address);
+                Supplier s = Supplier.Create("三宝", gpsc.ID,address);
                 context.Suppliers.Add(s);
                 address = Address.Create(county, "罗源");
-                s = Supplier.Create("亿鑫", address);
+                s = Supplier.Create("亿鑫",gpsc.ID, address);
                 context.Suppliers.Add(s);
                 address = Address.Create(county, "松下镇");
-                s = Supplier.Create("大东海", address);
+                s = Supplier.Create("大东海", gpsc.ID,address);
+                context.Suppliers.Add(s);
+                address = Address.Create(county, "吴航镇");
+                s = Supplier.Create("锦强", sc.ID,address);
                 context.Suppliers.Add(s);
                 context.SaveChanges();
                 supplierID = s.ID;
@@ -615,12 +625,6 @@ namespace Alps.Domain
             void PurchaseMgrSeed(AlpsContext context)
             {
                 #region 采购订单初始化
-                SupplierClass sc=SupplierClass.Create("配件供应商");
-                context.SupplierClasses.Add(sc);
-                sc=SupplierClass.Create("煤碳供应商");
-                context.SupplierClasses.Add(sc);
-                sc=SupplierClass.Create("坯料供应商");
-                context.SupplierClasses.Add(sc);
                 // PurchaseOrder purchaseOrder = PurchaseOrder.Create(supplierID, "系统初始化");
                 // ProductSkuInfo gcpsi = context.ProductSkus.Find(gcSkuID).GetProductSkuInfo();
                 // purchaseOrder.AddItem(gcpsi, 10, 3.2m, 2000);

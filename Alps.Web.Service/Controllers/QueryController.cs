@@ -52,7 +52,6 @@ namespace Alps.Web.Service.Controllers
                 CommodityCount = _context.Commodities.Count(),
                 SaleOrderCount = _context.SaleOrders.Count(),
                 SaleOrderConfirmCount = _context.SaleOrders.Where(p => p.Status == SaleOrderStatus.Confirm).Count(),
-
             };
             return this.AlpsActionOk(rst);
         }
@@ -64,7 +63,19 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("SupplierOptions")]
         public IActionResult SupplierOptions()
         {
-            return Ok(_context.Suppliers.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+            var query= from sc in _context.SupplierClasses
+            from s in _context.Suppliers
+            where sc.ID==s.SupplierClassID
+            group new {sc,s} by sc into c
+            select new AlpsSelectorItemDto{Value=c.Key.ID,DisplayValue=c.Key.Name,IsOption=false,Children=c.Select(p=>new AlpsSelectorItemDto{Value=p.s.ID
+            ,DisplayValue=p.s.Name
+            })};
+            return Ok(query);
+            // _context.SupplierClasses.Select(p=>new AlpsSelectorItemDto{Value=p.ID,DisplayValue=p.Name,IsOption=false,Children=_context.Suppliers.Select(
+            //     l=>new AlpsSelectorItemDto{Value=l.}
+
+            // )})
+            // return Ok(_context.Suppliers.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
         }
         [HttpGet("CustomerOptions")]
         public IActionResult CustomerOptions()
@@ -83,6 +94,15 @@ namespace Alps.Web.Service.Controllers
         }
         [HttpGet("ProductSkuOptions")]
         public IActionResult ProductSkuOptions()
+        {
+            var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID, IsOption = false })
+              .Union(_context.ProductSkus.Where(k => !k.Deleted).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
+              .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID, IsOption = false }));
+            var catagories = BuildTree(unionQuery.ToList(), null);
+            return Ok(catagories);
+        }
+        [HttpGet("ProductSkuOptionsForSale")]
+        public IActionResult ProductSkuOptionsForSale()
         {
             var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID, IsOption = false })
               .Union(_context.ProductSkus.Where(k => !k.Deleted&& k.Vendable).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
