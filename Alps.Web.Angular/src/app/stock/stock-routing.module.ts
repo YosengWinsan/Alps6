@@ -9,6 +9,7 @@ import { StockComponent } from './stock.component';
 import { StockInDetailComponent } from './stock-in-detail/stock-in-detail.component';
 import { StockOutDetailComponent } from './stock-out-detail/stock-out-detail.component';
 import { PositionListComponent } from './position-list/position-list.component';
+import { PositionEditComponent } from './position-edit/position-edit.component';
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
             { path: 'stockin', component: StockInComponent },
             { path: 'stockindetail', component: StockInDetailComponent },
             { path: 'stockoutdetail', component: StockOutDetailComponent },
-            { path: 'positionlist', component: PositionListComponent }
+            { path: 'positionlist', component: PositionListComponent },
+            { path: 'positionedit', component: PositionEditComponent }
         ]
     }
    

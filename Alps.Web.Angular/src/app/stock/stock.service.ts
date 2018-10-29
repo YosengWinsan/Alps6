@@ -83,5 +83,14 @@ export class StockService extends RepositoryService {
     this.setPosition();
     return this.getall();
   }
-
+  getPosition(id)
+  {
+    this.setPosition();
+    return this.get(id);
+  }
+  savePosition(entity)
+  {
+    this.setPosition();
+    return this.createAndUpdate(entity);
+  }
 }

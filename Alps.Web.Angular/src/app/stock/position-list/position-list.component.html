@@ -20,10 +20,14 @@
   </ng-container>
 
   <ng-container matColumnDef="action">
-    <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>
+      <a mat-icon-button routerLink="../positionedit" >
+        <mat-icon>add</mat-icon>
+      </a>
+    </mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <a routerLink="../stockoutdetail" [queryParams]="{id:row.id}">
-        <mat-icon>list</mat-icon>
+      <a routerLink="../positionedit" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
       </a>
     </mat-cell>
   </ng-container>

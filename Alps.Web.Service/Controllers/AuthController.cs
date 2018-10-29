@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Alps.Web.Service.controllers
+namespace Alps.Web.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

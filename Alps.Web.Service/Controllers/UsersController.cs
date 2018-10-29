@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Alps.Web.Service.controllers
+namespace Alps.Web.Service.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

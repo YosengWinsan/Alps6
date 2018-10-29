@@ -10,7 +10,7 @@ using Alps.Domain.LoanMgr;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Alps.Web.Service.controllers
+namespace Alps.Web.Service.Controllers
 {
      [Authorize]
     [Route("api/[controller]")]

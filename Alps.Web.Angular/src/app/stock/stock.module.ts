@@ -15,12 +15,13 @@ import { StockInDetailComponent } from './stock-in-detail/stock-in-detail.compon
 import { StockOutDetailComponent } from './stock-out-detail/stock-out-detail.component';
 import { StockOutItemEditComponent } from './stock-out/stock-out-item-edit/stock-out-item-edit.component';
 import { PositionListComponent } from './position-list/position-list.component';
+import { PositionEditComponent } from './position-edit/position-edit.component';
 @NgModule({
   imports: [
     CommonModule, StockRoutingModule, MatButtonModule, MatGridListModule, MatTableModule, MatIconModule, MatSortModule, InfrastructureModule,MatFormFieldModule
     ,ReactiveFormsModule,MatDialogModule,MatInputModule,MatDividerModule,FormsModule
   ],
-  declarations: [StockInfoComponent, StockInListComponent, StockInComponent, StockOutComponent, StockOutListComponent, StockComponent,  StockInItemEditComponent, StockInDetailComponent, StockOutDetailComponent, StockOutItemEditComponent, PositionListComponent],
+  declarations: [StockInfoComponent, StockInListComponent, StockInComponent, StockOutComponent, StockOutListComponent, StockComponent,  StockInItemEditComponent, StockInDetailComponent, StockOutDetailComponent, StockOutItemEditComponent, PositionListComponent, PositionEditComponent],
   entryComponents:[StockInItemEditComponent,StockOutItemEditComponent]
 
 })
