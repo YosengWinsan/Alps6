@@ -44,6 +44,7 @@ export class AlpsCommodityCatagorySelectorComponent implements OnInit {
             this.levelThreeSelectedCatagory = null;
             this.levelTwoCatagories = [];
             this.levelTwoSelectedCatagory = null;
+            this.selectionChanged.emit(catagory.value);
           }
         }
         break;
@@ -58,6 +59,7 @@ export class AlpsCommodityCatagorySelectorComponent implements OnInit {
           else {
             this.levelThreeCatagories = [];
             this.levelThreeSelectedCatagory = null;
+            this.selectionChanged.emit(catagory.value);
           }
         }
         break;

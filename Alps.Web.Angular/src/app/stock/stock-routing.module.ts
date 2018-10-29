@@ -8,6 +8,7 @@ import { StockOutListComponent } from './stock-out-list/stock-out-list.component
 import { StockComponent } from './stock.component';
 import { StockInDetailComponent } from './stock-in-detail/stock-in-detail.component';
 import { StockOutDetailComponent } from './stock-out-detail/stock-out-detail.component';
+import { PositionListComponent } from './position-list/position-list.component';
 
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
             { path: 'stockout', component: StockOutComponent },
             { path: 'stockin', component: StockInComponent },
             { path: 'stockindetail', component: StockInDetailComponent },
-            { path: 'stockoutdetail', component: StockOutDetailComponent }
+            { path: 'stockoutdetail', component: StockOutDetailComponent },
+            { path: 'positionlist', component: PositionListComponent }
         ]
     }
    

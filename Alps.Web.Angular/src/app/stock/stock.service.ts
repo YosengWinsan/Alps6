@@ -12,6 +12,7 @@ export class StockService extends RepositoryService {
   private setStockIn() { this.setBaseUrl("api/StockInVouchers"); }
   private setStockOut() { this.setBaseUrl("api/stockoutvouchers"); }
   private setStock() { this.setBaseUrl("api/stocks"); }
+  private setPosition() { this.setBaseUrl("api/positions"); }
   getStockInVouchers() {
     this.setStockIn();
     return this.getall();
@@ -77,4 +78,10 @@ export class StockService extends RepositoryService {
     this.setStockOut();
     return this.action("Submit/"+id);
   }
+  getPositions()
+  {
+    this.setPosition();
+    return this.getall();
+  }
+
 }

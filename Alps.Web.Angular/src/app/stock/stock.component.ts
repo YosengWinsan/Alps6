@@ -9,7 +9,7 @@ export class StockComponent implements OnInit {
 
   constructor() { }
   navLinks = {
-    "入库": "stockin", "出库": "stockout", "库存明细": 'stockinfo', "入库明细": 'stockinlist', "出库明细": 'stockoutlist'
+    "入库": "stockin", "出库": "stockout", "库存明细": 'stockinfo', "入库明细": 'stockinlist', "出库明细": 'stockoutlist', "仓位明细": 'positionlist'
   };
   ngOnInit() {
   }
