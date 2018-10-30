@@ -15,8 +15,8 @@ export class ProductSkuEditComponent implements OnInit {
   productID: string;
   constructor(private productService: ProductService, private queryService: QueryService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) {
     this.productSkuForm = formBuilder.group({
-      id: [], name: [], productID: [], description: [], code: [], vendable: [],
-      commodityName: [], listPrice: [], quantityRate: [], preSellQuantity: [], preSellAuxiliaryQuantity: []
+      id: [], name: [], productID: [], description: [], code: [], vendable: [false,],
+      commodityName: [], listPrice: [0,], quantityRate: [0,], preSellQuantity: [0,], preSellAuxiliaryQuantity: [0,]
     });
     this.productSkuForm.get("vendable").valueChanges.subscribe(value => {
       if (value && !this.productSkuForm.get("commodityName").value) {

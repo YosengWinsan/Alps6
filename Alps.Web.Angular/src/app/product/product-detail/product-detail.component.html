@@ -22,7 +22,7 @@
   </ng-container>
   <ng-container matColumnDef="createdTime">
     <mat-header-cell *matHeaderCellDef mat-sort-header>创建时间</mat-header-cell>
-    <mat-cell *matCellDef="let row">{{row.createdTime}}</mat-cell>
+    <mat-cell *matCellDef="let row">{{row.createdTime|date:"yyyy-MM-dd"}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="deleted">
     <mat-header-cell *matHeaderCellDef mat-sort-header>已禁用</mat-header-cell>

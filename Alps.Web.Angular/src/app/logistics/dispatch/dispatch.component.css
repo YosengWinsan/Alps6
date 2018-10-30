@@ -1,0 +1,15 @@
+.dispatch-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid yellow;
+    min-height: 100%;
+}
+.dispatch-car-list{
+    width: 200px;
+    border: 1px solid red;
+}
+.dispatch-car-detail{
+    flex: 1;
+    border: 1px solid fuchsia;
+}

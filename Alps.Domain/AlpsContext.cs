@@ -67,7 +67,7 @@ namespace Alps.Domain
         #region PurchaseMgr
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; }
-        public DbSet<SupplierClass> SupplierClasses{get;set;}
+        public DbSet<SupplierClass> SupplierClasses { get; set; }
         #endregion
 
         #region AccountingMgr
@@ -264,21 +264,21 @@ namespace Alps.Domain
 
                 #region 初始化管理员
                 AlpsRole role = AlpsRole.Create("Admin", "管理员");
-                context.AlpsRoles.Add(role);                
-                AlpsUser user = AlpsUser.Create("a", "a","李", "123456", "223344");
-                
+                context.AlpsRoles.Add(role);
+                AlpsUser user = AlpsUser.Create("a", "a", "李", "123456", "223344");
+
                 user.AddRole(role);
-                role=AlpsRole.Create("User", "用户");
+                role = AlpsRole.Create("User", "用户");
                 context.AlpsRoles.Add(role);
                 user.AddRole(role);
                 context.AlpsUsers.Add(user);
 
-                user=AlpsUser.Create("b","b","张三","112233","789789");
+                user = AlpsUser.Create("b", "b", "张三", "112233", "789789");
                 user.AddRole(role);
                 context.AlpsUsers.Add(user);
 
-                context.AlpsRoles.Add(AlpsRole.Create("Cashier","出纳"));
-                
+                context.AlpsRoles.Add(AlpsRole.Create("Cashier", "出纳"));
+
 
 
                 #endregion
@@ -338,24 +338,24 @@ namespace Alps.Domain
 
                 #region 初始化供应商
 
-                SupplierClass sc=SupplierClass.Create("配件供应商");
+                SupplierClass sc = SupplierClass.Create("配件供应商");
                 context.SupplierClasses.Add(sc);
-                sc=SupplierClass.Create("煤碳供应商");
+                sc = SupplierClass.Create("煤碳供应商");
                 context.SupplierClasses.Add(sc);
-                SupplierClass gpsc=SupplierClass.Create("坯料供应商");
+                SupplierClass gpsc = SupplierClass.Create("坯料供应商");
                 context.SupplierClasses.Add(gpsc);
 
                 address = Address.Create(county, "漳州");
-                Supplier s = Supplier.Create("三宝", gpsc.ID,address);
+                Supplier s = Supplier.Create("三宝", gpsc.ID, address);
                 context.Suppliers.Add(s);
                 address = Address.Create(county, "罗源");
-                s = Supplier.Create("亿鑫",gpsc.ID, address);
+                s = Supplier.Create("亿鑫", gpsc.ID, address);
                 context.Suppliers.Add(s);
                 address = Address.Create(county, "松下镇");
-                s = Supplier.Create("大东海", gpsc.ID,address);
+                s = Supplier.Create("大东海", gpsc.ID, address);
                 context.Suppliers.Add(s);
                 address = Address.Create(county, "吴航镇");
-                s = Supplier.Create("锦强", sc.ID,address);
+                s = Supplier.Create("锦强", sc.ID, address);
                 context.Suppliers.Add(s);
                 context.SaveChanges();
                 supplierID = s.ID;
@@ -391,8 +391,14 @@ namespace Alps.Domain
                 context.Positions.Add(new Position() { Name = "新建616", Number = "616", Warehouse = "新建仓库" });
                 Position position = new Position() { Name = "小槽315", Number = "315", Warehouse = "小槽仓库" };
                 context.Positions.Add(position);
-                context.SaveChanges();
+
+
                 positionID = position.ID;
+                position = new Position() { Name = "坯场-1", Number = "901", Warehouse = "坯场" };
+                context.Positions.Add(position);
+                position = new Position() { Name = "坯场-2", Number = "902", Warehouse = "坯场" };
+                context.Positions.Add(position);
+                context.SaveChanges();
                 #endregion
 
                 #region 初始化类别
@@ -498,45 +504,26 @@ namespace Alps.Domain
                     //sku = ProductSku.Create(p, "9米*64条", "系统初始化");
                     context.ProductSkus.Add(sku);
                 }
-                foreach (Product p in context.Products.Where(p => p.Catagory.Name == "连铸坯"))
-                {
-                    sku = ProductSku.Create(p.ID, p.Name + " " + "6米", "系统初始化", "", false);
-                    //sku = ProductSku.Create(p, "6米", "系统初始化");
-                    context.ProductSkus.Add(sku);
-                    sku = ProductSku.Create(p.ID, p.Name + " " + "12米", "系统初始化", "", false);
-                    //sku = ProductSku.Create(p, "12米", "系统初始化");
-                    context.ProductSkus.Add(sku);
-                }
-                gpSkuID = sku.ID;
-                //ProductSku sku = null;
-                //int tempKg = 20;
-                //foreach (Product p in context.Products.Where(p => p.Name.Contains("槽钢")))
-                //{
-                //    for (var i = 0; i < 10; i++)
-                //    {
-                //        sku = ProductSku.Create(p, (tempKg + i).ToString() + "公斤*6米*96条", 0, PricingMethod.PricingByQuantity, 2000);
-                //        context.ProductSkus.Add(sku);
-                //    }
-                //    tempKg = tempKg + 2;
-                //    //sku = ProductSku.Create(p, "200条包装", 0, PricingMethod.PricingByWeight, 2000);
-                //    //context.ProductSkus.Add(sku);
-                //}
-                //gcSkuID = sku.ID;
-                //foreach (Product p in context.Products.Where(p => p.Name.Contains("角钢")))
-                //{
-                //    sku = ProductSku.Create(p, "100条包装", 0, PricingMethod.PricingByQuantity, 2000);
-                //    context.ProductSkus.Add(sku);
-                //    sku = ProductSku.Create(p, "200条包装", 0, PricingMethod.PricingByWeight, 2000);
-                //    context.ProductSkus.Add(sku);
-                //}
-                //foreach (Product p in context.Products.Where(p => p.Name.Contains("连铸坯")))
-                //{
-                //    sku = ProductSku.Create(p, "150方", 0, PricingMethod.PricingByWeight, 2000);
-                //    context.ProductSkus.Add(sku);
-                //    sku = ProductSku.Create(p, "120方", 0, PricingMethod.PricingByQuantity, 2000);
-                //    context.ProductSkus.Add(sku);
-                //}
-                //gpSkuID = sku.ID;
+                // foreach (Product p in context.Products.Where(p => p.Catagory.Name == "连铸坯"))
+                // {
+                //     sku = ProductSku.Create(p.ID, p.Name + " " + "6米", "系统初始化", "", false);
+                //     //sku = ProductSku.Create(p, "6米", "系统初始化");
+                //     context.ProductSkus.Add(sku);
+                //     sku = ProductSku.Create(p.ID, p.Name + " " + "12米", "系统初始化", "", false);
+                //     //sku = ProductSku.Create(p, "12米", "系统初始化");
+                //     context.ProductSkus.Add(sku);
+                // }
+                var gp=context.Products.FirstOrDefault(p=>p.Name=="150*150");
+                var newSku=ProductSku.Create(gp.ID,"亿鑫150*150*12M","","9001",false);
+                context.ProductSkus.Add(newSku);
+                gpSkuID = newSku.ID;
+                newSku=ProductSku.Create(gp.ID,"大东海150*150*12M","","9002",false);
+                context.ProductSkus.Add(newSku);
+                newSku=ProductSku.Create(gp.ID,"春兴150*150*12M","","9003",false);
+                context.ProductSkus.Add(newSku);
+                newSku=ProductSku.Create(gp.ID,"东华150*150*12M","","9003",false);
+                context.ProductSkus.Add(newSku);
+                
                 context.SaveChanges();
 
                 #endregion

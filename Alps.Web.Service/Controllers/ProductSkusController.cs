@@ -119,6 +119,7 @@ namespace Alps.Web.Service.Controllers
         {
             if (!ModelState.IsValid)
             {
+                
                 return BadRequest(ModelState);
             }
             //Product p = _context.Products.Find(dto.ProductID);
