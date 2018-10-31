@@ -8,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class DispatchComponent implements OnInit {
 
   constructor() { }
-
+carList;
   ngOnInit() {
+this.carList=[{name:"winsan"},{name:"amei"}];
   }
 
 }

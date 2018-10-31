@@ -1,4 +1,12 @@
-<div class="dispatch-container">
-  <div class="dispatch-car-list">1</div>
-  <div class="dispatch-car-detail">1</div>
-</div>
+
+  <div class="dispatch-car-list">
+    <div style="white-space: nowrap;">
+      <mat-icon class="icon-middle">local_shipping</mat-icon><span>车辆列表</span>
+    </div>
+      <button mat-button class='car-button' *ngFor="let car of carList">
+          {{car.name}}       
+</button>
+  </div>
+  <div class="dispatch-car-detail">
+    
+  </div>
