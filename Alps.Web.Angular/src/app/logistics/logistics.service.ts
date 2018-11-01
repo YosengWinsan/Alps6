@@ -6,9 +6,9 @@ import { RepositoryService } from '../infrastructure/infrastructure.module';
 })
 export class LogisticsService extends RepositoryService {
 
-  constructor(injector:Injector) 
-  {
+  constructor(injector: Injector) {
     super(injector);
-   }
-   
+    this.setBaseUrl("api/logistics");
+  }
+  
 }

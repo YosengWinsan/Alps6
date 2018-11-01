@@ -7,7 +7,7 @@ import { DispatchComponent } from './dispatch/dispatch.component';
 
 const routes: Routes = [
   {path:"",component:LogisticsComponent,children:
-  [{path:"",redirectTo:"logisticsinfo",pathMatch:"full"},
+  [{path:"",redirectTo:"dispatch",pathMatch:"full"},
   {path:"logisticsinfo",component:LogisticsInfoComponent},
   {path:"distribution",component:DistributionComponent}  ,
   {path:"dispatch",component:DispatchComponent}

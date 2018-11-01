@@ -10,11 +10,11 @@ export class DispatchComponent implements OnInit {
 
   constructor() { }
   carList;
-  private currentCar=new Subject<string>();
+  private currentCar=new Subject<string>();  
   carDetail={};
   ngOnInit() {
     this.currentCar.subscribe(p => {
-      this.carDetail = {name:p};
+      this.carDetail = {name:p};      
     });
     this.carList = [{ name: "winsan",id:"1" }, { name: "amei",id:"2" }];
   }

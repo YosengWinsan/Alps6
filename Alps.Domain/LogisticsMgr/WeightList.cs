@@ -4,6 +4,8 @@ namespace Alps.Domain.LogisticsMgr
 {
     public class WeightList:EntityBase
     {
+        public Guid DispatchRecordID{get;set;}
+        public virtual DispatchRecord DispatchRecord{get;set;}
         public decimal GrossWeight{get;set;}
         public decimal TareWeight{get;set;}
 
