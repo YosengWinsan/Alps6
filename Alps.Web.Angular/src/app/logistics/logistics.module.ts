@@ -7,11 +7,12 @@ import { LogisticsInfoComponent } from './logistics-info/logistics-info.componen
 import { InfrastructureModule } from '../infrastructure/infrastructure.module';
 import { DistributionComponent } from './distribution/distribution.component';
 import { DispatchComponent } from './dispatch/dispatch.component';
+import { MatCardModule } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
-    LogisticsRoutingModule,InfrastructureModule
+    LogisticsRoutingModule,InfrastructureModule,MatCardModule
   ],
   declarations: [LogisticsComponent, LogisticsInfoComponent, DistributionComponent, DispatchComponent]
 })

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-dispatch',
@@ -8,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 export class DispatchComponent implements OnInit {
 
   constructor() { }
-carList;
+  carList;
+  private currentCar=new Subject<string>();
+  carDetail={};
   ngOnInit() {
-this.carList=[{name:"winsan"},{name:"amei"}];
+    this.currentCar.subscribe(p => {
+      this.carDetail = {name:p};
+    });
+    this.carList = [{ name: "winsan",id:"1" }, { name: "amei",id:"2" }];
+  }
+  chooseCar(carID) {
+    this.currentCar.next(carID);
+
   }
 
 }

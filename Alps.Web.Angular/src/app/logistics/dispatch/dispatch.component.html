@@ -3,10 +3,14 @@
     <div style="white-space: nowrap;">
       <mat-icon class="icon-middle">local_shipping</mat-icon><span>车辆列表</span>
     </div>
-      <button mat-button class='car-button' *ngFor="let car of carList">
+      <button mat-button class='car-button' *ngFor="let car of carList" (click)="chooseCar(car.id)">
           {{car.name}}       
 </button>
   </div>
   <div class="dispatch-car-detail">
-    
+    <mat-card>
+        <mat-card-title>车辆明细</mat-card-title>
+        <alps-info-chip label="车号" [value]="carDetail.name"></alps-info-chip>
+    </mat-card>
+
   </div>
