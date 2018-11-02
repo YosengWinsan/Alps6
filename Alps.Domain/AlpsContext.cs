@@ -10,6 +10,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Alps.Domain.DistributionMgr;
 using Alps.Domain.LoanMgr;
+using Alps.Domain.LogisticsMgr;
 
 namespace Alps.Domain
 {
@@ -83,6 +84,13 @@ namespace Alps.Domain
         public DbSet<WithdrawRecord> WithdrawRecords { get; set; }
 
         #endregion
+        #region LogisticsMgr
+            public DbSet<DispatchRecord> DispatchRecords{get;set;}
+
+        #endregion
+
+
+
         #endregion
 
         #region 初始化相关

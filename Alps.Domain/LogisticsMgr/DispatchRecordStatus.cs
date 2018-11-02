@@ -1,6 +1,6 @@
 namespace Alps.Domain.LogisticsMgr
 {
    public enum DispatchRecordStatus{
-    Normal,Completed,Cancelled
+    Normal,InProcess,Completed,Cancelled
 } 
 }

@@ -10,5 +10,8 @@ export class LogisticsService extends RepositoryService {
     super(injector);
     this.setBaseUrl("api/logistics");
   }
-  
+  getCars(){
+    return this.query("getcars");
+  }
+
 }
