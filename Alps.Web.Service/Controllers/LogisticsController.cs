@@ -21,7 +21,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("getcars")]
         public IActionResult GetCars(){
             var query=this._context.DispatchRecords.Where(p=>p.Status==DispatchRecordStatus.Normal||p.Status==DispatchRecordStatus.InProcess)
-            .Select(p=>p.CarNumber);
+            .Select(p=>new {CarNumber=p.CarNumber,ID=p.ID});
             return this.AlpsActionOk(query.ToList());
         }
 

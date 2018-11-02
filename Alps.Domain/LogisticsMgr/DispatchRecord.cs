@@ -18,6 +18,12 @@ namespace Alps.Domain.LogisticsMgr
             this.WeightLists=new HashSet<WeightList>();
             this.Status=DispatchRecordStatus.Normal;
         }
+        public static DispatchRecord Create(string carNumber,string creater)
+        {
+            var newDR=new DispatchRecord{CarNumber=carNumber,WeightLists=new HashSet<WeightList>(),Status=DispatchRecordStatus.Normal
+            ,CreateTime=DateTimeOffset.Now,Creater=creater};
+            return newDR;
+        }
 
     }
     

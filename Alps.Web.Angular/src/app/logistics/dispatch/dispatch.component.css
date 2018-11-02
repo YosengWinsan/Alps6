@@ -10,8 +10,8 @@
 }
 .dispatch-car-list{
     min-width: 60px;
-    max-width: 200px;
-    width: 20%;
+    max-width: 150px;
+    width: 15%;
     border-right: 1px solid gray;
 }
 .dispatch-car-detail{

@@ -250,6 +250,13 @@ namespace Alps.Domain
                 PurchaseMgrSeed(context);
                 SaleMgrSeed(context);
                 LoanMgrSeed(context);
+                LogisticsMgrSeed(context);
+            }
+            void LogisticsMgrSeed(AlpsContext context)
+            {
+                context.DispatchRecords.Add(DispatchRecord.Create("闽AB8119","系统"));
+                context.DispatchRecords.Add(DispatchRecord.Create("闽AM5095","系统"));
+                context.SaveChanges();
             }
             void LoanMgrSeed(AlpsContext context)
             {

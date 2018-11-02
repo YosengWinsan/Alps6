@@ -21,6 +21,7 @@ export class DispatchComponent implements OnInit {
     //this.carList = [{ name: "winsan",id:"1" }, { name: "amei",id:"2" }];
   }
   chooseCar(carID) {
+    console.info(carID);
     this.currentCar.next(carID);
 
   }

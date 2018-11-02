@@ -6,7 +6,7 @@
        <mat-icon class="icon-middle">add</mat-icon></button>
     </div>
       <button mat-stroked-button class='car-button' *ngFor="let car of carList|async" (click)="chooseCar(car.id)">
-          {{car.name}}       
+          {{car.carNumber}}       
 </button>
   </div>
   <div class="dispatch-car-detail">
