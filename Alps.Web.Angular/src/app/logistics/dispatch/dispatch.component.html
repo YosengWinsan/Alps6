@@ -1,20 +1,42 @@
-
-  <div class="dispatch-car-list">
-    <div class="carlist-header">
-      <mat-icon class="icon-middle">local_shipping</mat-icon><span class="carlist-header-title">车辆列表</span>
-      <button mat-icon-button>
-       <mat-icon class="icon-middle">add</mat-icon></button>
-    </div>
-      <button mat-stroked-button class='car-button' *ngFor="let car of carList|async" (click)="chooseCar(car.id)">
-          {{car.carNumber}}       
-</button>
+<div class="dispatch-car-list">
+  <div class="carlist-header">
+    <mat-icon class="icon-middle">local_shipping</mat-icon><span class="carlist-header-title">车辆列表</span>
+    <button mat-icon-button>
+      <mat-icon class="icon-middle">add</mat-icon>
+    </button>
   </div>
-  <div class="dispatch-car-detail">
-    <mat-card>
-        <mat-card-title>车辆明细</mat-card-title>
-        <alps-info-chip label="车号" [value]="carDetail.name"></alps-info-chip>
-    </mat-card>
-    <!-- <mat-table #table [dataSource]="supplierClassDataSource" matSort aria-label="Elements">
+  <button mat-stroked-button class='car-button' *ngFor="let car of carList" (click)="chooseCar(car.id)">
+    {{car.carNumber}}
+  </button>
+</div>
+<div class="dispatch-car-detail">
+  <div>
+    <h3>车辆明细</h3>
+    <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
+    <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
+    <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+  </div>
+  <div>
+    <p>过磅明细</p>
+
+    <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
+    <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
+    <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+  </div>
+  <mat-card>
+    <mat-card-title>车辆明细</mat-card-title>
+    <mat-card-content>
+      <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
+      <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
+      <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+      <div *ngFor="let weightList of carDetail.weightLists">
+        <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
+        <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
+        <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <!-- <mat-table #table [dataSource]="supplierClassDataSource" matSort aria-label="Elements">
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
@@ -37,4 +59,4 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table> -->
-  </div>
+</div>

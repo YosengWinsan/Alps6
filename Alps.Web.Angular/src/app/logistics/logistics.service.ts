@@ -13,5 +13,8 @@ export class LogisticsService extends RepositoryService {
   getCars(){
     return this.query("getcars");
   }
-
+  getDispatchRecord(id)
+  {
+    return this.query("getDispatchRecord/"+id);
+  }
 }

@@ -1,8 +1,10 @@
 using Alps.Domain;
 using Alps.Domain.LogisticsMgr;
+using Alps.Web.Service.Extensions;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 
 
@@ -19,10 +21,22 @@ namespace Alps.Web.Service.Controllers
             this._context = context;
         }
         [HttpGet("getcars")]
-        public IActionResult GetCars(){
-            var query=this._context.DispatchRecords.Where(p=>p.Status==DispatchRecordStatus.Normal||p.Status==DispatchRecordStatus.InProcess)
-            .Select(p=>new {CarNumber=p.CarNumber,ID=p.ID});
+        public IActionResult GetCars()
+        {
+            var query = this._context.DispatchRecords.Where(p => p.Status == DispatchRecordStatus.Normal || p.Status == DispatchRecordStatus.InProcess)
+            .Select(p => new { CarNumber = p.CarNumber, ID = p.ID });
             return this.AlpsActionOk(query.ToList());
+        }
+        [HttpGet("getDispatchRecord/{id}")]
+        public IActionResult GetDispatchRecord(Guid id)
+        {
+            var query = this._context.DispatchRecords.Select(p => new DispatchRecordDto
+            {
+                ID = p.ID,CarNumber=p.CarNumber,
+                Status = EnumHelper.GetDisplayValue(p.Status),Type=EnumHelper.GetDisplayValue(p.Type),
+                WeightLists = p.WeightLists.Select(k => new WeightListDto { GrossWeight = k.GrossWeight, TareWeight = k.TareWeight })
+            }).FirstOrDefault(p => p.ID == id);
+            return this.AlpsActionOk(query);
         }
 
     }

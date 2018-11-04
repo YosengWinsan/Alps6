@@ -9,14 +9,14 @@
     display: flex;
 }
 .dispatch-car-list{
-    min-width: 60px;
+    min-width: 100px;
     max-width: 150px;
     width: 15%;
     border-right: 1px solid gray;
 }
 .dispatch-car-detail{
     flex: 1;
-    padding: 5px;
+    padding: 20px;
 }
 .carlist-header{
     white-space: nowrap;
