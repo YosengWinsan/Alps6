@@ -31,7 +31,16 @@
       <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
       <p>过磅明细<button (click)="addWl()">  新磅单</button></p>
       <div *ngFor="let weightList of carDetail.weightLists">
-        
+        <mat-form-field appearance="outline">
+            <mat-label>毛重</mat-label>
+          <input matInput placeholder="请点击图标读取" [value]="weightList.grossWeight">
+          <mat-icon matSuffix (click)="weightList.grossWeight=getWeight()">local_shipping</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+              <mat-label>皮重</mat-label>
+            <input matInput placeholder="请点击图标读取" [value]="weightList.tareWeight">
+            <mat-icon matSuffix (click)="weightList.tareWeight=getWeight()">local_shipping</mat-icon>
+            </mat-form-field>
         <alps-info-chip label="毛重" [value]="weightList.grossWeight"></alps-info-chip><button mat-icon-button><mat-icon>local_shipping</mat-icon></button>
         <alps-info-chip label="皮重" [value]="weightList.tareWeight"></alps-info-chip>
         <alps-info-chip label="净重" [value]="weightList.grossWeight-weightList.tareWeight"></alps-info-chip>

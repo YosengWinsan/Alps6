@@ -28,7 +28,11 @@ export class DispatchComponent implements OnInit {
     this.currentCar.next(carID);
   }
   addWl(){
-    this.carDetail.weightLists.push({});
+    this.carDetail.weightLists.push({grossWeight:null,tareWeight:null});
+  }
+  getWeight()
+  {
+    return Math.round(Math.random()*3000)/100;
   }
 
 }
