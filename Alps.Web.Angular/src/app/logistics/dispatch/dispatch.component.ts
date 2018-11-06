@@ -12,7 +12,7 @@ export class DispatchComponent implements OnInit {
   constructor(private logisticsService: LogisticsService) { }
   carList;
   private currentCar = new Subject<string>();
-  carDetail = {};
+  carDetail : any={};
   ngOnInit() {    
     this.currentCar.subscribe(p => {
       this.logisticsService.getDispatchRecord(p).subscribe(k => { this.carDetail = k; });
@@ -23,11 +23,12 @@ export class DispatchComponent implements OnInit {
       if (this.carList && this.carList.length > 0)
         this.currentCar.next(this.carList[0].id);
     });
-    //this.carList = [{ name: "winsan",id:"1" }, { name: "amei",id:"2" }];
   }
   chooseCar(carID) {
     this.currentCar.next(carID);
-
+  }
+  addWl(){
+    this.carDetail.weightLists.push({});
   }
 
 }

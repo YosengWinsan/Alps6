@@ -29,10 +29,12 @@
       <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
       <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
       <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+      <p>过磅明细<button (click)="addWl()">  新磅单</button></p>
       <div *ngFor="let weightList of carDetail.weightLists">
-        <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
-        <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
-        <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+        
+        <alps-info-chip label="毛重" [value]="weightList.grossWeight"></alps-info-chip><button mat-icon-button><mat-icon>local_shipping</mat-icon></button>
+        <alps-info-chip label="皮重" [value]="weightList.tareWeight"></alps-info-chip>
+        <alps-info-chip label="净重" [value]="weightList.grossWeight-weightList.tareWeight"></alps-info-chip>
       </div>
     </mat-card-content>
   </mat-card>
