@@ -30,21 +30,64 @@
       <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
       <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
       <p>过磅明细<button (click)="addWl()">  新磅单</button></p>
-      <div *ngFor="let weightList of carDetail.weightLists">
+      <!-- <div *ngFor="let weightList of carDetail.weightLists">
         <mat-form-field appearance="outline">
             <mat-label>毛重</mat-label>
-          <input matInput placeholder="请点击图标读取" [value]="weightList.grossWeight">
+          <input matInput placeholder="请点击图标读取" [value]="weightList.grossWeight" disabled>
           <mat-icon matSuffix (click)="weightList.grossWeight=getWeight()">local_shipping</mat-icon>
           </mat-form-field>
           <mat-form-field appearance="outline">
               <mat-label>皮重</mat-label>
-            <input matInput placeholder="请点击图标读取" [value]="weightList.tareWeight">
+            <input matInput placeholder="请点击图标读取" [value]="weightList.tareWeight" disabled>
             <mat-icon matSuffix (click)="weightList.tareWeight=getWeight()">local_shipping</mat-icon>
             </mat-form-field>
-        <alps-info-chip label="毛重" [value]="weightList.grossWeight"></alps-info-chip><button mat-icon-button><mat-icon>local_shipping</mat-icon></button>
-        <alps-info-chip label="皮重" [value]="weightList.tareWeight"></alps-info-chip>
-        <alps-info-chip label="净重" [value]="weightList.grossWeight-weightList.tareWeight"></alps-info-chip>
-      </div>
+
+      </div> -->
+      <mat-table #weightListTable [dataSource]="carDetail.weightLists" matSort aria-label="Elements">
+        <!-- Id Column -->
+        <!-- <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+        </ng-container> -->
+        <!-- Name Column -->
+        <ng-container matColumnDef="grossWeight">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>毛重</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="flex-row-container" >
+            {{row.grossWeight}}<div class="flex-box"></div><mat-icon  (click)="row.grossWeight=getWeight()">local_shipping</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="tareWeight">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>皮重</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="flex-row-container" >
+            {{row.tareWeight}}<div class="flex-box"></div><mat-icon  (click)="row.tareWeight=getWeight()">local_shipping</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="netWeight">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>净重</mat-header-cell>
+            <mat-cell *matCellDef="let row" >
+                {{row.grossWeight-row.tareWeight}}
+            </mat-cell>
+          </ng-container>
+        <!-- <ng-container matColumnDef="action">
+          <mat-header-cell *matHeaderCellDef>
+            <a mat-icon-button routerLink="../catagoryedit" [queryParams]="{'parentID':listID}">
+              <mat-icon>add</mat-icon>
+            </a>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <a mat-icon-button  routerLink="./" [queryParams]="{'id':row.id}" *ngIf="!isLeaf">
+              <mat-icon>view_list</mat-icon>
+            </a>
+            &nbsp;
+            <a  mat-icon-button routerLink="../catagoryedit" [queryParams]="{id:row.id,parentID:listID}">
+              <mat-icon>edit</mat-icon>
+            </a>
+          </mat-cell>
+        </ng-container> -->
+      
+        <mat-header-row *matHeaderRowDef="weightListColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: weightListColumns;"></mat-row>
+      </mat-table>
     </mat-card-content>
   </mat-card>
   <!-- <mat-table #table [dataSource]="supplierClassDataSource" matSort aria-label="Elements">

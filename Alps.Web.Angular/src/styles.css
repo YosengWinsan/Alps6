@@ -26,6 +26,23 @@ a {
     text-decoration: none;
     color: #0366d6;
   }
+
+  .flex-row-container
+  {
+      display: flex;
+      flex-direction: row;
+      width:100%;
+  }
+  .flex-column-container
+  {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+  }
+  .flex-box
+  {
+      flex:1;
+  }
 /* div{
     font-size: 14px;
 } */
