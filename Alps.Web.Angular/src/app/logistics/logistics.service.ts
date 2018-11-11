@@ -17,4 +17,5 @@ export class LogisticsService extends RepositoryService {
   {
     return this.query("getDispatchRecord/"+id);
   }
+  
 }

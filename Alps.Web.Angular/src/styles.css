@@ -36,12 +36,13 @@ a {
   .flex-column-container
   {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       height: 100%;
   }
   .flex-box
   {
       flex:1;
+      -border: 1px red solid;
   }
 /* div{
     font-size: 14px;

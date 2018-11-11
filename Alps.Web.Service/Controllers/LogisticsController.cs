@@ -34,7 +34,15 @@ namespace Alps.Web.Service.Controllers
             {
                 ID = p.ID,CarNumber=p.CarNumber,
                 Status = EnumHelper.GetDisplayValue(p.Status),Type=EnumHelper.GetDisplayValue(p.Type),
-                WeightLists = p.WeightLists.Select(k => new WeightListDto { GrossWeight = k.GrossWeight, TareWeight = k.TareWeight })
+                GrossWeight=p.GrossWeight,
+                TareWeight=p.TareWeight,
+                GrossWeightOperator=p.GrossWeightOperator,
+                TareWeightOperator=p.TareWeightOperator,
+                GrossWeightTime=p.GrossWeightTime,
+                TareWeightTime=p.TareWeightTime,
+                WeightConfirmedOperator=p.WeightConfirmedOperator,
+                WeightConfirmedTime=p.WeightConfirmedTime
+                //WeightLists = p.WeightLists.Select(k => new WeightListDto { GrossWeight = k.GrossWeight, TareWeight = k.TareWeight })
             }).FirstOrDefault(p => p.ID == id);
             return this.AlpsActionOk(query);
         }
