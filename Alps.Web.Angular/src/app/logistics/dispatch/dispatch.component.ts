@@ -16,9 +16,11 @@ export class DispatchComponent implements OnInit {
   private weightListTable:MatTable<any>;
   private currentCar = new Subject<string>();
   carDetail : any={};
+  selectedCar:any;
   weightListColumns=["grossWeight","grossWeightTime","grossWeightOperator","tareWeight","tareWeightTime","tareWeightOperator","netWeight"];
   ngOnInit() {    
     this.currentCar.subscribe(p => {
+      this.selectedCar=p;
       this.logisticsService.getDispatchRecord(p).subscribe(k => { this.carDetail = k; });
     });
     

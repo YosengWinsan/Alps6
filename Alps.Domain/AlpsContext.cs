@@ -256,6 +256,7 @@ namespace Alps.Domain
             {
                 context.DispatchRecords.Add(DispatchRecord.Create("闽AB8119","系统"));
                 context.DispatchRecords.Add(DispatchRecord.Create("闽AM5095","系统"));
+                context.DispatchRecords.Add(DispatchRecord.Create("闽AM5186","系统"));
                 context.SaveChanges();
             }
             void LoanMgrSeed(AlpsContext context)

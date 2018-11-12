@@ -5,20 +5,13 @@
       <mat-icon class="icon-middle">add</mat-icon>
     </button>
   </div>
-  <button mat-stroked-button class='car-button' *ngFor="let car of carList" (click)="chooseCar(car.id)">
+  <button mat-flat-button class='car-button' [ngClass]="{' mat-primary':car.id==selectedCar}" *ngFor="let car of carList" (click)="chooseCar(car.id)" >
     {{car.carNumber}}
   </button>
 </div>
 <div class="dispatch-car-detail">
   <div>
     <h3>车辆明细</h3>
-    <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
-    <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
-    <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
-  </div>
-  <div>
-    <p>过磅明细</p>
-
     <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
     <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
     <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
@@ -34,7 +27,7 @@
             <alps-info-chip label="司磅" [value]="carDetail.grossWeightOperator"></alps-info-chip>
           </div>
           <div class="flex-box">
-            <button mat-button class="weight-button"  (click)="setWeight(1)">磅毛</button>
+            <button mat-stroked-button class="weight-button"  (click)="setWeight(1)">磅毛</button>
           </div>
         </div>
         <div class="flex-box flex-row-container">
@@ -44,7 +37,7 @@
             <alps-info-chip label="司磅" [value]="carDetail.tareWeightOperator"></alps-info-chip>
           </div>
           <div class="flex-box">
-            <button mat-button class="weight-button" (click)="setWeight(0)">磅皮</button>
+            <button mat-stroked-button class="weight-button" (click)="setWeight(0)">磅皮</button>
           </div>
         </div>
         <div class="flex-box flex-row-container">
@@ -54,7 +47,7 @@
             <alps-info-chip label="司磅" [value]="carDetail.weightConfirmedOperator"></alps-info-chip>
           </div>
           <div class="flex-box">
-            <button mat-button class="weight-button">提交</button>
+            <button mat-stroked-button class="weight-button">提交</button>
           </div>
         </div>
       </div>
@@ -75,13 +68,7 @@
             </mat-form-field>
 
       </div> -->
-      <mat-table #weightListTable [dataSource]="carDetail.weightLists" matSort aria-label="Elements">
-        <!-- Id Column -->
-        <!-- <ng-container matColumnDef="id">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
-        </ng-container> -->
-        <!-- Name Column -->
+      <!-- <mat-table #weightListTable [dataSource]="carDetail.weightLists" matSort aria-label="Elements">
         <ng-container matColumnDef="grossWeight">
           <mat-header-cell *matHeaderCellDef mat-sort-header>毛重</mat-header-cell>
           <mat-cell *matCellDef="let row" class="flex-row-container">
@@ -126,28 +113,13 @@
             {{row.grossWeight-row.tareWeight|number}}
           </mat-cell>
         </ng-container>
-        <!-- <ng-container matColumnDef="action">
-          <mat-header-cell *matHeaderCellDef>
-            <a mat-icon-button routerLink="../catagoryedit" [queryParams]="{'parentID':listID}">
-              <mat-icon>add</mat-icon>
-            </a>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <a mat-icon-button  routerLink="./" [queryParams]="{'id':row.id}" *ngIf="!isLeaf">
-              <mat-icon>view_list</mat-icon>
-            </a>
-            &nbsp;
-            <a  mat-icon-button routerLink="../catagoryedit" [queryParams]="{id:row.id,parentID:listID}">
-              <mat-icon>edit</mat-icon>
-            </a>
-          </mat-cell>
-        </ng-container> -->
+
 
         <mat-header-row *matHeaderRowDef="weightListColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: weightListColumns;"></mat-row>
-      </mat-table>
+      </mat-table>-->
     </mat-card-content>
-  </mat-card>
+  </mat-card> 
   <!-- <mat-table #table [dataSource]="supplierClassDataSource" matSort aria-label="Elements">
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>

@@ -42,7 +42,6 @@ a {
   .flex-box
   {
       flex:1;
-      -border: 1px red solid;
   }
 /* div{
     font-size: 14px;
