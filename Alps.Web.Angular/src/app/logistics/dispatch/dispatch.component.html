@@ -10,15 +10,16 @@
   </button>
 </div>
 <div class="dispatch-car-detail">
-  <div>
-    <h3>车辆明细</h3>
-    <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
-    <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
-    <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
-  </div>
+
   <mat-card>
-    <mat-card-title>过磅明细</mat-card-title>
+    <mat-card-title>车辆明细</mat-card-title>
     <mat-card-content>
+        <div>
+            <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
+            <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
+            <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+          </div>
+          <h3>过磅明细</h3>
       <div class="flex-column-container">
         <div class="flex-box flex-row-container">
           <div class="flex-box">
@@ -51,75 +52,71 @@
           </div>
         </div>
       </div>
-      <!-- <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
-      <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
-      <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
-      <p>过磅明细<button (click)="addWl()"> 新磅单</button></p> -->
-      <!-- <div *ngFor="let weightList of carDetail.weightLists">
-        <mat-form-field appearance="outline">
-            <mat-label>毛重</mat-label>
-          <input matInput placeholder="请点击图标读取" [value]="weightList.grossWeight" disabled>
-          <mat-icon matSuffix (click)="weightList.grossWeight=getWeight()">local_shipping</mat-icon>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-              <mat-label>皮重</mat-label>
-            <input matInput placeholder="请点击图标读取" [value]="weightList.tareWeight" disabled>
-            <mat-icon matSuffix (click)="weightList.tareWeight=getWeight()">local_shipping</mat-icon>
-            </mat-form-field>
-
-      </div> -->
-      <!-- <mat-table #weightListTable [dataSource]="carDetail.weightLists" matSort aria-label="Elements">
-        <ng-container matColumnDef="grossWeight">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>毛重</mat-header-cell>
-          <mat-cell *matCellDef="let row" class="flex-row-container">
-            {{row.grossWeight}}<div class="flex-box"></div>
-            <mat-icon (click)="setWeight(row,1)">local_shipping</mat-icon>
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="grossWeightTime">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>磅毛时间</mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            {{row.grossWeightTime|date:"MM-dd HH:mm"}}
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="grossWeightOperator">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>磅毛人</mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            {{row.grossWeightOperator}}
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="tareWeight">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>皮重</mat-header-cell>
-          <mat-cell *matCellDef="let row" class="flex-row-container">
-            {{row.tareWeight}}<div class="flex-box"></div>
-            <mat-icon (click)="setWeight(row,0)">local_shipping</mat-icon>
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="tareWeightTime">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>磅皮时间</mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            {{row.tareWeightTime|date:"MM-dd HH:mm"}}
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="tareWeightOperator">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>磅皮人</mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            {{row.tareWeightOperator}}
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="netWeight">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>净重</mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            {{row.grossWeight-row.tareWeight|number}}
-          </mat-cell>
-        </ng-container>
-
-
-        <mat-header-row *matHeaderRowDef="weightListColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: weightListColumns;"></mat-row>
-      </mat-table>-->
+      <h3>车辆明细</h3>
+      <mat-table #weightListTable [dataSource]="carDetail.weightLists" matSort aria-label="Elements">
+          <ng-container matColumnDef="grossWeight">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>毛重</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="flex-row-container">
+              {{row.grossWeight}}<div class="flex-box"></div>
+              <mat-icon (click)="setWeight(row,1)">local_shipping</mat-icon>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="grossWeightTime">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>磅毛时间</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{row.grossWeightTime|date:"MM-dd HH:mm"}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="grossWeightOperator">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>磅毛人</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{row.grossWeightOperator}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="tareWeight">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>皮重</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="flex-row-container">
+              {{row.tareWeight}}<div class="flex-box"></div>
+              <mat-icon (click)="setWeight(row,0)">local_shipping</mat-icon>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="tareWeightTime">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>磅皮时间</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{row.tareWeightTime|date:"MM-dd HH:mm"}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="tareWeightOperator">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>磅皮人</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{row.tareWeightOperator}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="netWeight">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>净重</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{row.grossWeight-row.tareWeight|number}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef>
+              <a routerLink="../supplierclassedit" >
+                <mat-icon>add</mat-icon>
+              </a>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <a routerLink="../supplierclassedit" [queryParams]="{id:row.id}">
+                <mat-icon>edit</mat-icon>
+              </a>
+            </mat-cell>
+          </ng-container>
+  
+          <mat-header-row *matHeaderRowDef="weightListColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: weightListColumns;"></mat-row>
+        </mat-table>
     </mat-card-content>
   </mat-card> 
+
   <!-- <mat-table #table [dataSource]="supplierClassDataSource" matSort aria-label="Elements">
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>

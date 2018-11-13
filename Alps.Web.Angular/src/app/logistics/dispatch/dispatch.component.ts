@@ -17,7 +17,7 @@ export class DispatchComponent implements OnInit {
   private currentCar = new Subject<string>();
   carDetail : any={};
   selectedCar:any;
-  weightListColumns=["grossWeight","grossWeightTime","grossWeightOperator","tareWeight","tareWeightTime","tareWeightOperator","netWeight"];
+  weightListColumns=["grossWeight","grossWeightTime","grossWeightOperator","tareWeight","tareWeightTime","tareWeightOperator","netWeight","action"];
   ngOnInit() {    
     this.currentCar.subscribe(p => {
       this.selectedCar=p;
