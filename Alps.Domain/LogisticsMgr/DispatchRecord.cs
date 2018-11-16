@@ -23,6 +23,7 @@ namespace Alps.Domain.LogisticsMgr
         public DateTimeOffset WeightConfirmedTime{get;set;}
         public string WeightConfirmedOperator{get;set;}
 
+
         public DispatchRecord()
         {
             //this.WeightLists=new HashSet<WeightList>();
