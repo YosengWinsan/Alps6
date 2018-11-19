@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class LogisticsComponent implements OnInit {
 
   constructor() { }
-links={"调度中心":"dispatch","物流信息":"logisticsinfo","订单配送":"distribution","车辆管理":"vehicle"}
+links={"调度中心":"dispatch","物流信息":"logisticsinfo","配送明细":"distribution","车辆管理":"vehicle"}
   ngOnInit() {
   }
 

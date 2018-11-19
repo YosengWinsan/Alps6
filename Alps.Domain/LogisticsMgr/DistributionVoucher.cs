@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alps.Domain.DistributionMgr
+namespace Alps.Domain.LogisticsMgr
 {
     public class DistributionVoucher : EntityBase
     {

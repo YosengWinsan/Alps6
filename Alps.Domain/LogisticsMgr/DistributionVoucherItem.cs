@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Alps.Domain.Common;
 using Alps.Domain.ProductMgr;
 using Alps.Domain.SaleMgr;
-namespace Alps.Domain.DistributionMgr
+namespace Alps.Domain.LogisticsMgr
 {
     public class DistributionVoucherItem : EntityBase
     {

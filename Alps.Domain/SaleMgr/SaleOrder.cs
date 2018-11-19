@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Alps.Domain.Common;
-using Alps.Domain.DistributionMgr;
+using Alps.Domain.LogisticsMgr;
 using System.ComponentModel.DataAnnotations;
 namespace Alps.Domain.SaleMgr
 {

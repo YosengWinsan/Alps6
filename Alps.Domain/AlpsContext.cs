@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Alps.Domain.DistributionMgr;
 using Alps.Domain.LoanMgr;
 using Alps.Domain.LogisticsMgr;
 
