@@ -70,5 +70,8 @@ export class QueryService extends RepositoryService {
   getRoleOptions(){
     return this.queryAndCache("RoleOptions");
   }
+  getDispatchRecordOptions(){
+    return this.query("DispatchRecordOptions");
+  }
 }
 

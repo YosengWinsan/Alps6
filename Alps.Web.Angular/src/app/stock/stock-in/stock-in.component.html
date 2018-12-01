@@ -6,7 +6,7 @@
     </mat-form-field> -->
        <alps-selector placeholder='来源' formControlName="supplierID" [options]="supplierOptions"></alps-selector>
        <alps-selector placeholder='采购部门' formControlName="departmentID" [options]="departmentOptions"></alps-selector>
-
+       <alps-selector placeholder='磅单' formControlName="dispatchRecordID" [options]="dispatchRecordOptions"></alps-selector>
 <!-- <input type="hidden" formControlName="items"> -->
       
  <mat-table #table [dataSource]="stockInForm.controls['items'].value" matSort aria-label="Elements" enterToTab> 

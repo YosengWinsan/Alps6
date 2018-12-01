@@ -100,7 +100,7 @@
           </ng-container>
           <ng-container matColumnDef="action">
             <mat-header-cell *matHeaderCellDef>
-              <a routerLink="../supplierclassedit" >
+              <a routerLink="../../stock/stockin" [queryParams]="{drID:carDetail.id}" >
                 <mat-icon>add</mat-icon>
               </a>
             </mat-header-cell>

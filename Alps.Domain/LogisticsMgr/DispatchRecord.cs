@@ -6,6 +6,7 @@ namespace Alps.Domain.LogisticsMgr
     public class DispatchRecord : EntityBase
     {
         //public Guid CarID{get;set;}
+        public long RecordNumber { get; set; }
         public string CarNumber { get; set; }
         public DispatchType Type { get; set; }
         public DateTimeOffset CreateTime { get; set; }
@@ -20,8 +21,8 @@ namespace Alps.Domain.LogisticsMgr
         public string GrossWeightOperator { get; set; }
         public string TareWeightOperator { get; set; }
         public DateTimeOffset TareWeightTime { get; set; }
-        public DateTimeOffset WeightConfirmedTime{get;set;}
-        public string WeightConfirmedOperator{get;set;}
+        public DateTimeOffset WeightConfirmedTime { get; set; }
+        public string WeightConfirmedOperator { get; set; }
 
 
         public DispatchRecord()

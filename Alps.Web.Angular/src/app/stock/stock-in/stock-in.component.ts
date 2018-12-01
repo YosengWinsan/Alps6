@@ -3,9 +3,11 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { StockService } from '../stock.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QueryService } from '../../infrastructure/infrastructure.module';
-import { MatDialog, MatTable } from '@angular/material';
+import { MatDialog, MatTable, throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 import { StockInItemEditComponent } from './stock-in-item-edit/stock-in-item-edit.component';
 import { AlpsConst } from '../../infrastructure/alps-const';
+import { map } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-stock-in',
@@ -18,44 +20,71 @@ export class StockInComponent implements OnInit {
   stockInForm: FormGroup;
   supplierOptions;
   departmentOptions;
+  dispatchRecordOptions;
   displayedColumns = ["productSku", "quantity", "price", "auxiliaryQuantity", "position", "serialNumber", "action"];
 
   constructor(private stockService: StockService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private queryService: QueryService
     , private matDialog: MatDialog, private router: Router) {
-    this.stockInForm = formBuilder.group({ id: [], supplierID: [], departmentID: [], items: [] })
+    this.stockInForm = formBuilder.group({ id: [], supplierID: [], departmentID: [], dispatchRecordID: [], items: [] })
   }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      var id = params["id"];
-      if (!id) {
-        id = "";
-      }
-      this.queryService.getSupplierOptions().subscribe((res) => {
-        
-        this.supplierOptions = res;
+    this.activatedRoute.queryParams.subscribe(params => {
+      let id = params["id"] ? params["id"] : null;
+      let drID = params["drID"] ? params["drID"] : null;
+      let voucherOb = of(null);
+      let drIDOb = of(drID);
+      if (id)
+        voucherOb = this.stockService.getStockIn(id);
+      forkJoin(voucherOb,
+        this.queryService.getSupplierOptions(),
+        this.queryService.getDepartmentOptions(),
+        this.queryService.getDispatchRecordOptions(),
+        drIDOb
+      ).subscribe(res => {
+        if (res[0])
+          this.stockInForm.patchValue(res[0]);
+        this.supplierOptions = res[1];
+        this.departmentOptions = res[2];
+        this.dispatchRecordOptions = res[3];
+        if (res[4])
+          this.stockInForm.patchValue({ dispatchRecordID: res[4] });
       });
-      this.queryService.getDepartmentOptions().subscribe((res) => {        
-        this.departmentOptions = res;
-      });
-      if (id != "")
-        this.stockService.getStockIn(id).subscribe((res) => {
-            this.stockInForm.patchValue(res);
-          
-        });
-
     });
+
+    // this.activatedRoute.queryParams.subscribe((params) => {
+    //   var id = params["id"];
+    //   if (!id) {
+    //     id = "";
+    //   }
+    //   this.queryService.getSupplierOptions().subscribe((res) => {
+
+    //     this.supplierOptions = res;
+    //   });
+    //   this.queryService.getDepartmentOptions().subscribe((res) => {
+    //     this.departmentOptions = res;
+    //   });
+    //   this.queryService.getDispatchRecordOptions().subscribe((res) => {
+    //     this.dispatchRecordOptions = res;
+    //   });
+    //   let drID = params["drID"] ? params["drID"] : null;
+    //   if (id != "")
+    //     this.stockService.getStockIn(id).subscribe((res) => {
+    //       this.stockInForm.patchValue(res);
+    //     });
+    // });
   }
   save() {
     this.stockService.updateStockIn(this.stockInForm.value).subscribe((res) => {
-        this.router.navigate(["./stockinlist"], { relativeTo: this.activatedRoute.parent });
+      this.router.navigate(["./stockinlist"], { relativeTo: this.activatedRoute.parent });
     });
   }
   editItem(row) {
     this.matDialog.open(StockInItemEditComponent, { data: row, minWidth: "90vw" }).afterClosed().subscribe(res => {
       if (res && res.result) {
         this.combinItem(row, res);
-      }    });
+      }
+    });
   }
   addItem() {
     this.matDialog.open(StockInItemEditComponent, { data: { id: AlpsConst.GUID_EMPTY }, minWidth: "90vw" }).afterClosed().subscribe(res => {

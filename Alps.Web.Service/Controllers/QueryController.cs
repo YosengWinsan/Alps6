@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace Alps.Web.Service.Controllers
 {
-    
-     [Authorize]
+
+    [Authorize]
     [Produces("application/json")]
     [Route("api/Query")]
     public class QueryController : Controller
@@ -63,13 +63,22 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("SupplierOptions")]
         public IActionResult SupplierOptions()
         {
-            var query= from sc in _context.SupplierClasses
-            from s in _context.Suppliers
-            where sc.ID==s.SupplierClassID
-            group new {sc,s} by sc into c
-            select new AlpsSelectorItemDto{Value=c.Key.ID,DisplayValue=c.Key.Name,IsOption=false,Children=c.Select(p=>new AlpsSelectorItemDto{Value=p.s.ID
-            ,DisplayValue=p.s.Name
-            })};
+            var query = from sc in _context.SupplierClasses
+                        from s in _context.Suppliers
+                        where sc.ID == s.SupplierClassID
+                        group new { sc, s } by sc into c
+                        select new AlpsSelectorItemDto
+                        {
+                            Value = c.Key.ID,
+                            DisplayValue = c.Key.Name,
+                            IsOption = false,
+                            Children = c.Select(p => new AlpsSelectorItemDto
+                            {
+                                Value = p.s.ID
+,
+                                DisplayValue = p.s.Name
+                            })
+                        };
             return Ok(query);
             // _context.SupplierClasses.Select(p=>new AlpsSelectorItemDto{Value=p.ID,DisplayValue=p.Name,IsOption=false,Children=_context.Suppliers.Select(
             //     l=>new AlpsSelectorItemDto{Value=l.}
@@ -105,7 +114,7 @@ namespace Alps.Web.Service.Controllers
         public IActionResult ProductSkuOptionsForSale()
         {
             var unionQuery = _context.Products.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.CatagoryID, IsOption = false })
-              .Union(_context.ProductSkus.Where(k => !k.Deleted&& k.Vendable).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
+              .Union(_context.ProductSkus.Where(k => !k.Deleted && k.Vendable).Select(p => new TreeNode { ID = p.ID, Name = p.FullName, ParentID = p.ProductID }))
               .Union(_context.Catagories.Select(p => new TreeNode { ID = p.ID, Name = p.Name, ParentID = p.ParentID, IsOption = false }));
             var catagories = BuildTree(unionQuery.ToList(), null);
             return Ok(catagories);
@@ -128,8 +137,13 @@ namespace Alps.Web.Service.Controllers
         }
         [HttpGet("CommodityOptions")]
         public IActionResult CommodityOptions()
-        {            
-            return this.AlpsActionOk(_context.Commodities.Select(p => new  { Value = p.ID, DisplayValue = p.Name ,QuantityRate=p.QuantityRate,IsOption=true}));
+        {
+            return this.AlpsActionOk(_context.Commodities.Select(p => new { Value = p.ID, DisplayValue = p.Name, QuantityRate = p.QuantityRate, IsOption = true }));
+        }
+        [HttpGet("DispatchRecordOptions")]
+        public IActionResult DispatchRecordOptions()
+        {
+            return this.AlpsActionOk(_context.DispatchRecords.Select(p => new { Value = p.ID, DisplayValue = p.CarNumber, IsOption = true }));
         }
         class TreeNode
         {
@@ -187,13 +201,13 @@ namespace Alps.Web.Service.Controllers
             //Where(p=>p.Types.Contains(type))
             return this.AlpsActionOk(BuildTree(unionQuery.ToList(), null));
         }
-                [HttpGet("LenderOptions")]
+        [HttpGet("LenderOptions")]
         public IActionResult LenderOptions()
         {
             //Where(p=>p.Types.Contains(type))
             return Ok(_context.Lenders.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
         }
-                [HttpGet("RoleOptions")]
+        [HttpGet("RoleOptions")]
         public IActionResult RoleOptions()
         {
             //Where(p=>p.Types.Contains(type))

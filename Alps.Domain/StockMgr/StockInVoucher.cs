@@ -1,5 +1,6 @@
 ﻿using Alps.Domain.AccountingMgr;
 using Alps.Domain.Common;
+using Alps.Domain.LogisticsMgr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ namespace Alps.Domain.StockMgr
 
         public virtual Supplier Supplier { get; set; }
         public virtual Department Department { get; set; }
+
+        public Guid DispatchRecordID { get; set; }
+        public virtual DispatchRecord DispatchRecord { get; set; }
 
         public StockInVoucher()
         {
