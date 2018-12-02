@@ -37,6 +37,7 @@ namespace Alps.Web.Service.Model
         public Guid SupplierID { get; set; }
         public Guid DepartmentID { get; set; }
         public int Status { get; set; }
+        public Guid DispatchRecordID{get;set;}
         public IEnumerable<StockInVoucherItemDto> Items { get; set; }
     }
     public class StockInVoucherDetailDto{

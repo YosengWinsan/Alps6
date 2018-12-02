@@ -61,6 +61,7 @@ namespace Alps.Web.Service.Controllers
                 DepartmentID = k.DepartmentID,
                 ID = k.ID,
                 SupplierID = k.SupplierID,
+                DispatchRecordID=k.DispatchRecordID.HasValue?k.DispatchRecordID.Value:Guid.Empty,
                 Status = (int)k.Status,
                 Items = from i in _context.StockInVoucherItems
                 from sku in _context.ProductSkus
@@ -135,7 +136,7 @@ public IActionResult Detail(Guid id)
       if (!ModelState.IsValid)
         return BadRequest();
       var voucher = StockInVoucher.Create(dto.SupplierID, dto.DepartmentID, this.User.Identity.Name);
-     
+     voucher.SetDispatchRecordID(dto.DispatchRecordID);
       voucher.UpdateItems(dto.Items);
       _context.StockInVouchers.Add(voucher);
       _context.SaveChanges();

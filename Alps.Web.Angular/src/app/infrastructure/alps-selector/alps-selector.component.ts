@@ -2,6 +2,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Component, Input, OnInit, forwardRef } from '@angular/core';
 import { MatDialog } from "@angular/material";
 import { AlpsSelectorDialogComponent, AlpsSelectorOption, AlpsSelectorData } from './alps-selector-dialog/alps-selector-dialog.component';
+import { AlpsConst } from '../alps-const';
 
 export const COMPONENT_NAME_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -69,7 +70,7 @@ _selectedOption;
     return this._selectedOption[p];
   }
   private initDisplayValue() {
-    if (this._value && this._value !== "") {
+    if (this._value && this._value !== "" && this._value!==AlpsConst.GUID_EMPTY) {
 
       if (this._options && this._options.length > 0) {
         var displayValue = this.searchOption(this._options, this._value);

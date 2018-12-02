@@ -24,7 +24,7 @@ namespace Alps.Domain.StockMgr
         public virtual Supplier Supplier { get; set; }
         public virtual Department Department { get; set; }
 
-        public Guid DispatchRecordID { get; set; }
+        public Guid? DispatchRecordID { get; set; }
         public virtual DispatchRecord DispatchRecord { get; set; }
 
         public StockInVoucher()
@@ -41,6 +41,10 @@ namespace Alps.Domain.StockMgr
                 CreateTime = DateTimeOffset.Now
             };
             return voucher;
+        }
+        public void SetDispatchRecordID(Guid dispatchRecordID)
+        {
+            this.DispatchRecordID=dispatchRecordID;
         }
         public StockInVoucherItem AddItem(Guid positionID, Guid productSkuID, string serialNumber, decimal quantity, decimal auxiliaryQuantity, decimal price, bool reFreshQuantity = true)
         {
