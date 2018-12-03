@@ -5,7 +5,8 @@
       <mat-icon class="icon-middle">add</mat-icon>
     </button>
   </div>
-  <button mat-flat-button class='car-button' [ngClass]="{' mat-primary':car.id==selectedCar}" *ngFor="let car of carList" (click)="chooseCar(car.id)" >
+  <button mat-flat-button class='car-button' [ngClass]="{' mat-primary':car.id==selectedCar}" *ngFor="let car of carList"
+    (click)="chooseCar(car.id)">
     {{car.carNumber}}
   </button>
 </div>
@@ -14,12 +15,12 @@
   <mat-card>
     <mat-card-title>车辆明细</mat-card-title>
     <mat-card-content>
-        <div>
-            <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
-            <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
-            <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
-          </div>
-          <h3>过磅明细</h3>
+      <div>
+        <alps-info-chip label="车号" [value]="carDetail.carNumber"></alps-info-chip>
+        <alps-info-chip label="类型" [value]="carDetail.type"></alps-info-chip>
+        <alps-info-chip label="状态" [value]="carDetail.status"></alps-info-chip>
+      </div>
+      <h3>过磅明细</h3>
       <div class="flex-column-container">
         <div class="flex-box flex-row-container">
           <div class="flex-box">
@@ -28,7 +29,7 @@
             <alps-info-chip label="司磅" [value]="carDetail.grossWeightOperator"></alps-info-chip>
           </div>
           <div class="flex-box">
-            <button mat-stroked-button class="weight-button"  (click)="setWeight(1)">磅毛</button>
+            <button mat-stroked-button class="weight-button" (click)="setWeight(1)">磅毛</button>
           </div>
         </div>
         <div class="flex-box flex-row-container">
@@ -53,69 +54,68 @@
         </div>
       </div>
       <h3>开单明细</h3>
-      <mat-table #weightListTable [dataSource]="carDetail.weightLists" matSort aria-label="Elements">
-          <ng-container matColumnDef="grossWeight">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>毛重</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="flex-row-container">
-              {{row.grossWeight}}<div class="flex-box"></div>
-              <mat-icon (click)="setWeight(row,1)">local_shipping</mat-icon>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="grossWeightTime">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>磅毛时间</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              {{row.grossWeightTime|date:"MM-dd HH:mm"}}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="grossWeightOperator">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>磅毛人</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              {{row.grossWeightOperator}}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="tareWeight">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>皮重</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="flex-row-container">
-              {{row.tareWeight}}<div class="flex-box"></div>
-              <mat-icon (click)="setWeight(row,0)">local_shipping</mat-icon>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="tareWeightTime">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>磅皮时间</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              {{row.tareWeightTime|date:"MM-dd HH:mm"}}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="tareWeightOperator">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>磅皮人</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              {{row.tareWeightOperator}}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="netWeight">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>净重</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              {{row.grossWeight-row.tareWeight|number}}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="action">
-            <mat-header-cell *matHeaderCellDef>
-              <a routerLink="../../stock/stockin" [queryParams]="{drID:carDetail.id}" >
-                <mat-icon>add</mat-icon>
-              </a>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              <a routerLink="../supplierclassedit" [queryParams]="{id:row.id}">
-                <mat-icon>edit</mat-icon>
-              </a>
-            </mat-cell>
-          </ng-container>
-  
-          <mat-header-row *matHeaderRowDef="weightListColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: weightListColumns;"></mat-row>
-        </mat-table>
+      <mat-table #weightListTable [dataSource]="carDetail.vouchers" matSort aria-label="Elements">
+        <ng-container matColumnDef="source">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>来源</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.source}}
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef>合计</mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="destination">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>去向</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{row.destination}}
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="aQuantity">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>辅数</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{row.aQuantity}}
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef>{{totalAQuantity}}</mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>数量</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{row.quantity}}
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef>{{totalQuantity}}</mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>金额</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{row.amount}}
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef>{{totalAmount}}</mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="operator">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>制单人</mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{row.operator}}
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <mat-header-cell *matHeaderCellDef>
+            <a routerLink="../../stock/stockin" [queryParams]="{drID:carDetail.id}">
+              <mat-icon>add</mat-icon>
+            </a>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <a routerLink="../../stock/stockin" [queryParams]="{id:row.id}">
+              <mat-icon>edit</mat-icon>
+            </a>
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="vouchersColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: vouchersColumns;"></mat-row>
+        <mat-footer-row *matFooterRowDef="vouchersColumns"></mat-footer-row>
+      </mat-table>
     </mat-card-content>
-  </mat-card> 
+  </mat-card>
 
   <!-- <mat-table #table [dataSource]="supplierClassDataSource" matSort aria-label="Elements">
       <ng-container matColumnDef="name">

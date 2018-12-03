@@ -41,7 +41,10 @@ namespace Alps.Web.Service.Controllers
                 GrossWeightTime=p.GrossWeightTime,
                 TareWeightTime=p.TareWeightTime,
                 WeightConfirmedOperator=p.WeightConfirmedOperator,
-                WeightConfirmedTime=p.WeightConfirmedTime
+                WeightConfirmedTime=p.WeightConfirmedTime,
+                Vouchers=_context.StockInVouchers.Where(l=>l.DispatchRecordID==p.ID).Select(o=>new VoucherDto{
+                    ID=o.ID,Source=o.Supplier.Name,Destination=o.Department.Name,AQuantity=o.TotalAuxiliaryQuantity,Quantity=o.TotalQuantity,Amount=o.TotalAmount,Operator=o.Confirmer
+                })
                 //WeightLists = p.WeightLists.Select(k => new WeightListDto { GrossWeight = k.GrossWeight, TareWeight = k.TareWeight })
             }).FirstOrDefault(p => p.ID == id);
             return this.AlpsActionOk(query);

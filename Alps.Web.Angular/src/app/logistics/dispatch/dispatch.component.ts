@@ -17,11 +17,15 @@ export class DispatchComponent implements OnInit {
   private currentCar = new Subject<string>();
   carDetail : any={};
   selectedCar:any;
-  weightListColumns=["grossWeight","grossWeightTime","grossWeightOperator","tareWeight","tareWeightTime","tareWeightOperator","netWeight","action"];
+  vouchersColumns=["source","destination","aQuantity","quantity","amount","operator","action"];
+  totalAmount;
   ngOnInit() {    
     this.currentCar.subscribe(p => {
       this.selectedCar=p;
-      this.logisticsService.getDispatchRecord(p).subscribe(k => { this.carDetail = k; });
+      this.logisticsService.getDispatchRecord(p).subscribe(k => { 
+        this.carDetail = k;
+      this.totalAmount=this.carDetail.vouchers.map(p=>p.amount).reduce((acc,value)=>acc+value,0);
+      });
     });
     
     this.logisticsService.getCars().subscribe(p => {
@@ -30,6 +34,7 @@ export class DispatchComponent implements OnInit {
         this.currentCar.next(this.carList[0].id);
     });
   }
+
   chooseCar(carID) {
     this.currentCar.next(carID);
   }
