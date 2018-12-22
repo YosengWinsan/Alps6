@@ -15,6 +15,9 @@ export class QueryService extends RepositoryService {
   initDatabase() {
     return this.query("InitDatabase");
   }
+  getPath(){
+    return this.query("GetAnswer");
+  }
   private queryAndCache(url) {
     const cache = JSON.parse(sessionStorage.getItem(url));
     return cache ? of(cache) : this.query(url).pipe(tap((res) => {

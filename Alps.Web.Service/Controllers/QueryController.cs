@@ -55,6 +55,64 @@ namespace Alps.Web.Service.Controllers
             };
             return this.AlpsActionOk(rst);
         }
+        [HttpGet("GetAnswer")]
+        public IActionResult GetPath()
+        {
+            List<int> paths = new List<int>();
+            paths.Add(11);
+            return this.AlpsActionOk(TestPath(paths));
+        }
+        private bool TestPath(IList<int> paths)
+        {
+            int tripNum = 3;
+            int lastInt = paths.Last();
+            var newPaths = paths.ToList();
+            var upInt = lastInt - 10 > 10 && lastInt - 10 != 12 ? lastInt - 10 : 0;
+            if (upInt > 0 && !paths.Contains(upInt))
+            {
+                newPaths.Add(upInt);
+                if (TestPath(newPaths))
+                {
+                    return true;
+                }
+            }
+            newPaths = paths.ToList();
+            var downInt = lastInt + 10 < 10 * (tripNum + 1) && lastInt + 10 != 12 ? lastInt + 10 : 0;
+            if (downInt > 0 && !paths.Contains(downInt))
+            {
+                newPaths.Add(downInt);
+                if (TestPath(newPaths))
+                {
+                    return true;
+                }
+
+            }
+            newPaths = paths.ToList();
+            var leftInt = lastInt - 1 - (lastInt - 1) / 10 * 10 > 0 && lastInt - 1 != 12 ? lastInt - 1 : 0;
+            if (leftInt > 0 && !paths.Contains(leftInt))
+            {
+                newPaths.Add(leftInt);
+                if (TestPath(newPaths))
+                {
+                    return true;
+                }
+            }
+            newPaths = paths.ToList();
+            var rightInt = lastInt + 1 - (lastInt + 1) / 10 * 10 < tripNum + 1 && lastInt + 1 != 12 ? lastInt + 1 : 0;
+            if (rightInt > 0 && !paths.Contains(rightInt))
+            {
+                newPaths.Add(rightInt);
+                if (TestPath(newPaths))
+                {
+                    return true;
+                }
+            }
+            if (paths.LongCount() == tripNum * tripNum - 1)
+                return true;
+            return false;
+        }
+
+
         [HttpGet("TestOptions")]
         public IActionResult TestOptions()
         {
