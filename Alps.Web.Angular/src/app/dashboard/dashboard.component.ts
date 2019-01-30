@@ -34,11 +34,6 @@ export class DashboardComponent implements OnInit {
       });
     }
   }
-  getPath()
-  {
-    this.queryService.getPath().subscribe();
-  }
-
 
   clearCache() {
     this.queryService.clearCache();
