@@ -37,9 +37,9 @@ namespace Alps.Web.Service.Controllers
                     new Claim("idName",user.IDName),
                     new Claim("name",user.Name)
                                 };
-                foreach(var role in user.Roles)
+                foreach (var role in user.Roles)
                 {
-                    claims.Add(new Claim("role",role.Name));
+                    claims.Add(new Claim("role", role.Name));
                 }
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOption.SecurityKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -58,6 +58,8 @@ namespace Alps.Web.Service.Controllers
             }
             return this.AlpsActionOk(new { result = false, message = "密码有错" });
         }
+
+        
 
     }
 }
