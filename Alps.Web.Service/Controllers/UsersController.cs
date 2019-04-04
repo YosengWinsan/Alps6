@@ -51,7 +51,23 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("getroles")]
         public IActionResult GetRoles()
         {
-            return this.AlpsActionOk(_context.AlpsRoles.Select(k=>new RoleDto { ID = k.ID, Name = k.Name }));
+            return this.AlpsActionOk(_context.AlpsRoles.Select(k => new RoleDto { ID = k.ID, Name = k.Name }));
+        }
+        [HttpGet("getrole/{id}")]
+        public IActionResult GetRole(Guid id)
+        {
+            var role = _context.AlpsRoles.Find(id);
+            if (role != null)
+            {
+                return this.AlpsActionOk(new RoleDto { ID = role.ID, Name = role.Name });
+            }
+            else
+                return this.AlpsActionWarning("无此身份信息");
+        }
+        [HttpPost("saverole")]
+        public IActionResult GetRole(RoleDto dto)
+        {
+            return this.AlpsActionOk(dto);
         }
     }
 }

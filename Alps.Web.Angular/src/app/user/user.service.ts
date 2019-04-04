@@ -21,4 +21,12 @@ export class UserService extends RepositoryService {
 
     return this.query("getroles");
   }
+  getRole(id:string){
+    return this.query("getrole/"+id);
+  }
+  saveRole(role)
+  {
+    this.checkAndFillID(role);
+    return this.action("saverole",role);
+  }
 }
