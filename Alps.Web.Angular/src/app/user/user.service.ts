@@ -10,10 +10,15 @@ export class UserService extends RepositoryService {
     super(injector);
     this.setBaseUrl("api/Users");
   }
+  //private setRoles(){this.setBaseUrl()}
   getUsers(){
     return this.getall();
   }
   getUser(id){
     return this.get(id);
+  }
+  getRoles(){
+
+    return this.query("getroles");
   }
 }

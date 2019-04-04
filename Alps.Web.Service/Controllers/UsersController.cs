@@ -48,6 +48,10 @@ namespace Alps.Web.Service.Controllers
                 Roles = p.Roles.Select(k => new RoleDto { ID = k.ID, Name = k.Name })
             }).FirstOrDefault(p => p.ID == id));
         }
-
+        [HttpGet("getroles")]
+        public IActionResult GetRoles()
+        {
+            return this.AlpsActionOk(_context.AlpsRoles.Select(k=>new RoleDto { ID = k.ID, Name = k.Name }));
+        }
     }
 }

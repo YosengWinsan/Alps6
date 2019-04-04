@@ -11,5 +11,5 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
   }
-  links = {"用户概况":"info","用户列表":"userlist"};
+  links = {"用户概况":"info","用户列表":"userlist","身份列表":"rolelist"};
 }

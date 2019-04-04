@@ -1,0 +1,27 @@
+<mat-table #table [dataSource]="roleList|async" matSort aria-label="Elements">
+  <!-- Id Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ID号</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+  </ng-container>
+      <!-- <a routerLink="../lenderedit">
+        <mat-icon>add</mat-icon>
+      </a> -->
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a routerLink="../roleedit" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="['id','name']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['id','name'];"></mat-row>
+</mat-table>
