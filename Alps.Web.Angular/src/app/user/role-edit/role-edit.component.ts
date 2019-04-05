@@ -23,7 +23,7 @@ export class RoleEditComponent implements OnInit {
         });
       }
     })
-  }
+  } 
 
   save() {
     this.userService.saveRole(this.roleForm.value).subscribe(d=>{
