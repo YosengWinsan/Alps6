@@ -51,7 +51,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("getroles")]
         public IActionResult GetRoles()
         {
-            return this.AlpsActionOk(_context.AlpsRoles.Select(k => new RoleDto { ID = k.ID, Name = k.Name }));
+            return this.AlpsActionOk(_context.AlpsRoles.Select(k => new RoleDto { ID = k.ID, Name = k.Name ,Description=k.Description}));
         }
         [HttpGet("getrole/{id}")]
         public IActionResult GetRole(Guid id)
@@ -59,15 +59,44 @@ namespace Alps.Web.Service.Controllers
             var role = _context.AlpsRoles.Find(id);
             if (role != null)
             {
-                return this.AlpsActionOk(new RoleDto { ID = role.ID, Name = role.Name });
+                return this.AlpsActionOk(new RoleDto { ID = role.ID, Name = role.Name,Timestamp=role.Timestamp ,Description=role.Description});
             }
             else
                 return this.AlpsActionWarning("无此身份信息");
         }
         [HttpPost("saverole")]
-        public IActionResult GetRole(RoleDto dto)
+        public IActionResult SaveRole(RoleDto dto)
         {
-            return this.AlpsActionOk(dto);
+            if (dto.ID == Guid.Empty)
+            {
+                var role = AlpsRole.Create(dto.Name, dto.Description);
+                _context.AlpsRoles.Add(role);
+            }
+            else
+            {
+
+                AlpsRole role = _context.AlpsRoles.Find(dto.ID);
+                if (role == null)
+                    return this.AlpsActionWarning("身份信息不存在");
+                else
+                {
+                    if (!role.Timestamp.SequenceEqual(dto.Timestamp))
+                        return this.AlpsActionWarning("身份信息已改变");
+                    else
+                    {
+                        role.Name = dto.Name;
+                        role.Description = dto.Description;
+                    }
+                }
+            }
+            try
+            {
+                _context.SaveChanges();
+                return this.AlpsActionOk();
+            }
+            catch { return this.AlpsActionWarning("保存失败"); }
+
+
         }
     }
 }

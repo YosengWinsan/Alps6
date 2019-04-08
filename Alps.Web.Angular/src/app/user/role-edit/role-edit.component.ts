@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../user.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AlpsActionResponse } from 'src/app/infrastructure/infrastructure.module';
 
 @Component({
   selector: 'app-role-edit',
@@ -10,12 +11,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class RoleEditComponent implements OnInit {
   roleForm: FormGroup;
-  constructor(private formBuilder: FormBuilder,private userService: UserService,private activatedRoute:ActivatedRoute,private router:Router) {
-    this.roleForm = formBuilder.group({ name: [] ,id:[]});
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private activatedRoute: ActivatedRoute, private router: Router) {
+    this.roleForm = formBuilder.group({ name: [], id: [], timestamp: [], description: [] });
   }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(params=>{
+    this.activatedRoute.queryParams.subscribe(params => {
       let id = params["id"] ? params["id"] : "";
       if (id != "") {
         this.userService.getRole(id).subscribe(data => {
@@ -23,12 +24,12 @@ export class RoleEditComponent implements OnInit {
         });
       }
     })
-  } 
+  }
 
   save() {
-    this.userService.saveRole(this.roleForm.value).subscribe(d=>{
-      if(d)
-      this.router.navigate(["./rolelist"]);
+    this.userService.saveRole(this.roleForm.value).subscribe((d: AlpsActionResponse) => {
+      if (d.resultCode == 1)
+        this.router.navigate(["../rolelist"],{relativeTo:this.activatedRoute});
       //this.router.navigate(["./productdetail"], { relativeTo: this.activatedRoute.parent,queryParams:{id:this.productForm.controls["id"].value}});
     });
   }

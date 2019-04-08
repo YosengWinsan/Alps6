@@ -4,7 +4,10 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
     <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
   </ng-container>
-
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>描述</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
+  </ng-container>
   <ng-container matColumnDef="id">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ID号</mat-header-cell>
     <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
@@ -23,6 +26,6 @@
     </mat-cell>
   </ng-container>
 
-  <mat-header-row *matHeaderRowDef="['id','name','action']"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: ['id','name','action'];"></mat-row>
+  <mat-header-row *matHeaderRowDef="['id','name','description','action']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['id','name','description','action'];"></mat-row>
 </mat-table>
