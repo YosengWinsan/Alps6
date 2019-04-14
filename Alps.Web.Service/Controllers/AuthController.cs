@@ -10,6 +10,7 @@ using Alps.Domain.AccountingMgr;
 using Alps.Web.Service.Auth;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -22,10 +23,12 @@ namespace Alps.Web.Service.Controllers
     {
         private readonly AlpsContext _context;
         private readonly AlpsJwtOption _jwtOption;
-        public AuthController(AlpsContext context, AlpsJwtOption jwtOption)
+        private readonly IActionDescriptorCollectionProvider _actionProvider;
+        public AuthController(AlpsContext context, AlpsJwtOption jwtOption,IActionDescriptorCollectionProvider actionProvider)
         {
             this._context = context;
             this._jwtOption = jwtOption;
+            this._actionProvider=actionProvider;
         }
         [HttpPost("login")]
         public IActionResult Login([FromBody]LoginDto dto)
@@ -57,6 +60,13 @@ namespace Alps.Web.Service.Controllers
                 });
             }
             return this.AlpsActionOk(new { result = false, message = "密码有错" });
+        }
+        
+        [HttpGet("GetResources")]
+        public IActionResult GetResources(){
+
+            return this.AlpsActionOk(this._actionProvider.ActionDescriptors.Items.Select(p=>new {
+               Controller=p.RouteValues["Controller"], Action= p.RouteValues["Action"]}).GroupBy(p=>new {p.Controller,p.Action}));
         }
 
         
