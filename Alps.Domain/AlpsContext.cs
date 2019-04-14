@@ -10,7 +10,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Alps.Domain.LoanMgr;
 using Alps.Domain.LogisticsMgr;
-
+using Alps.Domain.SecurityMgr;
 namespace Alps.Domain
 {
     public class AlpsContext : //IdentityDbContext<AlpsUser>

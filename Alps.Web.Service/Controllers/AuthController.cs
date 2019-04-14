@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Alps.Domain;
-using Alps.Domain.AccountingMgr;
+using Alps.Domain.SecurityMgr;
 using Alps.Web.Service.Auth;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -62,11 +62,11 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(new { result = false, message = "密码有错" });
         }
         
-        [HttpGet("GetResources")]
+        [HttpGet("GetResources",Name="获取资源")]
         public IActionResult GetResources(){
 
             return this.AlpsActionOk(this._actionProvider.ActionDescriptors.Items.Select(p=>new {
-               Controller=p.RouteValues["Controller"], Action= p.RouteValues["Action"]}).GroupBy(p=>new {p.Controller,p.Action}));
+               Controller=p.RouteValues["Controller"], Action= p.RouteValues["Action"],Name=p.AttributeRouteInfo.Name}).GroupBy(p=>new {p.Controller,p.Action}));
         }
 
         

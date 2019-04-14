@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Alps.Domain;
-using Alps.Domain.AccountingMgr;
+using Alps.Domain.SecurityMgr;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

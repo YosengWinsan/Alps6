@@ -1,4 +1,4 @@
-namespace Alps.Domain.AccountingMgr
+namespace Alps.Domain.SecurityMgr
 {
     public class AlpsRole : EntityBase
     {
