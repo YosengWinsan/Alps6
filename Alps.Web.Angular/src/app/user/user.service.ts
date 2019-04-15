@@ -29,4 +29,10 @@ export class UserService extends RepositoryService {
     this.checkAndFillID(role);
     return this.action("saverole",role);
   }
+  getResources(){
+    return this.query('getresources')
+  }
+  updateResource(){
+    return this.action('updateresources');
+  }
 }

@@ -6,6 +6,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { AuthorizeComponent } from './authorize/authorize.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { RoleEditComponent } from './role-edit/role-edit.component';
+import { ResourceListComponent } from './resource-list/resource-list.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,8 @@ const routes: Routes = [
       { path: 'userlist', component: UserListComponent },
       { path: 'authorize', component:AuthorizeComponent},
       {path:'rolelist',component:RoleListComponent},
-      {path:'roleedit',component:RoleEditComponent}
+      {path:'roleedit',component:RoleEditComponent},
+      {path:'resourcelist',component:ResourceListComponent}
     ]
   }
 

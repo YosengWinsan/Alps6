@@ -73,8 +73,17 @@ namespace Alps.Domain
         #region AccountingMgr
 
         public DbSet<TradeAccount> TradeAccounts { get; set; }
+
+
+
+        #endregion
+
+        #region SecurityMgr
+
         public DbSet<AlpsUser> AlpsUsers { get; set; }
         public DbSet<AlpsRole> AlpsRoles { get; set; }
+        public DbSet<AlpsResource> AlpsResources { get; set; }
+
         #endregion
 
         #region LoanMgr
@@ -84,7 +93,7 @@ namespace Alps.Domain
 
         #endregion
         #region LogisticsMgr
-            public DbSet<DispatchRecord> DispatchRecords{get;set;}
+        public DbSet<DispatchRecord> DispatchRecords { get; set; }
 
         #endregion
 
@@ -253,9 +262,9 @@ namespace Alps.Domain
             }
             void LogisticsMgrSeed(AlpsContext context)
             {
-                context.DispatchRecords.Add(DispatchRecord.Create("闽AB8119","系统"));
-                context.DispatchRecords.Add(DispatchRecord.Create("闽AM5095","系统"));
-                context.DispatchRecords.Add(DispatchRecord.Create("闽AM5186","系统"));
+                context.DispatchRecords.Add(DispatchRecord.Create("闽AB8119", "系统"));
+                context.DispatchRecords.Add(DispatchRecord.Create("闽AM5095", "系统"));
+                context.DispatchRecords.Add(DispatchRecord.Create("闽AM5186", "系统"));
                 context.SaveChanges();
             }
             void LoanMgrSeed(AlpsContext context)
@@ -528,17 +537,17 @@ namespace Alps.Domain
                 //     //sku = ProductSku.Create(p, "12米", "系统初始化");
                 //     context.ProductSkus.Add(sku);
                 // }
-                var gp=context.Products.FirstOrDefault(p=>p.Name=="150*150");
-                var newSku=ProductSku.Create(gp.ID,"亿鑫150*150*12M","","9001",false);
+                var gp = context.Products.FirstOrDefault(p => p.Name == "150*150");
+                var newSku = ProductSku.Create(gp.ID, "亿鑫150*150*12M", "", "9001", false);
                 context.ProductSkus.Add(newSku);
                 gpSkuID = newSku.ID;
-                newSku=ProductSku.Create(gp.ID,"大东海150*150*12M","","9002",false);
+                newSku = ProductSku.Create(gp.ID, "大东海150*150*12M", "", "9002", false);
                 context.ProductSkus.Add(newSku);
-                newSku=ProductSku.Create(gp.ID,"春兴150*150*12M","","9003",false);
+                newSku = ProductSku.Create(gp.ID, "春兴150*150*12M", "", "9003", false);
                 context.ProductSkus.Add(newSku);
-                newSku=ProductSku.Create(gp.ID,"东华150*150*12M","","9003",false);
+                newSku = ProductSku.Create(gp.ID, "东华150*150*12M", "", "9003", false);
                 context.ProductSkus.Add(newSku);
-                
+
                 context.SaveChanges();
 
                 #endregion

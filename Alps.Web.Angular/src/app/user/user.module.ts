@@ -11,12 +11,13 @@ import { MatListModule } from '@angular/material';
 import { RoleListComponent } from './role-list/role-list.component';
 import { RoleEditComponent } from './role-edit/role-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ResourceListComponent } from './resource-list/resource-list.component';
 
 @NgModule({
   imports: [
     CommonModule,
     UserRoutingModule,InfrastructureModule,MatListModule,ReactiveFormsModule
   ],
-  declarations: [InfoComponent, UserListComponent, UserComponent, AuthorizeComponent, RoleListComponent, RoleEditComponent]
+  declarations: [InfoComponent, UserListComponent, UserComponent, AuthorizeComponent, RoleListComponent, RoleEditComponent, ResourceListComponent]
 })
 export class UserModule { }

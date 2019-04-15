@@ -5,6 +5,7 @@ using Alps.Domain.SecurityMgr;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alps.Web.Service.Controllers
@@ -15,10 +16,12 @@ namespace Alps.Web.Service.Controllers
     public class UsersController : ControllerBase
     {
         private readonly AlpsContext _context;
+        private readonly IActionDescriptorCollectionProvider _actionProvider;
 
-        public UsersController(AlpsContext context)
+        public UsersController(AlpsContext context, IActionDescriptorCollectionProvider actionProvider)
         {
             _context = context;
+            _actionProvider = actionProvider;
         }
 
         // GET: api/Commodity
@@ -51,7 +54,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("getroles")]
         public IActionResult GetRoles()
         {
-            return this.AlpsActionOk(_context.AlpsRoles.Select(k => new RoleDto { ID = k.ID, Name = k.Name ,Description=k.Description}));
+            return this.AlpsActionOk(_context.AlpsRoles.Select(k => new RoleDto { ID = k.ID, Name = k.Name, Description = k.Description }));
         }
         [HttpGet("getrole/{id}")]
         public IActionResult GetRole(Guid id)
@@ -59,7 +62,7 @@ namespace Alps.Web.Service.Controllers
             var role = _context.AlpsRoles.Find(id);
             if (role != null)
             {
-                return this.AlpsActionOk(new RoleDto { ID = role.ID, Name = role.Name,Timestamp=role.Timestamp ,Description=role.Description});
+                return this.AlpsActionOk(new RoleDto { ID = role.ID, Name = role.Name, Timestamp = role.Timestamp, Description = role.Description });
             }
             else
                 return this.AlpsActionWarning("无此身份信息");
@@ -95,8 +98,38 @@ namespace Alps.Web.Service.Controllers
                 return this.AlpsActionOk();
             }
             catch { return this.AlpsActionWarning("保存失败"); }
+        }
+        [HttpPost("updateresources", Name = "更新资源")]
+        public IActionResult UpdateResources()
+        {
+            var query = this._actionProvider.ActionDescriptors.Items.Select(p => new
+            {
+                Controller = p.RouteValues["Controller"],
+                Action = p.RouteValues["Action"],
+                Name = p.AttributeRouteInfo.Name == null ? string.Empty : p.AttributeRouteInfo.Name
+            }).GroupBy(p => new { p.Controller, p.Action, p.Name })
+               .Select(p => new AlpsResource { Controller = p.Key.Controller, Action = p.Key.Action, Name = p.Key.Name, UpdateTime = DateTimeOffset.Now });
+            var existResource = _context.AlpsResources.ToList();
+            var deletedR = _context.AlpsResources.Where(p => !query.Any(k => k.Controller == p.Controller && k.Action == p.Action && p.Name == k.Name));
 
+            var insertedR = query.Where(p => !_context.AlpsResources.Any(k => k.Controller == p.Controller && k.Action == p.Action && p.Name == k.Name));
+            _context.AlpsResources.RemoveRange(deletedR);
+            _context.AlpsResources.AddRange(insertedR);
+            _context.SaveChanges();
+            return this.AlpsActionOk();
+        }
 
+        [HttpGet("getresources", Name = "获取资源")]
+        public IActionResult GetResources()
+        {
+            return this.AlpsActionOk(_context.AlpsResources);
+
+            // return this.AlpsActionOk(this._actionProvider.ActionDescriptors.Items.Select(p => new
+            // {
+            //     Controller = p.RouteValues["Controller"],
+            //     Action = p.RouteValues["Action"],
+            //     Name = p.AttributeRouteInfo.Name
+            // }).GroupBy(p => new { p.Controller, p.Action }));
         }
     }
 }

@@ -1,0 +1,37 @@
+<div><button mat-button (click)="updateResource()">更新资源信息</button></div>
+<mat-table #table [dataSource]="resourceList" matSort aria-label="Elements">
+  <!-- Id Column -->
+
+  <ng-container matColumnDef="controller">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>控制器</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.controller}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef> 合计 </mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="actionx">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>接口</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.action}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef> {{totalCount}}个</mat-footer-cell>
+  </ng-container>
+<!-- 
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>
+            <a routerLink="../roleedit">
+              <mat-icon>add</mat-icon>
+            </a> 
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a routerLink="../roleedit" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container> -->
+
+  <mat-header-row *matHeaderRowDef="['controller','actionx','name']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['controller','actionx','name'];"></mat-row>
+  <mat-footer-row *matFooterRowDef="['controller','actionx','name']"></mat-footer-row>
+</mat-table>

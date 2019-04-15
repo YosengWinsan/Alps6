@@ -23,12 +23,10 @@ namespace Alps.Web.Service.Controllers
     {
         private readonly AlpsContext _context;
         private readonly AlpsJwtOption _jwtOption;
-        private readonly IActionDescriptorCollectionProvider _actionProvider;
-        public AuthController(AlpsContext context, AlpsJwtOption jwtOption,IActionDescriptorCollectionProvider actionProvider)
+        public AuthController(AlpsContext context, AlpsJwtOption jwtOption)
         {
             this._context = context;
             this._jwtOption = jwtOption;
-            this._actionProvider=actionProvider;
         }
         [HttpPost("login")]
         public IActionResult Login([FromBody]LoginDto dto)
@@ -62,12 +60,7 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(new { result = false, message = "密码有错" });
         }
         
-        [HttpGet("GetResources",Name="获取资源")]
-        public IActionResult GetResources(){
-
-            return this.AlpsActionOk(this._actionProvider.ActionDescriptors.Items.Select(p=>new {
-               Controller=p.RouteValues["Controller"], Action= p.RouteValues["Action"],Name=p.AttributeRouteInfo.Name}).GroupBy(p=>new {p.Controller,p.Action}));
-        }
+       
 
         
 
