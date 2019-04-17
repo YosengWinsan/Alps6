@@ -1,4 +1,4 @@
-<div><button mat-button (click)="updateResource()">更新资源信息</button></div>
+<div><button mat-button (click)="updateResource()">更新资源信息</button><button mat-button (click)="savePermissions()">保存授权信息</button></div>
 <mat-table #table [dataSource]="resourceList" matSort aria-label="Elements">
   <!-- Id Column -->
 
@@ -24,7 +24,7 @@
   </ng-container>
   <ng-container matColumnDef="{{role.name}}" *ngFor="let role of roleList">
     <mat-header-cell *matHeaderCellDef mat-sort-header>{{role.description}}</mat-header-cell>
-    <mat-cell *matCellDef="let row"><mat-checkbox (click)="updatePermission(role.id,row.id)"></mat-checkbox></mat-cell>
+    <mat-cell *matCellDef="let row"><mat-checkbox (click)="updatePermission(role.id,row.id)" [checked]="getPermission(role.id,row.id)"]></mat-checkbox></mat-cell>
     <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
   </ng-container>
 <!-- 

@@ -35,4 +35,11 @@ export class UserService extends RepositoryService {
   updateResource(){
     return this.action('updateresources');
   }
+  getPermissions(){
+    return this.query("getPermissions");
+  }
+  savePermissions(permissions)
+  {
+    return this.action("savepermissions",permissions);
+  }
 }

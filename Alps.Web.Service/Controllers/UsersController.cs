@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Alps.Domain;
 using Alps.Domain.SecurityMgr;
@@ -123,13 +124,31 @@ namespace Alps.Web.Service.Controllers
         public IActionResult GetResources()
         {
             return this.AlpsActionOk(_context.AlpsResources);
-
-            // return this.AlpsActionOk(this._actionProvider.ActionDescriptors.Items.Select(p => new
-            // {
-            //     Controller = p.RouteValues["Controller"],
-            //     Action = p.RouteValues["Action"],
-            //     Name = p.AttributeRouteInfo.Name
-            // }).GroupBy(p => new { p.Controller, p.Action }));
+        }
+        [HttpGet("getPermissions", Name = "获取权限")]
+        public IActionResult GetPermissions()
+        {
+            // var query=from r in _context.AlpsResources
+            //             from role in _context.AlpsRoles
+            //             select new {ResourceID=r.ID,RoleID=role.ID} into list
+            //             join p in  _context.Permissions on new {list.RoleID,list.ResourceID} equals new {p.RoleID,p.ResourceID}
+            //             select new { list.ResourceID,list.RoleID,}
+            
+            return this.AlpsActionOk(_context.Permissions.Select(p=>new {p.ResourceID,p.RoleID}));
+        }
+        [HttpPost("savepermissions", Name = "更新权限")]
+        public IActionResult SavePermissions( List<PermissionDto> dtos)
+        {
+            var pList=_context.Permissions;
+            var newPermissions=dtos.Where(dto=>!pList.Any(p=>p.ResourceID== dto.ResourceID&& p.RoleID==dto.RoleID));
+            var deletedPermissions=pList.Where(p=>!dtos.Any(dto=>p.ResourceID== dto.ResourceID&& p.RoleID==dto.RoleID));
+            _context.Permissions.RemoveRange(deletedPermissions);
+            foreach( var p in newPermissions)
+            {
+                _context.Permissions.Add(Permission.Create(p.ResourceID,p.RoleID));
+            }
+            _context.SaveChanges();
+            return this.AlpsActionOk();
         }
     }
 }
