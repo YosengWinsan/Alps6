@@ -12,7 +12,7 @@ export class ResourceListComponent implements OnInit {
   constructor(private userService: UserService) { }
   resourceList;
   roleList;
-  permissionList: any[];
+  permissionList: any;//{[resourceID:string]:{[roleID:string]:boolean}};
   totalCount;
   displayColumns = ['name', 'controller', 'actionx', 'updateTime'];
   ngOnInit() {
@@ -23,6 +23,10 @@ export class ResourceListComponent implements OnInit {
     forkJoin(this.userService.getResources(), this.userService.getRoles(), this.userService.getPermissions()).subscribe(rst => {
       this.resourceList = rst[0];
       this.permissionList = rst[2];
+      // rst[2].forEach(p => {
+      //   this.permissionList[p.resourceID][p.roleID]=true;
+      // });
+      // console.info(this.permissionList);
       this.totalCount = this.resourceList.length;
       this.roleList = rst[1];
       this.roleList.forEach(role => {
@@ -41,10 +45,13 @@ export class ResourceListComponent implements OnInit {
         this.loadList();
     });
   }
+
   getPermission(roleID, resourceID) {
+    //console.info("get");
     return this.permissionList.findIndex(p => p.roleID == roleID && p.resourceID == resourceID) > -1;
   }
   updatePermission(roleID, resourceID) {
+    console.info("update");
     let index = this.permissionList.findIndex(p => p.roleID == roleID && p.resourceID == resourceID);
     if (index > -1)
       this.permissionList.splice(index, 1);
