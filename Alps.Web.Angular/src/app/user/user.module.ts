@@ -10,13 +10,13 @@ import { AuthorizeComponent } from './authorize/authorize.component';
 import { MatListModule, MatCheckboxModule } from '@angular/material';
 import { RoleListComponent } from './role-list/role-list.component';
 import { RoleEditComponent } from './role-edit/role-edit.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { ResourceListComponent } from './resource-list/resource-list.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    UserRoutingModule,InfrastructureModule,MatListModule,ReactiveFormsModule,MatCheckboxModule
+    UserRoutingModule,InfrastructureModule,MatListModule,ReactiveFormsModule,MatCheckboxModule,FormsModule
   ],
   declarations: [InfoComponent, UserListComponent, UserComponent, AuthorizeComponent, RoleListComponent, RoleEditComponent, ResourceListComponent]
 })

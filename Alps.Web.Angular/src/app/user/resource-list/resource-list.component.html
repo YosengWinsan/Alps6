@@ -22,9 +22,9 @@
     <mat-cell *matCellDef="let row">{{row.updateTime|date:'yyyy-MM-dd hh:mm'}}</mat-cell>
     <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
   </ng-container>
-  <ng-container matColumnDef="{{role.name}}" *ngFor="let role of roleList">
+  <ng-container matColumnDef="{{role.name}}" *ngFor="let role of roleList;let roleindex=index">
     <mat-header-cell *matHeaderCellDef mat-sort-header>{{role.description}}</mat-header-cell>
-    <mat-cell *matCellDef="let row"><mat-checkbox (click)="updatePermission(role.id,row.id)" [checked]="getPermission(role.id,row.id)"></mat-checkbox></mat-cell>
+    <mat-cell *matCellDef="let row;let i=index"><mat-checkbox  [(ngModel)]="permissionList[i][roleindex]" >{{permissionList[i][roleindex]}}</mat-checkbox></mat-cell>
     <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
   </ng-container>
 <!-- 

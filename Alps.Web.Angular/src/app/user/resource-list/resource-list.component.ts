@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { forkJoin } from 'rxjs';
+import { p } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-resource-list',
@@ -12,7 +13,7 @@ export class ResourceListComponent implements OnInit {
   constructor(private userService: UserService) { }
   resourceList;
   roleList;
-  permissionList: any;//{[resourceID:string]:{[roleID:string]:boolean}};
+  permissionList: any = [];//{[resourceID:string]:{[roleID:string]:boolean}};
   totalCount;
   displayColumns = ['name', 'controller', 'actionx', 'updateTime'];
   ngOnInit() {
@@ -22,7 +23,7 @@ export class ResourceListComponent implements OnInit {
   loadList() {
     forkJoin(this.userService.getResources(), this.userService.getRoles(), this.userService.getPermissions()).subscribe(rst => {
       this.resourceList = rst[0];
-      this.permissionList = rst[2];
+      //this.permissionList = rst[2];
       // rst[2].forEach(p => {
       //   this.permissionList[p.resourceID][p.roleID]=true;
       // });
@@ -32,8 +33,21 @@ export class ResourceListComponent implements OnInit {
       this.roleList.forEach(role => {
         this.displayColumns.push(role.name);
       });
-
+      for (let i = 0; i < this.resourceList.length; i++) {
+        this.permissionList[i] = [];
+        for (let j = 0; j < this.roleList.length; j++) {
+          this.permissionList[i].push(false);
+          for (let k = 0; k < rst[2].length; k++) {
+            if (rst[2][k].resourceID == this.resourceList[i].id && rst[2][k].roleID == this.roleList[j].id) {
+              this.permissionList[i][j] = true;
+              (<any[]>rst[2]).splice(k, 1);
+              break;
+            }
+          }
+        }
+      }
     });
+    console.info(this.permissionList);
     // this.resourceList = this.userService.getResources().subscribe(rst => {
     //   this.resourceList = rst;
     //   this.totalCount = this.resourceList.length;
@@ -46,19 +60,15 @@ export class ResourceListComponent implements OnInit {
     });
   }
 
-  getPermission(roleID, resourceID) {
-    //console.info("get");
-    return this.permissionList.findIndex(p => p.roleID == roleID && p.resourceID == resourceID) > -1;
-  }
-  updatePermission(roleID, resourceID) {
-    console.info("update");
-    let index = this.permissionList.findIndex(p => p.roleID == roleID && p.resourceID == resourceID);
-    if (index > -1)
-      this.permissionList.splice(index, 1);
-    else
-      this.permissionList.push({ resourceID, roleID });
-  }
-  savePermissions(){
-    this.userService.savePermissions(this.permissionList).subscribe();
+  savePermissions() {
+    let list = [];
+    for (let i = 0; i < this.resourceList.length; i++) {
+      for (let j = 0; j < this.roleList.length; j++) {
+        if (this.permissionList[i][j]) {
+          list.push({ "resourceID": this.resourceList[i].id, "roleID": this.roleList[j].id });
+        }
+      }
+    }
+    this.userService.savePermissions(list).subscribe();
   }
 }
