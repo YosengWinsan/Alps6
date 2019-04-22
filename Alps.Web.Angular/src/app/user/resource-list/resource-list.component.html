@@ -24,7 +24,7 @@
   </ng-container>
   <ng-container matColumnDef="{{role.name}}" *ngFor="let role of roleList;let roleindex=index">
     <mat-header-cell *matHeaderCellDef mat-sort-header>{{role.description}}</mat-header-cell>
-    <mat-cell *matCellDef="let row;let i=index"><mat-checkbox  [(ngModel)]="permissionList[i][roleindex]" >{{permissionList[i][roleindex]}}</mat-checkbox></mat-cell>
+    <mat-cell *matCellDef="let row;let i=index"><mat-checkbox  [(ngModel)]="permissionList[i][roleindex]" ></mat-checkbox></mat-cell>
     <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
   </ng-container>
 <!-- 
