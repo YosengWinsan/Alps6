@@ -1,5 +1,13 @@
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using Alps.Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alps.Web.Service.Auth
 {
@@ -25,14 +33,14 @@ namespace Alps.Web.Service.Auth
 
             var actionId = GetActionId(context);
             var userName = context.HttpContext.User.Identity.Name;
-
-            var roles = await (
-                from user in _dbContext.Users
-                join userRole in _dbContext.UserRoles on user.Id equals userRole.UserId
-                join role in _dbContext.Roles on userRole.RoleId equals role.Id
-                where user.UserName == userName
-                select role
-            ).ToListAsync();
+             var roles = await (
+                from user in _dbContext.AlpsUsers
+                where user.Name==userName
+                select user.Roles. ).ToListAsync();
+            //     join  resource in _dbContext.AlpsResources on 
+            //     where user.UserName == userName
+            //     select role
+            // ).ToListAsync();
 
             foreach (var role in roles)
             {
@@ -81,6 +89,8 @@ namespace Alps.Web.Service.Auth
 
             return $"{area}:{controller}:{action}";
         }
+
+
     }
     
 }
