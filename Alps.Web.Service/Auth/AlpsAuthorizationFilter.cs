@@ -31,26 +31,34 @@ namespace Alps.Web.Service.Auth
                 return;
             }
 
-            var actionId = GetActionId(context);
-            var userName = context.HttpContext.User.Identity.Name;
-             var roles = await (
-                from user in _dbContext.AlpsUsers
-                where user.Name==userName
-                select user.Roles. ).ToListAsync();
-            //     join  resource in _dbContext.AlpsResources on 
-            //     where user.UserName == userName
-            //     select role
-            // ).ToListAsync();
+            //var actionId = GetActionId(context);
+            var controllerActionDescriptor = (ControllerActionDescriptor)context.ActionDescriptor;
+            var area = controllerActionDescriptor.ControllerTypeInfo.GetCustomAttribute<AreaAttribute>()?.RouteValue;
+            var controller = controllerActionDescriptor.ControllerName;
+            var action = controllerActionDescriptor.ActionName;
 
-            foreach (var role in roles)
-            {
-                if(role.Access == null)
-                    continue;
-                    
-                var accessList = JsonConvert.DeserializeObject<IEnumerable<MvcControllerInfo>>(role.Access);
-                if (accessList.SelectMany(c => c.Actions).Any(a => a.Id == actionId))
-                    return;
-            }
+            var userName = context.HttpContext.User.Identity.Name;
+            var query = await (
+            from u in _dbContext.AlpsUsers
+            from role in _dbContext.AlpsRoles
+            where u.IDName == userName && u.Roles.Contains(role)  && 
+            (from r in _dbContext.AlpsResources
+                join p in _dbContext.Permissions on r.ID equals p.ResourceID
+                where r.Controller==controller && r.Action == action 
+                select p.RoleID).Contains(role.ID)
+            select u.ID).CountAsync();
+
+            if (query > 0)
+                return;
+            // foreach (var role in roles)
+            // {
+            //     if(role.Access == null)
+            //         continue;
+
+            //     var accessList = JsonConvert.DeserializeObject<IEnumerable<MvcControllerInfo>>(role.Access);
+            //     if (accessList.SelectMany(c => c.Actions).Any(a => a.Id == actionId))
+            //         return;
+            // }
 
             context.Result = new ForbidResult();
         }
@@ -92,5 +100,5 @@ namespace Alps.Web.Service.Auth
 
 
     }
-    
+
 }
