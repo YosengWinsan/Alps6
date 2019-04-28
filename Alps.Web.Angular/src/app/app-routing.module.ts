@@ -6,12 +6,14 @@ import { AppContainerComponent } from './app-container/app-container.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { ForbidComponent } from './auth/forbid/forbid.component';
 const routes: Routes = [
   //{path:"",redirectTo:"dashboard",pathMatch:"full"},
   {
     path: '', component: AppContainerComponent, children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: "dashboard", component: DashboardComponent },
+      { path: 'forbid', component: ForbidComponent },
       { path: "catagory", loadChildren: "./catagory/catagory.module#CatagoryModule" },
       { path: "product", loadChildren: "./product/product.module#ProductModule" },
       { path: "stock", loadChildren: "./stock/stock.module#StockModule" },

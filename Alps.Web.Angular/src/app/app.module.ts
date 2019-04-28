@@ -17,6 +17,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { AuthHttpInterceptor } from './auth/auth-http-interceptor';
 import { MatPaginatorLocal } from './extends/MatPaginatorLocal';
+import { ForbidComponent } from './auth/forbid/forbid.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +25,8 @@ import { MatPaginatorLocal } from './extends/MatPaginatorLocal';
     AppContainerComponent,
     LoginComponent,
     RegisterComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ForbidComponent
     //,
   //  AlpsSelectorComponent,
   //  AlpsSelectorDialogComponent

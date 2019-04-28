@@ -59,7 +59,6 @@ namespace Alps.Web.Service.Auth
             //     if (accessList.SelectMany(c => c.Actions).Any(a => a.Id == actionId))
             //         return;
             // }
-
             context.Result = new ForbidResult();
         }
 

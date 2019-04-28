@@ -99,6 +99,11 @@ export class RepositoryService {
       this.router.navigate(['/login']);
       return throwError("未注册");
     }
+    if (error.status == 403) {
+      this.finishLoad();
+      this.router.navigate(['/forbid']);
+      return throwError("权限不够");
+    }
     this.queryError();
     return throwError('与服务器交互失败！');
   }
