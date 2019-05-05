@@ -1,6 +1,12 @@
-.forbid-container{
-    min-height: 100%;
-    text-align: center;
+.forbid-container {
+    min-height: 90vh;
     align-content: center;
     justify-content: center;
+    text-align: center;
+    
+}
+.warn-box{
+    
+    align-content: center;
+    justify-content:center;
 }
