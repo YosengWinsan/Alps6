@@ -34,6 +34,37 @@
             "presentation": {
                 "reveal": "always"
             }
+        },        
+        {
+            "label": "Client Start",
+            "command": "ng serve --o --proxy-config proxy.conf.json",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Alps.Web.Angular"
+            }
+           // ,            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Server Start",
+            "command": "dotnet watch run",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Alps.Web.Service"
+            }
+           // ,            "problemMatcher": "$msCompile"
+        }        ,
+        {
+            "label": "Start",
+            "dependsOn": [ "Client Start","Server Start"],
+            "presentation": {
+                "reveal": "always"
+            }
         }
     ]
 }
