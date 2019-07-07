@@ -4,17 +4,36 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
-            "command": "dotnet build",
+            "label": "Server Build",
+            "command": "dotnet publish -c release",
             "type": "shell",
-            "group": "build",
             "presentation": {
-                "reveal": "silent"
+                "reveal": "always"
             },
             "options": {
                 "cwd": "${workspaceFolder}/Alps.Web.Service"
+            }
+           // ,            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Client Build",
+            "command": "ng build --prod --aot",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
             },
-            "problemMatcher": "$msCompile"
+            "options": {
+                "cwd": "${workspaceFolder}/Alps.Web.Angular"
+            }
+            //,            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build",
+            "dependsOn": [ "Client Build","Server Build"],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "reveal": "always"
+            }
         }
     ]
 }

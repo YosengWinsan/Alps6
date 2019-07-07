@@ -30,7 +30,8 @@ namespace Alps.Web.Service.Auth
                 context.Result = new UnauthorizedResult();
                 return;
             }
-
+            if (context.HttpContext.User.IsInRole("Admin"))
+                return;
             //var actionId = GetActionId(context);
             var controllerActionDescriptor = (ControllerActionDescriptor)context.ActionDescriptor;
             var area = controllerActionDescriptor.ControllerTypeInfo.GetCustomAttribute<AreaAttribute>()?.RouteValue;
@@ -41,11 +42,11 @@ namespace Alps.Web.Service.Auth
             var query = await (
             from u in _dbContext.AlpsUsers
             from role in _dbContext.AlpsRoles
-            where u.IDName == userName && u.Roles.Contains(role)  && 
+            where u.IDName == userName && u.Roles.Contains(role) &&
             (from r in _dbContext.AlpsResources
-                join p in _dbContext.Permissions on r.ID equals p.ResourceID
-                where r.Controller==controller && r.Action == action 
-                select p.RoleID).Contains(role.ID)
+             join p in _dbContext.Permissions on r.ID equals p.ResourceID
+             where r.Controller == controller && r.Action == action
+             select p.RoleID).Contains(role.ID)
             select u.ID).CountAsync();
 
             if (query > 0)
