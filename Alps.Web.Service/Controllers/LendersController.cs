@@ -42,7 +42,7 @@ namespace Alps.Web.Service.Controllers
 
             var lender = await _context.Lenders.Select(p=>new LenderEditDto{ID=p.ID,
             IDNumber=p.IDNumber,
-            MobilePhoneNumber=p.MobilePhoneNumber,
+            MobilePhoneNumber=p.MobilePhoneNumber,Memo=p.Memo,
             Name=p.Name}).FirstOrDefaultAsync(p=>p.ID==id);
             if (lender == null)
             {
@@ -69,6 +69,7 @@ namespace Alps.Web.Service.Controllers
             lender.Name=dto.Name;
             lender.IDNumber=dto.IDNumber;
             lender.MobilePhoneNumber=dto.MobilePhoneNumber;
+            lender.Memo=dto.Memo;
 
             try
             {

@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LenderEditComponent implements OnInit {
 
   constructor(private loanService: LoanService, private fomrBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) { }
-  lenderForm = this.fomrBuilder.group({ id: [], name: [, Validators.required], idNumber: [, Validators.required], mobilePhoneNumber: [] });
+  lenderForm = this.fomrBuilder.group({ id: [], name: [, Validators.required], idNumber: [, Validators.required], mobilePhoneNumber: [] ,memo:[]});
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(param => {
       var id = param["id"] ? param["id"] : "";

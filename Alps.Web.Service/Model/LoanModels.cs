@@ -65,5 +65,6 @@ namespace Alps.Web.Service.Model
         public string Name{get;set;}
         public string IDNumber{get;set;}
         public string MobilePhoneNumber{get;set;}
+        public string Memo{get;set;}
     }
 }
