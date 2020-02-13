@@ -3,7 +3,9 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { StockService } from '../stock.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QueryService } from '../../infrastructure/infrastructure.module';
-import { MatDialog, MatTable, throwMatDialogContentAlreadyAttachedError } from '@angular/material';
+import { MatDialog,  throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
+import {  MatTable } from '@angular/material/table';
+
 import { StockInItemEditComponent } from './stock-in-item-edit/stock-in-item-edit.component';
 import { AlpsConst } from '../../infrastructure/alps-const';
 import { map } from 'rxjs/operators';

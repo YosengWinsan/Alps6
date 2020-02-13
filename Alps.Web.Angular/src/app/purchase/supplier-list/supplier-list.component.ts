@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 import { PurchaseService } from '../purchase.service';
 
 @Component({
@@ -11,16 +12,15 @@ export class SupplierListComponent implements OnInit {
 
   @ViewChild(MatSort) sort;
   constructor(private purchaseService: PurchaseService) { }
-  supplierDataSource :MatTableDataSource<any>;
-  displayedColumns=["name","contact","address","action"];
+  supplierDataSource: MatTableDataSource<any>;
+  displayedColumns = ["name", "contact", "address", "action"];
   ngOnInit() {
     this.purchaseService.getSuppliers().subscribe((res) => {
-        this.supplierDataSource =new MatTableDataSource( res);
-        this.supplierDataSource.sort=this.sort;
+      this.supplierDataSource = new MatTableDataSource(res);
+      this.supplierDataSource.sort = this.sort;
     });
   }
-  applyFilter(filter)
-  {
-    this.supplierDataSource.filter=filter;
+  applyFilter(filter) {
+    this.supplierDataSource.filter = filter;
   }
 }

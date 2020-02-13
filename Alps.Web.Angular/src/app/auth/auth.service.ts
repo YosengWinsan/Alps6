@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { RepositoryService } from '../infrastructure/infrastructure.module';
 //import {Buffer} from 'buffer';
 import { Base64 } from 'js-base64';
@@ -26,7 +26,7 @@ export class AuthService extends RepositoryService {
   get username() { return this._userName; }
   private _roles: string[];
   get roles() { return this._roles; }
-  private loginStatusSubject = new Subject<boolean>();
+  private loginStatusSubject = new BehaviorSubject<boolean>(false);
   loginStatus = this.loginStatusSubject.asObservable();
   login(user: string, password: string) {
 
@@ -52,7 +52,10 @@ export class AuthService extends RepositoryService {
     let token = null;
     if (tokenString)
       token = JSON.parse(Base64.decode(tokenString.split('.')[1]));
-    if (token) {
+      
+      
+    if (token && token.exp*1000>Date.now()) 
+    {
       this._userName = token.name;
       this._idName = token.idName;//['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
       if (typeof(token.role) =="string")
@@ -60,6 +63,7 @@ export class AuthService extends RepositoryService {
       else
         this._roles = token.role;//['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       this._token = tokenString;
+      this.loginStatusSubject.next(true);
     }
     else {
       this._userName = "";

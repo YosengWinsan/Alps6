@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, HostListener, ElementRef } from '@angular/core';
-import { MatTable, MatExpansionPanel } from '@angular/material';
+import { MatTable } from '@angular/material/table';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import { ShopcartService } from '../service/shopcart.service';
 import { IShopcartItem } from '../infrastructure.module';
 

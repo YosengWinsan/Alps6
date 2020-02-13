@@ -43,18 +43,21 @@ export class LoanService extends RepositoryService {
     this.setLoanVoucher();
     return this.action("withdraw", v);
   }
-  settleInterest(id){
+  settleInterest(id) {
     this.setLoanVoucher();
-    return this.action("settleInterest/"+id);
+    return this.action("settleInterest/" + id);
   }
   getWaterBills() {
     this.setLoanVoucher();
     return this.query("getWaterBills");
   }
-  getPrintInfo(type,id)
-  {
+  getPrintInfo(type, id) {
     this.setLoanVoucher();
-    return this.action("getPrintInfo",{type:type,id:id});
+    return this.action("getPrintInfo", { type: type, id: id });
+  }
+  invalidateLender(id: string) {
+    this.setLender();
+    return this.action("invalidate/" + id);
   }
 
 }

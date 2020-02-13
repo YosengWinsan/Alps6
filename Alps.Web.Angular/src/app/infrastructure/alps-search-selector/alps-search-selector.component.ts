@@ -4,7 +4,7 @@ import { Observable, timer, EMPTY, combineLatest, Subject, BehaviorSubject, of, 
 import { startWith, distinctUntilChanged, debounce, filter, switchMap, map, catchError, publishReplay, refCount, withLatestFrom, take, delayWhen, tap } from 'rxjs/operators';
 import { AlpsSearchSelectorOption } from './alps-search-selector-type';
 import { PinYinHelper } from '../../extends/PinYinHelper';
-import { _countGroupLabelsBeforeOption } from '@angular/material';
+import { _countGroupLabelsBeforeOption } from '@angular/material/core';
 
 
 @Component({

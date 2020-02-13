@@ -3,6 +3,7 @@ using Alps.Domain.Common;
 
 using System.ComponentModel.DataAnnotations;
 using Alps.Domain.ProductMgr;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alps.Domain.SaleMgr
 {
@@ -21,14 +22,21 @@ namespace Alps.Domain.SaleMgr
         // public Department Owner{get;set;       
         // }
         [Display(Name = "定价")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal ListPrice { get; set; }
         [Display(Name = "库存数量")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal StockQuantity { get; set; }
-        public decimal PreSellQuantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
+        public decimal PreSellQuantity { get; set; } 
         public decimal SellableQuantity { get{return PreSellQuantity+StockQuantity-OrderedQuantity;}  }
+         [Column(TypeName="decimal(18,2)")]
         public decimal OrderedQuantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal StockAuxiliaryQuantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal PreSellAuxiliaryQuantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal OrderedAuxiliaryQuantity { get; set; }
         public decimal SellableAuxiliaryQuantity { get{return PreSellAuxiliaryQuantity+StockAuxiliaryQuantity-OrderedAuxiliaryQuantity;} }
 
@@ -38,6 +46,7 @@ namespace Alps.Domain.SaleMgr
         [Display(Name = "交货日期")]
         public DateTime? DateOfDelivery { get; set; }
         public bool IsVirtualCommodity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal QuantityRate { get; set; }
 
         public static Commodity Create(Guid productSkuID, string name, string description, decimal listPrice, decimal quantity, decimal auxiliaryQuantity)

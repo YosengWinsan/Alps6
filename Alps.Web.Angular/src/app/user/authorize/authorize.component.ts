@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../user.service';
 import { ActivatedRoute } from '@angular/router';
 import { QueryService } from '../../infrastructure/infrastructure.module';
-import { MatSelectionList } from '@angular/material';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-authorize',

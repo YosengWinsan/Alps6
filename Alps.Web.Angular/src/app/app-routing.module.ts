@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'register', component: RegisterComponent }
-];
+]; 
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

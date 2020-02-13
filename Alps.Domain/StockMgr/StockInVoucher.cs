@@ -3,6 +3,7 @@ using Alps.Domain.Common;
 using Alps.Domain.LogisticsMgr;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Alps.Domain.StockMgr
@@ -11,8 +12,11 @@ namespace Alps.Domain.StockMgr
     {
         public Guid SupplierID { get; set; }
         public Guid DepartmentID { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalAuxiliaryQuantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalQuantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalAmount { get; set; }
         public string Confirmer { get; set; }
         public DateTimeOffset? ConfirmTime { get; set; }

@@ -27,10 +27,13 @@ namespace Alps.Domain.PurchaseMgr
         [Display(Name = "订单状态")]
         public PurchaseOrderState State { get; set; }
         [Display(Name = "总金额")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
         [Display(Name = "总件数")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalQuantity { get; set; }
         [Display(Name = "总重量")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalWeight { get; set; }
         public void Confirm()
         {
@@ -58,7 +61,7 @@ namespace Alps.Domain.PurchaseMgr
             newPurchaseOrderItem.PurchaseOrderID = this.ID;
             newPurchaseOrderItem.PurchaseOrder = this;
 
-            newPurchaseOrderItem.ProductSkuInfo = ProductSkuInfo.Create(productSkuInfo.SkuID, productSkuInfo.Name, productSkuInfo.PricingMethod); 
+            newPurchaseOrderItem.ProductSkuInfo = ProductSkuInfo.Create(productSkuInfo.SkuID, productSkuInfo.Name, productSkuInfo.PricingMethod);
 
             Items.Add(newPurchaseOrderItem);
             this.TotalQuantity += newPurchaseOrderItem.Quantity;

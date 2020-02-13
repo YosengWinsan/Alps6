@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CatagoryService } from '../catagory.service';
 import { ActivatedRoute } from "@angular/router";
-import { MatSort, MatTable, MatTableDataSource } from "@angular/material";
+import { MatSort} from "@angular/material/sort";
+import {  MatTable } from "@angular/material/table";
+import {MatTableDataSource } from "@angular/material/table";
 
 @Component({
   selector: 'app-list',

@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Alps.Domain.ProductMgr
 {
-    public class MaterialReceipt:EntityBase
+    public class MaterialReceipt : EntityBase
     {
         [Display(Name = "给料部门")]
         public Guid SourceDepartmentID { get; set; }
@@ -21,10 +22,13 @@ namespace Alps.Domain.ProductMgr
         [Display(Name = "经办人")]
         public string Handler { get; set; }
         [Display(Name = "总数量")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalQuantity { get; set; }
         [Display(Name = "总重量")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalWeight { get; set; }
         [Display(Name = "总金额")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
         [Display(Name = "单据状态")]
         public MaterialReceiptState State { get; set; }

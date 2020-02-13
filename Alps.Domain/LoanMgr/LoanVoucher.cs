@@ -1,27 +1,32 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alps.Domain.LoanMgr
 {
     public class LoanVoucher : EntityBase
     {
-        
+
         public DateTimeOffset DepositDate { get; set; }
         public Guid LenderID { get; set; }
         public virtual Lender Lender { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal OriginAmount { get; set; }
         public DateTimeOffset InterestSettlementDate { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal InterestRate { get; set; }
+
         public string VoucherNumber { get; set; }
         public string HashCode { get; set; }
         public ICollection<WithdrawRecord> WithdrawRecords { get; set; }
-        public String Operator{get;set;}
-        public DateTimeOffset ModifyDate { get; set; } 
+        public String Operator { get; set; }
+        public DateTimeOffset ModifyDate { get; set; }
 
         protected LoanVoucher()
         {
-            this.ModifyDate =DateTimeOffset.Now;
+            this.ModifyDate = DateTimeOffset.Now;
             this.WithdrawRecords = new HashSet<WithdrawRecord>();
 
         }
@@ -42,8 +47,8 @@ namespace Alps.Domain.LoanMgr
         }
         public static DateTimeOffset GetSettlableDate()
         {
-            DateTimeOffset settlableDate=new DateTimeOffset(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
-            
+            DateTimeOffset settlableDate = new DateTimeOffset(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
+
             //var settlableDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             settlableDate = settlableDate.AddMonths(DateTimeOffset.Now.Month / 3 * 3 - DateTimeOffset.Now.Month);
             return settlableDate;
@@ -51,8 +56,8 @@ namespace Alps.Domain.LoanMgr
         public static int GetInterestDay(DateTimeOffset startdate, DateTimeOffset stopdate)
         {
 
-            DateTime fromdate=startdate.LocalDateTime;
-            DateTime todate=stopdate.LocalDateTime;
+            DateTime fromdate = startdate.LocalDateTime;
+            DateTime todate = stopdate.LocalDateTime;
 
             if (fromdate.Date >= todate.Date)
                 return 0;
@@ -94,7 +99,7 @@ namespace Alps.Domain.LoanMgr
             r.Remark = GetInterestDay(this.InterestSettlementDate, r.Date).ToString();
             this.WithdrawRecords.Add(r);
             this.Amount = this.Amount - amount;
-            this.ModifyDate=DateTimeOffset.Now;
+            this.ModifyDate = DateTimeOffset.Now;
             return r;
         }
         public WithdrawRecord InterestSettle()
@@ -113,7 +118,7 @@ namespace Alps.Domain.LoanMgr
             r.Remark = GetInterestDay(this.InterestSettlementDate, settlableDate).ToString();
             this.WithdrawRecords.Add(r);
             this.InterestSettlementDate = settlableDate;
-            this.ModifyDate=DateTimeOffset.Now;
+            this.ModifyDate = DateTimeOffset.Now;
             return r;
         }
     }

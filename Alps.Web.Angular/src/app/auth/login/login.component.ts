@@ -13,22 +13,24 @@ import { QueryService } from '../../infrastructure/infrastructure.module';
 export class LoginComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private authService: AuthService, private queryService: QueryService) {
-    this.loginForm = formBuilder.group({ username: [,Validators.required], password: [,Validators.required] });
+    this.loginForm = formBuilder.group({ username: [, Validators.required], password: [, Validators.required] });
   }
   url = "";
   loginForm: FormGroup;
   @ViewChild("usernameInput")
-  usernameInput:ElementRef;
+  usernameInput: ElementRef;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.url = params['url'] ? params['url'] : "";
     });
+
+  }
+  ngAfterViewInit() {
     this.usernameInput.nativeElement.focus();
   }
-  keyup(e:KeyboardEvent)
-  {
-    if(e.keyCode==13)
-    this.login();
+  keyup(e: KeyboardEvent) {
+    if (e.keyCode == 13)
+      this.login();
   }
   loginSubscription: Subscription = null;
   errorMsg = "";
@@ -49,14 +51,14 @@ export class LoginComponent implements OnInit {
 
     }
   }
-  clearWarn(){this.errorMsg="";}
+  clearWarn() { this.errorMsg = ""; }
   initDatabase() {
     if (confirm("确定要初始化？会爆哦！")) {
       this.queryService.clearCache();
-      this.queryService.initDatabase().subscribe((d) => {if(d) alert("初始化成功"); });
+      this.queryService.initDatabase().subscribe((d) => { if (d) alert("初始化成功"); });
     }
   }
-  clearCache(){
+  clearCache() {
     this.queryService.clearCache();
   }
 }

@@ -6,7 +6,17 @@ import { StockInComponent } from './stock-in/stock-in.component';
 import { StockOutComponent } from './stock-out/stock-out.component';
 import { StockOutListComponent } from './stock-out-list/stock-out-list.component';
 import { StockRoutingModule } from './stock-routing.module';
-import { MatButtonModule, MatGridListModule, MatTableModule, MatIconModule, MatSortModule, MatFormFieldModule, MatDialogModule, MatInputModule, MatDividerModule } from '@angular/material';
+//import { MatButtonModule, MatGridListModule, MatTableModule, MatIconModule, MatSortModule, MatFormFieldModule, MatDialogModule, MatInputModule, MatDividerModule } from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule} from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule} from '@angular/material/button';
+import { MatGridListModule} from '@angular/material/grid-list';
+import { MatDividerModule} from '@angular/material/divider';
+import { MatSortModule } from '@angular/material/sort';
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { StockComponent } from './stock.component';
 import { InfrastructureModule } from '../infrastructure/infrastructure.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';

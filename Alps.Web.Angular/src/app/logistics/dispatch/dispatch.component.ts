@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { LogisticsService } from '../logistics.service';
-import { MatTable } from '@angular/material';
+import { MatTable } from '@angular/material/table';
 
 @Component({
   selector: 'app-dispatch',

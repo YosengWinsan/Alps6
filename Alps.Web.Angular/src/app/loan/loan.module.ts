@@ -11,15 +11,21 @@ import { ReactiveFormsModule } from '../../../node_modules/@angular/forms';
 import { DepositComponent } from './deposit/deposit.component';
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { WaterBillsComponent } from './water-bills/water-bills.component';
-import { MatDatepickerModule, MatNativeDateModule,MatPaginatorModule, MatAutocompleteModule } from '../../../node_modules/@angular/material';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+//import { MatToolbarModule } from "@angular/material/toolbar";
+
 import { SettleInterestComponent } from './settle-interest/settle-interest.component';
 import { PrintVoucherComponent } from './print-voucher/print-voucher.component';
 
 @NgModule({
   imports: [
-    CommonModule,InfrastructureModule,
-    LoanRoutingModule,ReactiveFormsModule,MatDatepickerModule,MatNativeDateModule,MatPaginatorModule,MatAutocompleteModule
+    CommonModule, InfrastructureModule,
+    LoanRoutingModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatAutocompleteModule, MatCheckboxModule//,MatToolbarModule
   ],
-  declarations: [LoanComponent,  LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent]
+  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent]
 })
 export class LoanModule { }

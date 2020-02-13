@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,11 @@ namespace Alps.Domain.LogisticsMgr
        // public Commodity Commodity { get; set; }
         public Guid ProductSkuID { get; set; }
         public virtual ProductSku ProductSku{get;set;}
+         [Column(TypeName="decimal(18,2)")]
         public decimal AuxiliaryQuantity{get;set;}
+         [Column(TypeName="decimal(18,2)")]
         public decimal Quantity{get;set;}
+         [Column(TypeName="decimal(18,2)")]
         public decimal Price{get;set;}
         
     }

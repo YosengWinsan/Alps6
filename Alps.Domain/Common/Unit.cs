@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alps.Domain.Common
 {
@@ -11,6 +12,7 @@ namespace Alps.Domain.Common
         [Display(Name = "基本单位")]
         public bool IsBaseUnit { get; set; }
         [Display(Name = "换算率")]
+        [Column(TypeName="decimal(18,2)")]
         public decimal RateOfExchange { get; set; }
 
         public static Unit Create(string name, int group,bool isBaseUnit,decimal rateOfExchange=1)

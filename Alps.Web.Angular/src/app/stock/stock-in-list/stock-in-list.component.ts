@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { StockService } from '../stock.service';
-import { MatTableDataSource, MatSort } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-stock-in-list',
@@ -18,13 +19,13 @@ export class StockInListComponent implements OnInit {
     this.loadData();
   }
   loadData() {
-    this.stockService.getStockInVouchers().subscribe((res:any) => {
+    this.stockService.getStockInVouchers().subscribe((res: any) => {
       this.stockInList = new MatTableDataSource<StockInVoucherListDto>(res);
       this.stockInList.sort = this.matSort;
     });
 
   }
-  
+
 
 }
 

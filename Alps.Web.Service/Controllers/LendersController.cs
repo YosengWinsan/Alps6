@@ -12,7 +12,7 @@ using Alps.Web.Service.Model;
 
 namespace Alps.Web.Service.Controllers
 {
-     [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LendersController : ControllerBase
@@ -40,10 +40,18 @@ namespace Alps.Web.Service.Controllers
                 return BadRequest(ModelState);
             }
 
-            var lender = await _context.Lenders.Select(p=>new LenderEditDto{ID=p.ID,
-            IDNumber=p.IDNumber,
-            MobilePhoneNumber=p.MobilePhoneNumber,Memo=p.Memo,
-            Name=p.Name}).FirstOrDefaultAsync(p=>p.ID==id);
+            var lender = await _context.Lenders.Select(p => new LenderEditDto
+            {
+                ID = p.ID,
+                IDNumber = p.IDNumber,
+                MobilePhoneNumber = p.MobilePhoneNumber,
+                Memo = p.Memo,
+                Name = p.Name,
+                CreateDate = p.CreateDate,
+                ModifyDate = p.ModifyDate,
+                Invalid = p.Invalid,
+                InvalidDate = p.InvalidDate.Value
+            }).FirstOrDefaultAsync(p => p.ID == id);
             if (lender == null)
             {
                 return NotFound();
@@ -65,11 +73,11 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest();
             }
-            var lender=_context.Lenders.Find(id);
-            lender.Name=dto.Name;
-            lender.IDNumber=dto.IDNumber;
-            lender.MobilePhoneNumber=dto.MobilePhoneNumber;
-            lender.Memo=dto.Memo;
+            var lender = _context.Lenders.Find(id);
+            lender.Name = dto.Name;
+            lender.IDNumber = dto.IDNumber;
+            lender.MobilePhoneNumber = dto.MobilePhoneNumber;
+            lender.Memo = dto.Memo;
 
             try
             {
@@ -129,6 +137,26 @@ namespace Alps.Web.Service.Controllers
         private bool LenderExists(Guid id)
         {
             return _context.Lenders.Any(e => e.ID == id);
+        }
+        [HttpPost("invalidate/{id}")]
+        public async Task<IActionResult> Invalidate([FromRoute]Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var lender = await _context.Lenders.FindAsync(id);
+            if (lender == null)
+            {
+                return NotFound();
+            }
+            lender.Invalidate();
+
+            //_context.Lenders.Remove(lender);
+            await _context.SaveChangesAsync();
+
+            return this.AlpsActionOk();
         }
     }
 }

@@ -7,16 +7,17 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserComponent } from './user/user.component';
 import { InfrastructureModule } from '../infrastructure/infrastructure.module';
 import { AuthorizeComponent } from './authorize/authorize.component';
-import { MatListModule, MatCheckboxModule } from '@angular/material';
+import { MatListModule } from '@angular/material/list';
+import { MatCheckboxModule } from '@angular/material/checkbox'
 import { RoleListComponent } from './role-list/role-list.component';
 import { RoleEditComponent } from './role-edit/role-edit.component';
-import { ReactiveFormsModule,FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ResourceListComponent } from './resource-list/resource-list.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    UserRoutingModule,InfrastructureModule,MatListModule,ReactiveFormsModule,MatCheckboxModule,FormsModule
+    UserRoutingModule, InfrastructureModule, MatListModule, ReactiveFormsModule, MatCheckboxModule, FormsModule
   ],
   declarations: [InfoComponent, UserListComponent, UserComponent, AuthorizeComponent, RoleListComponent, RoleEditComponent, ResourceListComponent]
 })

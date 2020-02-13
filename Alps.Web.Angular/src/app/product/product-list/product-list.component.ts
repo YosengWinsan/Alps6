@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../product.service';
 import { QueryService } from '../../infrastructure/infrastructure.module';
-import { MatTableDataSource, MatSort } from '@angular/material';
+import { MatTableDataSource  } from '@angular/material/table';
+import {  MatSort } from '@angular/material/sort';
 //import { AlpsSelectorComponent } from '../../infrastructure/alps-selector/alps-selector.component';
 
 @Component({

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alps.Domain.ProductMgr
 {
@@ -26,16 +27,24 @@ namespace Alps.Domain.ProductMgr
         //销售相关信息
         public bool Vendable { get; set; }
         public string CommodityName { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal ListPrice { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal QuantityRate { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         //Quantity
         public decimal StockQuantity { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal PreSellQuantity { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal OrderedQuantity { get; set; }
         public decimal SellableQuantity { get { return PreSellQuantity + StockQuantity - OrderedQuantity; } }
         //AuxiliaryQuantity
+        [Column(TypeName = "decimal(18,2)")]
         public decimal StockAuxiliaryQuantity { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal PreSellAuxiliaryQuantity { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal OrderedAuxiliaryQuantity { get; set; }
         public decimal SellableAuxiliaryQuantity { get { return PreSellAuxiliaryQuantity + StockAuxiliaryQuantity - OrderedAuxiliaryQuantity; } }
         // public static ProductSku Create(Product product, string name, string description)
@@ -55,7 +64,7 @@ namespace Alps.Domain.ProductMgr
         // }
         public static ProductSku Create(Guid productID, string name, string description, string code, bool vendable)
         {
-            return ProductSku.Create(productID,name,description,code,vendable,"",0,0,0,0);
+            return ProductSku.Create(productID, name, description, code, vendable, "", 0, 0, 0, 0);
         }
         public static ProductSku Create(Guid productID, string name, string description, string code, bool vendable, string commodityName, decimal listPrice, decimal quantityRate
         , decimal preSellQuantity, decimal preSellAuxiliaryQuantity)
@@ -70,7 +79,7 @@ namespace Alps.Domain.ProductMgr
             sku.Vendable = vendable;
             if (sku.Vendable)
             {
-                sku.CommodityName=commodityName==string.Empty?name:commodityName;
+                sku.CommodityName = commodityName == string.Empty ? name : commodityName;
                 sku.ListPrice = listPrice;
                 sku.QuantityRate = quantityRate;
                 sku.PreSellQuantity = preSellQuantity;

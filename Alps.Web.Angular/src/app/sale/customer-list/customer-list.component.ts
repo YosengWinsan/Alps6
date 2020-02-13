@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SaleService } from '../sale.service';
-import { MatTableDataSource, MatSort } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-customer-list',
@@ -8,18 +9,17 @@ import { MatTableDataSource, MatSort } from '@angular/material';
   styleUrls: ['./customer-list.component.css']
 })
 export class CustomerListComponent implements OnInit {
-@ViewChild(MatSort) sort;
+  @ViewChild(MatSort) sort;
   constructor(private saleService: SaleService) { }
-  customerDataSource :MatTableDataSource<any>;
-  displayedColumns=["name","contact","address","action"];
+  customerDataSource: MatTableDataSource<any>;
+  displayedColumns = ["name", "contact", "address", "action"];
   ngOnInit() {
     this.saleService.getCustomers().subscribe((res) => {
-        this.customerDataSource =new MatTableDataSource( res);
-        this.customerDataSource.sort=this.sort;
+      this.customerDataSource = new MatTableDataSource(res);
+      this.customerDataSource.sort = this.sort;
     });
   }
-  applyFilter(filter)
-  {
-    this.customerDataSource.filter=filter;
+  applyFilter(filter) {
+    this.customerDataSource.filter = filter;
   }
 }

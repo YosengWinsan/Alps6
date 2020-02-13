@@ -2,6 +2,7 @@
 using Alps.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using Alps.Domain.ProductMgr;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alps.Domain.SaleMgr
 {
@@ -19,10 +20,14 @@ namespace Alps.Domain.SaleMgr
         //public decimal Quantity { get; set; }
         // public Guid UnitID { get; set; }
         [Display(Name="价格")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal Price { get; set; }
         public string Remark { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal Quantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal AuxiliaryQuantity{get;set;}
+         [Column(TypeName="decimal(18,2)")]
         public decimal Amount{get{return Math.Round(Price*Quantity,1);}}
 
     }

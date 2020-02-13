@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alps.Domain.LoanMgr
 {
@@ -9,8 +10,11 @@ namespace Alps.Domain.LoanMgr
         public DateTimeOffset Date{get;set;}
         
         public DateTimeOffset DepositDate{get;set;}
+         [Column(TypeName="decimal(18,2)")]
         public decimal Amount{get;set;}
+         [Column(TypeName="decimal(18,2)")]
         public decimal Interest{get;set;}
+         [Column(TypeName="decimal(18,2)")]
         public decimal InterestRate{get;set;}
         public string Remark{get;set;}
         public string Operator{get;set;}

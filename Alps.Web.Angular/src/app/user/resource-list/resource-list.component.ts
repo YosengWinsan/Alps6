@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { forkJoin } from 'rxjs';
-import { p } from '@angular/core/src/render3';
+//import { p } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-resource-list',

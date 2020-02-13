@@ -4,6 +4,8 @@ using System.Linq;
 using Alps.Domain.AccountingMgr;
 using System.ComponentModel.DataAnnotations;
 using Alps.Domain.Common;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Alps.Domain.ProductMgr
 {
     public class DeliveryVoucher:EntityBase
@@ -25,10 +27,13 @@ namespace Alps.Domain.ProductMgr
         [Display(Name = "提交人")]
         public string SubmitUser { get; set; }
         [Display(Name = "总数量")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalQuantity { get; set; }
         [Display(Name = "总重量")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalWeight { get; set; }
         [Display(Name = "总金额")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalAmount { get; set; }
         [Display(Name = "明细")]
         public virtual ICollection<DeliveryVoucherItem> Items { get; set; }

@@ -66,5 +66,9 @@ namespace Alps.Web.Service.Model
         public string IDNumber{get;set;}
         public string MobilePhoneNumber{get;set;}
         public string Memo{get;set;}
+        public DateTimeOffset CreateDate{get;set;}
+        public DateTimeOffset ModifyDate{get;set;}
+        public DateTimeOffset? InvalidDate{get;set;}
+        public bool Invalid{get;set;}
     }
 }

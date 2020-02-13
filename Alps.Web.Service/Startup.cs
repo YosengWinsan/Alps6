@@ -40,11 +40,21 @@ namespace Alps.Web.Service
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    
-                    options.SaveToken=true;
+                    /* options.Events = new JwtBearerEvents
+                     {
+                         OnTokenValidated = ct =>
+                         {
+                             //Console.WriteLine(ct.HttpContext.Request.Path.Value);
+                             var auth=ct.HttpContext.RequestServices.GetRequiredService<AlpsAuthorizationFilter>();
+                             auth.
+
+                             return Task.CompletedTask;
+                         }
+                     };*/
+                    options.SaveToken = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        
+
                         ValidateIssuer = true,//是否验证Issuer
                         ValidateAudience = true,//是否验证Audience
                         ValidateLifetime = true,//是否验证失效时间
@@ -62,6 +72,7 @@ namespace Alps.Web.Service
             {
                 options.UseSqlServer(Configuration.GetConnectionString("AlpsContext"), b => b.MigrationsAssembly("Alps.Web.Service"));
             });
+            //services.AddSingleton<AlpsAuthorizationFilter>();
             services.AddScoped<Alps.Domain.Service.StockService>();
 
             services.AddSpaStaticFiles(
@@ -80,25 +91,25 @@ namespace Alps.Web.Service
             else
             {
                 Console.WriteLine("F");
-                app.UseHsts(); 
+                app.UseHsts();
             }
             //app.UseCors();
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
+
+
 
             app.UseRouting();
-            
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseMiddleware<AlpsRoleAuthorizationMiddleware>();
 
             // if (!env.IsDevelopment())
             // {
             //     app.UseSpaStaticFiles();
             // }
 
-            
+
 
             app.UseEndpoints(endpoints =>
             {

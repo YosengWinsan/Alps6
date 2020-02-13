@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Alps.Domain.LogisticsMgr
 {
@@ -14,7 +15,9 @@ namespace Alps.Domain.LogisticsMgr
         public string Creater { get; set; }
         public DispatchRecordStatus Status { get; set; }
         //public ICollection<WeightList> WeightLists{get;set;}
+        [Column(TypeName = "decimal(18,2)")]
         public decimal GrossWeight { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal TareWeight { get; set; }
 
         public DateTimeOffset GrossWeightTime { get; set; }

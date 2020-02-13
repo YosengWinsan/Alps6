@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Alps.Domain.Common;
 namespace Alps.Domain.ProductMgr
 {
@@ -32,6 +33,7 @@ namespace Alps.Domain.ProductMgr
         [Display(Name = "计价方式")]
         public PricingMethod PricingMethod { get; set; }
         [Display(Name = "定价")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal ListPrice { get; set; }
         [Display(Name="类别")]
         public Guid CatagoryID { get;set; }

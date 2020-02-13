@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { StockService } from '../stock.service';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 import { QueryService } from '../../infrastructure/infrastructure.module';
 
 @Component({
@@ -10,12 +11,12 @@ import { QueryService } from '../../infrastructure/infrastructure.module';
 })
 export class StockInfoComponent implements OnInit {
 
-  
-  constructor(private stockService: StockService,private queryService:QueryService ) { }
 
-  @ViewChild(MatSort) matSort:MatSort;
+  constructor(private stockService: StockService, private queryService: QueryService) { }
+
+  @ViewChild(MatSort) matSort: MatSort;
   stockOutList: MatTableDataSource<StockListDto>;
-  displayedColumns=['name','auxiliaryQuantity','quantity','warehouse','owner','serialNumber'];
+  displayedColumns = ['name', 'auxiliaryQuantity', 'quantity', 'warehouse', 'owner', 'serialNumber'];
   catagoryOptions;
   selectedCatagory;
   ngOnInit() {
@@ -23,22 +24,21 @@ export class StockInfoComponent implements OnInit {
       this.catagoryOptions = res;
     });
   }
-  onCatagoryChange(value)
-  {
+  onCatagoryChange(value) {
     if (value && value !== "")
-    this.stockService.getStocksByCatagory(value).subscribe((res: StockListDto[]) => {
-      this.stockOutList = new MatTableDataSource<StockListDto>(res);
-      this.stockOutList.sort=this.matSort;
-    });
+      this.stockService.getStocksByCatagory(value).subscribe((res: StockListDto[]) => {
+        this.stockOutList = new MatTableDataSource<StockListDto>(res);
+        this.stockOutList.sort = this.matSort;
+      });
   }
 }
 
 interface StockListDto {
   id: string;
   name: string;
-  quantity:number;
-  auxiliaryQuantity:number;
-  warehouse:string;
-  owner:string;
-  serialNumber:string;
+  quantity: number;
+  auxiliaryQuantity: number;
+  warehouse: string;
+  owner: string;
+  serialNumber: string;
 }

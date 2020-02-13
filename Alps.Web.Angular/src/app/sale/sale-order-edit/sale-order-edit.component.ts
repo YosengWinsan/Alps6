@@ -3,7 +3,7 @@ import { SaleService } from '../sale.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { QueryService, ShopcartService } from '../../infrastructure/infrastructure.module';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { SaleOrderItemEditComponent } from './sale-order-item-edit/sale-order-item-edit.component';
 import { AlpsConst } from '../../infrastructure/alps-const';
 

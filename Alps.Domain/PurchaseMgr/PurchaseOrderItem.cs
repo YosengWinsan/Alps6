@@ -1,6 +1,8 @@
 ﻿using System;
 using Alps.Domain.ProductMgr;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Alps.Domain.PurchaseMgr
 {
     public class PurchaseOrderItem : EntityBase
@@ -12,8 +14,10 @@ namespace Alps.Domain.PurchaseMgr
 
         public ProductSkuInfo ProductSkuInfo { get; set; }
         [Display(Name = "数量")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal Quantity { get; set; }
         [Display(Name = "重量")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal Weight { get; set; }
         //[Display(Name="单位")]
         //public Guid UnitID { get; set; }
@@ -23,8 +27,10 @@ namespace Alps.Domain.PurchaseMgr
         //[Display(Name = "计价方式")]
         //public PricingMethod PricingMethod { get; set; }
         [Display(Name = "单价")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal Price { get; set; }
         [Display(Name = "金额")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal Amount { get; set; }
 
         //public virtual Unit Unit { get; set; }

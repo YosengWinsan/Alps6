@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTable, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { StockService } from '../stock.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,12 +14,12 @@ import { StockOutItemEditComponent } from './stock-out-item-edit/stock-out-item-
   styleUrls: ['./stock-out.component.css']
 })
 export class StockOutComponent implements OnInit {
-  
+
   @ViewChild('table') itemTable: MatTable<any>;
   stockOutForm: FormGroup;
   customerOptions;
   departmentOptions;
-  displayedColumns = ["productSku",  "auxiliaryQuantity","quantity", "price", "position", "serialNumber", "action"];
+  displayedColumns = ["productSku", "auxiliaryQuantity", "quantity", "price", "position", "serialNumber", "action"];
 
   constructor(private stockService: StockService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private queryService: QueryService
     , private matDialog: MatDialog, private router: Router) {
@@ -32,15 +33,15 @@ export class StockOutComponent implements OnInit {
         id = "";
       }
       this.queryService.getCustomerOptions().subscribe((res) => {
-        
+
         this.customerOptions = res;
       });
-      this.queryService.getDepartmentOptions().subscribe((res) => {        
+      this.queryService.getDepartmentOptions().subscribe((res) => {
         this.departmentOptions = res;
       });
       if (id != "")
         this.stockService.getStockOut(id).subscribe((res) => {
-            this.stockOutForm.patchValue(res);          
+          this.stockOutForm.patchValue(res);
         });
 
     });
@@ -48,14 +49,15 @@ export class StockOutComponent implements OnInit {
   save() {
     this.stockService.updateStockOut(this.stockOutForm.value).subscribe((res) => {
       history.back();
-        //this.router.navigate(["./stockoutlist"], { relativeTo: this.activatedRoute.parent });
+      //this.router.navigate(["./stockoutlist"], { relativeTo: this.activatedRoute.parent });
     });
   }
   editItem(row) {
     this.matDialog.open(StockOutItemEditComponent, { data: row, minWidth: "90vw" }).afterClosed().subscribe(res => {
       if (res && res.result) {
         this.combinItem(row, res);
-      }    });
+      }
+    });
   }
   addItem() {
     this.matDialog.open(StockOutItemEditComponent, { data: { id: AlpsConst.GUID_EMPTY }, minWidth: "90vw" }).afterClosed().subscribe(res => {

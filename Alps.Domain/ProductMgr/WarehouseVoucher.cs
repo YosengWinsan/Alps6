@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using Alps.Domain.Common;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Alps.Domain.ProductMgr
 {
     public class WarehouseVoucher : EntityBase
@@ -32,10 +34,13 @@ namespace Alps.Domain.ProductMgr
         [Display(Name = "经办人")]
         public string Handler { get; set; }
         [Display(Name = "总数量")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalQuantity { get; set; }
         [Display(Name = "总辅助数量")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalAuxiliaryQuantity { get; set; }
         [Display(Name = "总金额")]
+         [Column(TypeName="decimal(18,2)")]
         public decimal TotalAmount { get; set; }
         [Display(Name = "明细")]
         public  ICollection<WarehouseVoucherItem> Items { get; set; }

@@ -1,6 +1,6 @@
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Component, Input, OnInit, forwardRef } from '@angular/core';
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { AlpsSelectorDialogComponent, AlpsSelectorOption, AlpsSelectorData } from './alps-selector-dialog/alps-selector-dialog.component';
 import { AlpsConst } from '../alps-const';
 

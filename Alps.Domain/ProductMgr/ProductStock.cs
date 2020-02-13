@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Alps.Domain.AccountingMgr;
 using Alps.Domain.Common;
 
@@ -11,7 +12,9 @@ namespace Alps.Domain.ProductMgr
         //public Guid ProductID { get; set; }
 
         public Guid ProductSkuID { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal AuxiliaryQuantity { get; set; }
+         [Column(TypeName="decimal(18,2)")]
         public decimal Quantity { get; set; }
         public Guid PositionID { get; set; }
         public Guid OwnerID { get; set; }
