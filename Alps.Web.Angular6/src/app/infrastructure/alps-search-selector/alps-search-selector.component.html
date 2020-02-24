@@ -1,0 +1,24 @@
+ <mat-form-field class="mat-form-field-invalid"> 
+<i class="alps-search-selector-no-matches" *ngIf="emptyText && empty | async">{{emptyText}}</i>
+<input
+
+type="text"
+[placeholder]="placeholder"
+[attr.aria-label]="placeholder"
+spellcheck="false"
+matInput
+[formControl]="searchControl"
+#input
+(blur)="blur()"
+(focus)="input.select(); focus()"
+[matAutocomplete]="auto">
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith"
+[autoActiveFirstOption]="autoActiveFirstOption"
+class="bigger-mat-ac">
+<mat-option *ngFor="let option of list | async"
+[value]="option">
+{{ option.displayValue }}
+</mat-option>
+</mat-autocomplete>
+<b>{{ errorMessage | async }}</b>
+</mat-form-field>

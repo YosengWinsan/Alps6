@@ -1,0 +1,13 @@
+.alps-info-chip
+{
+    display: inline-block;
+}
+.alps-info-chip-label
+{
+    color:rgb(0,0,0,0.54)
+}
+.alps-info-chip-value
+{
+    min-width: 140px;
+    padding-left:35px;
+}

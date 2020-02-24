@@ -76,8 +76,9 @@ namespace Alps.Web.Service
             services.AddScoped<Alps.Domain.Service.StockService>();
 
             services.AddSpaStaticFiles(
-                Configuration => { Configuration.RootPath = "wwwroot/alpsWebAngular"; }
+                Configuration => { Configuration.RootPath = "wwwroot"; }
             );
+            
             //services.AddCors();
         }
 
@@ -95,9 +96,10 @@ namespace Alps.Web.Service
             }
             //app.UseCors();
             //app.UseHttpsRedirection();
+            //app.UseStaticFiles(o=>{o.});
+            //app.UseSpaStaticFiles();
             app.UseStaticFiles();
-
-
+            //app.UseSpa();
 
             app.UseRouting();
             app.UseAuthentication();

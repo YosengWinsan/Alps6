@@ -1,0 +1,47 @@
+<div><button mat-button (click)="updateResource()">更新资源信息</button><button mat-button (click)="savePermissions()">保存授权信息</button></div>
+<mat-table #table [dataSource]="resourceList" matSort aria-label="Elements">
+  <!-- Id Column -->
+
+  <ng-container matColumnDef="controller">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>控制器</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.controller}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="actionx">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>接口</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.action}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef> {{totalCount}}个</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef> 合计 </mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="updateTime">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>更新时间</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.updateTime|date:'yyyy-MM-dd hh:mm'}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="{{role.name}}" *ngFor="let role of roleList;let roleindex=index">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{role.description}}</mat-header-cell>
+    <mat-cell *matCellDef="let row;let i=index"><mat-checkbox  [(ngModel)]="permissionList[i][roleindex]" ></mat-checkbox></mat-cell>
+    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+  </ng-container>
+<!-- 
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>
+            <a routerLink="../roleedit">
+              <mat-icon>add</mat-icon>
+            </a> 
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a routerLink="../roleedit" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container> -->
+
+  <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns:displayColumns;"></mat-row>
+  <mat-footer-row *matFooterRowDef="displayColumns"></mat-footer-row>
+</mat-table>

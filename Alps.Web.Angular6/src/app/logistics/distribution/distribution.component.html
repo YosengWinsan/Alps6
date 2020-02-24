@@ -1,0 +1,68 @@
+<div></div>
+<mat-card >
+  <mat-card-title>订单明细</mat-card-title>
+  <mat-card-content>
+    <mat-table #itemTable [dataSource]="totalItems" matSort aria-label="Elements">
+      <ng-container matColumnDef="{{col}}" *ngFor="let col of totalItemsColumns|ngForObj">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{totalItemsColumns[col]}}</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>
+          <a (click)="addItem()">
+            <mat-icon>add</mat-icon>
+          </a>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <a (click)="editItem(row)">
+            <mat-icon>edit</mat-icon>
+          </a>&nbsp;
+          <a (click)="deleteItem(row)">
+            <mat-icon>delete</mat-icon>
+          </a>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+</mat-card>
+
+<mat-grid-list cols="2" rowHeight=400>
+  <mat-grid-tile>
+  
+  </mat-grid-tile>
+  <!-- <mat-grid-tile>
+    <mat-card class='mat-card-container'>
+      <mat-card-title>已配明细</mat-card-title>
+      <mat-card-content>
+        <mat-table #itemTable [dataSource]="totalItems" matSort aria-label="Elements">
+
+          <ng-container matColumnDef="{{col}}" *ngFor="let col of totalItemsColumns|ngForObj">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{totalItemsColumns[col]}}</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef>
+              <a (click)="addItem()">
+                <mat-icon>add</mat-icon>
+              </a>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <a (click)="editItem(row)">
+                <mat-icon>edit</mat-icon>
+              </a>&nbsp;
+              <a (click)="deleteItem(row)">
+                <mat-icon>delete</mat-icon>
+              </a>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile> -->
+</mat-grid-list>

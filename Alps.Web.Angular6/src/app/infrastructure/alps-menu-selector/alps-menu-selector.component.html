@@ -1,0 +1,31 @@
+<div style="display: inline-block;">
+  <label *ngIf="_placeholder!==''" class="alps-selector-label">{{_placeholder}}</label>
+  <button mat-button type="button" [matMenuTriggerFor]="firstLevel" style="display: block;min-width: 175px;">{{_displayValue}}</button>
+</div>
+<ng-container>
+  <mat-menu #firstLevel="matMenu" xPosition="after" yPosition="below" overlapTrigger="false">
+    <ng-container *ngFor="let option of _options">
+      <button mat-menu-item [matMenuTriggerFor]="secondLevel" *ngIf="option.children && option.children.length>0">{{option.displayValue}}</button>
+      <button mat-menu-item (click)="select(option)"  *ngIf="!(option.children && option.children.length>0)">{{option.displayValue}}</button>
+      <mat-menu #secondLevel="matMenu" xPosition="after" yPosition="below" overlapTrigger="false">
+        <ng-container *ngFor="let option of option.children">
+            <button mat-menu-item [matMenuTriggerFor]="thirdLevel" *ngIf="option.children && option.children.length>0">{{option.displayValue}}</button>
+            <button mat-menu-item (click)="select(option)" *ngIf="!(option.children && option.children.length>0)">{{option.displayValue}}</button>
+            <mat-menu #thirdLevel="matMenu" xPosition="after" yPosition="below" overlapTrigger="false">
+              <ng-container *ngFor="let option of option.children">
+                  <button mat-menu-item [matMenuTriggerFor]="fourthLevel" *ngIf="option.children && option.children.length>0">{{option.displayValue}}</button>
+                  <button mat-menu-item (click)="select(option)" *ngIf="!(option.children && option.children.length>0)">{{option.displayValue}}</button>
+                  <mat-menu #fourthLevel="matMenu" xPosition="after" yPosition="below" overlapTrigger="false">
+                    <ng-container *ngFor="let option of option.children">
+                      <button mat-menu-item (click)="select(option)">{{option.displayValue}}</button>
+                    </ng-container>
+                  </mat-menu>
+              </ng-container>
+            </mat-menu>
+        </ng-container>
+      </mat-menu>
+
+    </ng-container>
+  </mat-menu>
+  <!-- <a mat-list-item [matMenuTriggerFor]="secondMenu">{{item.name}}</a> -->
+</ng-container>

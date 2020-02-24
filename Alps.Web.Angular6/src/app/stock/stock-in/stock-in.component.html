@@ -1,0 +1,62 @@
+<alps-edit-toolbar (save)="save()" title="入库单编辑"></alps-edit-toolbar>
+
+<form [formGroup]="stockInForm" class="form-container">
+    <!-- <mat-form-field >
+      <input matInput placeholder="名称"  formControlName="name">
+    </mat-form-field> -->
+       <alps-selector placeholder='来源' formControlName="supplierID" [options]="supplierOptions"></alps-selector>
+       <alps-selector placeholder='采购部门' formControlName="departmentID" [options]="departmentOptions"></alps-selector>
+       <alps-selector placeholder='磅单' formControlName="dispatchRecordID" [options]="dispatchRecordOptions"></alps-selector>
+<!-- <input type="hidden" formControlName="items"> -->
+      
+ <mat-table #table [dataSource]="stockInForm.controls['items'].value" matSort aria-label="Elements" enterToTab> 
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="productSku">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>品名</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.productSku}}</mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>单价</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.price}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="auxiliaryQuantity">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>辅助数量</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.auxiliaryQuantity}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="quantity">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>数量</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.quantity}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>仓位</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.position}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="serialNumber">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>序列号</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.serialNumber}}</mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button (click)="addItem()">
+        <mat-icon  >add</mat-icon>
+      </button></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <a  (click)="editItem(row)">
+          <mat-icon>edit</mat-icon>
+        </a>&nbsp;<a  (click)="deleteItem(row)">
+            <mat-icon>delete</mat-icon>
+        </a>
+      </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table> 
+</form> 

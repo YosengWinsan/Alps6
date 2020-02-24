@@ -1,0 +1,34 @@
+<alps-edit-toolbar (save)="save()"></alps-edit-toolbar>
+
+<form [formGroup]="lenderForm">
+  <mat-form-field>
+    <input matInput placeholder="名称" formControlName="name">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="证件号" formControlName="idNumber">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="手机号" formControlName="mobilePhoneNumber">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="备注" formControlName="memo">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="创建时间" formControlName="createDate">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="修改时间" formControlName="modifyDate">
+  </mat-form-field>
+
+  <mat-checkbox formControlName="invalid">作废</mat-checkbox>
+
+  <mat-form-field>
+    <input matInput placeholder="作废时间" formControlName="invalidDate">
+  </mat-form-field>
+</form>
+<div class="action-toolbar">
+  <button mat-stroked-button (click)="back()">返回</button>&nbsp;
+  <button mat-stroked-button (click)="invalidate(currentID)"
+    [disabled]="currentID=='' || lenderForm.controls['invalid'].value">作废</button>&nbsp;
+  <button mat-stroked-button color="primary" (click)="save()">保存</button>
+</div>

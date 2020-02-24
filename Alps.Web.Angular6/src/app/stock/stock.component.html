@@ -1,0 +1,17 @@
+<!-- <mat-grid-list cols=5 rowHeight="40"> 
+    <mat-grid-tile ><a mat-raised-button class="alps-nav-button" routerLinkActive='mat-primary' [routerLink]="[ './stockin']">入库</a></mat-grid-tile>
+    <mat-grid-tile ><a  class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockout']">出库</a></mat-grid-tile>
+    <mat-grid-tile ><a  class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockinfo']">库存明细</a></mat-grid-tile>
+    <mat-grid-tile ><a  class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockinlist']">入库明细</a></mat-grid-tile>
+    <mat-grid-tile ><a  class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockoutlist']">出库明细</a></mat-grid-tile>
+
+</mat-grid-list> -->
+<!-- <div class="alps-nav-button-container">
+    <a class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockin']">入库</a>
+    <a class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockout']">出库</a>
+    <a class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockinfo']">库存明细</a>
+    <a class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockinlist']">入库明细</a>
+    <a class="alps-nav-button" mat-raised-button routerLinkActive='mat-primary' [routerLink]="[ './stockoutlist']">出库明细</a>
+</div> -->
+<alps-nav-bar [links]="navLinks"></alps-nav-bar>
+<router-outlet></router-outlet>

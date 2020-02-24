@@ -1,0 +1,10 @@
+<alps-edit-toolbar title="产品编辑" (save)="save()"></alps-edit-toolbar>
+<form [formGroup]="productForm" class="form-container">
+  <mat-form-field>
+    <input matInput placeholder="名称" formControlName="name">
+  </mat-form-field>
+  <alps-selector placeholder='所属类别' formControlName="catagoryID" [options]="catagoryOptions"></alps-selector>
+
+
+
+</form>

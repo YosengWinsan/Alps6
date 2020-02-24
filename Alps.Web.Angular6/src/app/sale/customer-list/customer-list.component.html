@@ -1,0 +1,34 @@
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="筛选">
+  </mat-form-field>
+<mat-table #table [dataSource]="customerDataSource" matSort aria-label="Elements">
+  <!-- Id Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="contact">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>联系人</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.contact}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="address">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>地址</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.address}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>
+      <a routerLink="../customeredit" >
+        <mat-icon>add</mat-icon>
+      </a>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a routerLink="../customeredit" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

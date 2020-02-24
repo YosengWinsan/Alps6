@@ -1,0 +1,6 @@
+  <div ><a *ngFor="let path of optionsPath" (click)="selectPath(path)">{{path.displayValue}}>></a></div>
+  <hr>
+  <div>
+    <button mat-button *ngFor="let option of optionsList" (click)="select(option)" color="{{selectedValue==option.value?'accent':''}}">{{option.displayValue}}</button>
+  </div>
+

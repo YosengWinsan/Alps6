@@ -1,0 +1,42 @@
+:host{
+    /* width: 100%;
+    display: flex;
+    flex-direction: row;
+    
+    min-height: 100%; */
+    flex: 1;
+    flex-direction: row;
+    display: flex;
+}
+.dispatch-car-list{
+    min-width: 100px;
+    max-width: 150px;
+    width: 15%;
+    border-right: 1px solid gray;
+}
+.dispatch-car-detail{
+    flex: 1;
+    padding: 20px;
+}
+.carlist-header{
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
+    font-size: 16px;
+}
+.carlist-header-title
+{
+    flex:1;
+}
+.icon-middle{
+    -vertical-align: middle;
+}
+
+.car-button
+{
+    width:100%;
+}
+.weight-button
+{
+    height:100%;
+}

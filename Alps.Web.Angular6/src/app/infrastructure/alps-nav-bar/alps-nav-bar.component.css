@@ -1,0 +1,13 @@
+.alps-nav-button-container
+{    
+    flex-direction: row;
+    display: flex;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+}
+.alps-nav-button{
+    min-width: 70px;
+    padding: 0 6px;
+    margin-bottom: 4px;
+    flex: 1px;
+}

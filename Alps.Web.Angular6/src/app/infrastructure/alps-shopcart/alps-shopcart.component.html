@@ -1,0 +1,38 @@
+<mat-accordion [ngClass]="{'shopcart-fixed':fixed}">
+  <mat-expansion-panel (opened)="shopcartTable.renderRows()" #shopcartPanel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>shopping_cart</mat-icon> 购物车
+      </mat-panel-title>
+      <mat-panel-description>
+        共{{_totalAuxiliaryQuantity}}件{{_totalQuantity|number:'0.3'}}吨{{_totalAmount}}元
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-table #shopcartTable [dataSource]="_shopcart" matSort aria-label="Elements">
+      <!-- Id Column -->
+      <ng-container matColumnDef="{{col}}" *ngFor="let col of shopcartColumns|ngForObj">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{shopcartColumns[col]}}</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <button mat-icon-button (click)="remove(row)">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div align="right">
+      <button mat-button (click)="clear()">清空购物篮</button>
+      <a mat-button  color="primary"  *ngIf="!_saleOrderID" [routerLink]="[ '/sale/saleorderedit']"  [queryParams]="{fromshopcart:true}" >创建新订单</a>
+      <a mat-button  color="primary" *ngIf="_saleOrderID"  [routerLink]="[ '/sale/saleorderedit']"  [queryParams]="{fromshopcart:true,id:_saleOrderID}" >返回订单</a>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<br>

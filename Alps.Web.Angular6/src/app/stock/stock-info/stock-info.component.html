@@ -1,0 +1,41 @@
+<alps-menu-selector placeholder="请选择一个类别" [options]="catagoryOptions" [(ngModel)]="selectedCatagory" (ngModelChange)="onCatagoryChange($event)"></alps-menu-selector>
+<mat-table #table [dataSource]="stockOutList" matSort aria-label="Elements">
+  'name','quantity','auxiliaryQuantity','warehouse','owner','serialNumber'
+  <!-- Id Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="owner">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>所有人</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.owner}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="warehouse">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>仓库</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.warehouse}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="quantity">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>数量</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.quantity}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="auxiliaryQuantity">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>辅助数量</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.auxiliaryQuantity}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="serialNumber">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>序列号</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.serialNumber}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a routerLink="../stockout" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

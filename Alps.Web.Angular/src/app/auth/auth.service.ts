@@ -1,8 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { map } from "rxjs/operators";
 import { RepositoryService } from '../infrastructure/infrastructure.module';
 //import {Buffer} from 'buffer';
-import { Base64 } from 'js-base64';
+import { Base64 } from '../extends/Base64';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,7 +31,7 @@ export class AuthService extends RepositoryService {
   loginStatus = this.loginStatusSubject.asObservable();
   login(user: string, password: string) {
 
-    this.action("login", { userName: user, password: password }).subscribe(data => {
+    return this.action("login", { userName: user, password: password }).pipe(map(data => {
       if (data.result) {
         sessionStorage.setItem(this.TOKEN_SIGN, data.token);
         this.parseToken();
@@ -38,9 +39,9 @@ export class AuthService extends RepositoryService {
       }
       else
         this.loginStatusSubject.next(false);
-
-    });
-    return this.loginStatus;
+      return data.result;
+    }));
+    //return this.loginStatus;
   }
   logout() {
     sessionStorage.removeItem(this.TOKEN_SIGN);
@@ -51,14 +52,13 @@ export class AuthService extends RepositoryService {
     let tokenString = sessionStorage.getItem(this.TOKEN_SIGN);
     let token = null;
     if (tokenString)
-      token = JSON.parse(Base64.decode(tokenString.split('.')[1]));
-      
-      
-    if (token && token.exp*1000>Date.now()) 
-    {
+      token = JSON.parse((new Base64()).decode(tokenString.split('.')[1]));
+
+
+    if (token && token.exp * 1000 > Date.now()) {
       this._userName = token.name;
       this._idName = token.idName;//['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-      if (typeof(token.role) =="string")
+      if (typeof (token.role) == "string")
         this._roles = [token.role];
       else
         this._roles = token.role;//['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];

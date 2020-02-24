@@ -1,0 +1,12 @@
+<alps-edit-toolbar (save)="save()"></alps-edit-toolbar>
+<form [formGroup]="positionForm" >
+    <mat-form-field >
+        <input matInput placeholder="仓位名"  formControlName="name">
+      </mat-form-field>
+  <mat-form-field >
+    <input matInput placeholder="仓位号"  formControlName="number">
+  </mat-form-field>
+  <mat-form-field >
+      <input matInput placeholder="所属仓库"  formControlName="warehouse">
+    </mat-form-field>
+</form>

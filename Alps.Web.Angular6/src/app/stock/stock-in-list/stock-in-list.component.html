@@ -1,0 +1,54 @@
+<mat-table #table [dataSource]="stockInList" matSort aria-label="Elements">
+
+  <!-- Id Column -->
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="createTime">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>时间</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.createTime|date:"yy-MM-dd"}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="supplier">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>供应商</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.supplier}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="department">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>部门</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.department}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="totalQuantity">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>数量</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.totalQuantity}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="totalAmount">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>金额</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.totalAmount}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>状态</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <!-- <a  *ngIf="row.status=='未提交'" routerLink="../stockin" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
+      </a>&nbsp;
+      <a *ngIf="row.status=='未提交'" (click)="delete(row)">
+        <mat-icon>delete</mat-icon>
+      </a>&nbsp; 
+      <a  *ngIf="row.status=='未提交'" (click)="submit(row)">
+        <mat-icon>backup</mat-icon>
+      </a> -->
+      <a  routerLink="../stockindetail" [queryParams]="{id:row.id}">
+        <mat-icon>list</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

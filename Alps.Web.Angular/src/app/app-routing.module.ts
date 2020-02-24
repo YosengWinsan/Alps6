@@ -7,8 +7,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForbidComponent } from './auth/forbid/forbid.component';
+
 const routes: Routes = [
-  //{path:"",redirectTo:"dashboard",pathMatch:"full"},
   {
     path: '', component: AppContainerComponent, children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

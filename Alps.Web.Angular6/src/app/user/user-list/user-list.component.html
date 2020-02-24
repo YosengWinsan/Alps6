@@ -1,0 +1,35 @@
+<mat-table #table [dataSource]="userList" matSort aria-label="Elements">
+  <!-- Id Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>名称</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="idName">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ID号</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.idName}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="mobilePhoneNumber">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>手机</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.mobilePhoneNumber}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="roles">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>身份</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.roles}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>
+      <!-- <a routerLink="../lenderedit">
+        <mat-icon>add</mat-icon>
+      </a> -->
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a routerLink="../authorize" [queryParams]="{id:row.id}">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

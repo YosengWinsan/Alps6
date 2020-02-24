@@ -83,11 +83,12 @@ namespace Alps.Domain
         public DbSet<AlpsUser> AlpsUsers { get; set; }
         public DbSet<AlpsRole> AlpsRoles { get; set; }
         public DbSet<AlpsResource> AlpsResources { get; set; }
-        public DbSet<Permission> Permissions{get;set;}
+        public DbSet<Permission> Permissions { get; set; }
 
         #endregion
 
         #region LoanMgr
+
         public DbSet<Lender> Lenders { get; set; }
         public DbSet<LoanVoucher> LoanVouchers { get; set; }
         public DbSet<WithdrawRecord> WithdrawRecords { get; set; }
@@ -125,12 +126,19 @@ namespace Alps.Domain
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            //modelBuilder.Entity<WarehouseVoucher>().Property(p => p.Destination).IsRequired();//.HasOne(p => p.Destination).WithRequiredPrincipal();
-            //modelBuilder.Entity<WarehouseVoucher>().HasOne(p => p.Destination).WithOptional().OnDelete(DeleteBehavior.Restrict);
-            //modelBuilder.Entity<WarehouseVoucher>().HasOne(p => p.Source).WithOptional().OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
-            foreach (System.Reflection.PropertyInfo pi in typeof(AlpsContext).GetProperties().Where(p => p.Module.Name == "Alps.Domain.ERP.dll"))
+
+
+            //modelBuilder.Entity<DispatchRecord>().ToTable("Load_")
+            foreach (var e in modelBuilder.Model.GetEntityTypes())
+            {
+                if (e.GetTableName().Length > 0)
+                {
+                    var newName = e.Name.Replace("Alps.Domain.", "").Replace("." + e.ShortName(), "").Replace("Mgr", "") + "_" + e.GetTableName();
+                    e.SetTableName(newName);
+                }
+            }
+            foreach (System.Reflection.PropertyInfo pi in typeof(AlpsContext).GetProperties().Where(p => p.Module.Name == "Alps.Domain.dll"))
             {
 
                 if (pi.PropertyType.IsGenericType)
@@ -140,6 +148,7 @@ namespace Alps.Domain
                     t = t.MakeGenericType(pi.PropertyType.GetGenericArguments()[0]);
                     dynamic o = Activator.CreateInstance(t);
                     modelBuilder.ApplyConfiguration(o);
+
                     //o.Configure(modelBuilder.Entity(pi.PropertyType.GetGenericArguments()[0]));
                     //modelBuilder.Configurations.Add(o);
                 }
@@ -567,7 +576,7 @@ namespace Alps.Domain
                 #region 初始化入库单--StockInVoucher
                 var skuID = context.ProductSkus.Find(gcSkuID).ID;
                 var sID = context.Suppliers.FirstOrDefault().ID;
-                var dID = context.Departments.LastOrDefault().ID;
+                var dID = context.Departments.OrderByDescending(p => p.ID).FirstOrDefault().ID;
                 StockInVoucher voucher = StockInVoucher.Create(sID, dID, "系统初始化");
                 voucher.AddItem(positionID, skuID, "12345", 2.3m, 1, 2100);
                 voucher.AddItem(positionID, skuID, "151515", 2.5m, 1, 2100);

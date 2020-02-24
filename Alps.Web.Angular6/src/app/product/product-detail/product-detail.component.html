@@ -1,0 +1,44 @@
+<alps-info-chip label="名称" value="{{product.name}}"></alps-info-chip>
+<alps-info-chip label="全称" value="{{product.fullName}}"></alps-info-chip>
+<alps-info-chip label="描述" value="{{product.fullDescription}}"></alps-info-chip>
+<alps-info-chip label="简述" value="{{product.shortDescription}}"></alps-info-chip>
+<alps-info-chip label="已作废" value="{{product.Deprecated?'是':'否'}}"></alps-info-chip>
+<alps-info-chip label="类别" value="{{product.catagory}}"></alps-info-chip>
+<a mat-button routerLink="../productedit" [queryParams]="{id:product.id}">编辑产品信息</a>
+<mat-table #table [dataSource]="product.productSkuList" matSort aria-label="Elements">
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Sku名称</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>描述</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="fullName">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Sku全名</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.fullName}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="createdTime">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>创建时间</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.createdTime|date:"yyyy-MM-dd"}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="deleted">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>已禁用</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.deleted}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="code">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>助记码</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.code}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef >
+      <a routerLink="../productskuedit" [queryParams]="{productID:product.id}"><mat-icon>add</mat-icon></a>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">  <a routerLink="../productskuedit" [queryParams]="{id:row.id}" ><mat-icon>edit</mat-icon></a></mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

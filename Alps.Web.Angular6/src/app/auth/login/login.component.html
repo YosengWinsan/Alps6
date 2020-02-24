@@ -1,0 +1,45 @@
+<div><button mat-button (click)="initDatabase()">初始化样本数据库</button>
+  <button mat-button (click)="clearCache()">清除缓存</button></div>
+<div class="login-form-container">
+  <form [formGroup]="loginForm" autocomplete="off" enterToTab>
+    <!-- <h1>永盛金属ERP</h1> -->
+    <mat-card class="login-form">
+      <mat-card-title>登录</mat-card-title>
+      <mat-card-content>
+
+        <mat-form-field>
+          <span matPrefix>
+            <mat-icon>person</mat-icon>
+          </span>
+          <input #usernameInput matInput formControlName="username" (focusin)="clearWarn()">
+
+        </mat-form-field>
+        <div class="warn"
+          *ngIf=" loginForm.controls.username.invalid &&  !loginForm.controls.username.pristine  && loginForm.controls.username.errors?.required">
+          请输入用户名
+        </div>
+        <mat-form-field>
+          <input matInput formControlName="password" (keyup.enter)="keyup($event)" (focusin)="clearWarn()">
+          <mat-icon matPrefix>lock</mat-icon>
+        </mat-form-field>
+        <div class="warn"
+          *ngIf=" loginForm.controls.password.invalid &&  !loginForm.controls.password.pristine  && loginForm.controls.password.errors?.required">
+          请输入密码
+        </div>
+        <div class="warn">{{errorMsg}}</div>
+      </mat-card-content>
+      <mat-card-actions>
+        <div class="action">
+          <button mat-flat-button (click)="login()" class="login-btn" color="primary" type="button">登录</button>
+          <div class="flex-container">
+            <div><a [routerLink]="['/forgotpassword']">忘记密码?</a></div>
+            <div class="flex-div"></div>
+            <div>
+              <a [routerLink]="['/register']">注册一个账号</a>
+            </div>
+          </div>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

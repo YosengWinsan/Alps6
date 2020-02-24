@@ -1,0 +1,39 @@
+<mat-sidenav-container class="app-container">
+  <mat-sidenav #drawer class="app-sidenav" fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)">
+    <mat-toolbar color="primary">导航 </mat-toolbar>
+    <mat-nav-list>
+      <ng-container *ngFor="let item of menuData">
+        <ng-container *ngIf="item.children && item.children.length>0">
+          <mat-menu #secondMenu="matMenu" xPosition="after" yPosition="below" overlapTrigger="false">
+            <a mat-menu-item *ngFor="let secondMenuItem of item.children" routerLink="{{secondMenuItem.path}}"
+              (click)="(drawer.mode==='over')?drawer.toggle():null">{{secondMenuItem.name}}</a>
+          </mat-menu>
+          <a mat-list-item [matMenuTriggerFor]="secondMenu">{{item.name}}</a>
+        </ng-container>
+        <a *ngIf="!(item.children && item.children.length>0)" mat-list-item routerLink="/{{item.path}}"
+          (click)="(drawer.mode==='over')?drawer.toggle():null">{{item.name}}</a>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="app-content-container">
+    <mat-toolbar color="primary">
+      <div>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <span>永盛金属ERP</span>
+      </div>
+      <div class='app-toolbar-flex'></div>
+      <span (click)="logout()">注销</span>
+    </mat-toolbar>
+    <div class="app-content">
+      <router-outlet></router-outlet>
+    </div>
+    <mat-toolbar color="primary">
+      <span>永盛科技</span>
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
