@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alps.Web.Service.Auth
 {
+    /*
     public class AlpsAuthorizationFilter : IAsyncAuthorizationFilter
     {
         private readonly AlpsContext _dbContext;
@@ -33,6 +34,7 @@ namespace Alps.Web.Service.Auth
             if (context.HttpContext.User.IsInRole("Admin"))
                 return;
             //var actionId = GetActionId(context);
+            
             var controllerActionDescriptor = (ControllerActionDescriptor)context.ActionDescriptor;
             var area = controllerActionDescriptor.ControllerTypeInfo.GetCustomAttribute<AreaAttribute>()?.RouteValue;
             var controller = controllerActionDescriptor.ControllerName;
@@ -100,5 +102,5 @@ namespace Alps.Web.Service.Auth
 
 
     }
-
+*/
 }

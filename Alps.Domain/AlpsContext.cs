@@ -83,7 +83,7 @@ namespace Alps.Domain
         public DbSet<AlpsUser> AlpsUsers { get; set; }
         public DbSet<AlpsRole> AlpsRoles { get; set; }
         public DbSet<AlpsResource> AlpsResources { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
+        //public DbSet<Permission> Permissions { get; set; }
 
         #endregion
 

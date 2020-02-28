@@ -29,7 +29,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet]
         public IActionResult GetUsers()
         {
-            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.Roles).Select(p => new UserListDto
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).Select(p => new UserListDto
             {
                 ID = p.ID,
                 IDName = p.IDName,
@@ -42,14 +42,14 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(Guid id)
         {
-            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.Roles).Select(p => new UserDetailDto
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).Select(p => new UserDetailDto
             {
                 ID = p.ID,
                 IDName = p.IDName,
                 IdentityNumber = p.IdentityNumber,
                 MobilePhoneNumber = p.MobilePhoneNumber,
                 Name = p.Name,
-                Roles = p.Roles.Select(k => new RoleDto { ID = k.ID, Name = k.Name })
+                Roles = p.RoleUsers.Select(k => new RoleDto { ID = k.RoleID, Name = k.Role.Name })
             }).FirstOrDefault(p => p.ID == id));
         }
         [HttpGet("getroles")]
@@ -133,22 +133,31 @@ namespace Alps.Web.Service.Controllers
             //             select new {ResourceID=r.ID,RoleID=role.ID} into list
             //             join p in  _context.Permissions on new {list.RoleID,list.ResourceID} equals new {p.RoleID,p.ResourceID}
             //             select new { list.ResourceID,list.RoleID,}
-            
-            return this.AlpsActionOk(_context.Permissions.Select(p=>new {p.ResourceID,p.RoleID}));
+            return this.AlpsActionOk(_context.AlpsRoles.SelectMany(p => p.Permissions).Select(p => new { p.ResourceID, p.RoleID }));
+            //return this.AlpsActionOk(_context.Permissions.Select(p=>new {p.ResourceID,p.RoleID}));
         }
         [HttpPost("savepermissions", Name = "更新权限")]
-        public IActionResult SavePermissions( List<PermissionDto> dtos)
+        public IActionResult SavePermissions(List<PermissionDto> dtos)
         {
-            var pList=_context.Permissions;
-            var newPermissions=dtos.Where(dto=>!pList.Any(p=>p.ResourceID== dto.ResourceID&& p.RoleID==dto.RoleID));
-            var deletedPermissions=pList.Where(p=>!dtos.Any(dto=>p.ResourceID== dto.ResourceID&& p.RoleID==dto.RoleID));
-            _context.Permissions.RemoveRange(deletedPermissions);
-            foreach( var p in newPermissions)
+            //var roles=_context.AlpsRoles.Include(p=>p.Permissions);
+            var roleIds = dtos.Select(p => p.RoleID).Distinct().ToArray();
+            foreach (Guid roleID in roleIds)
             {
-                _context.Permissions.Add(Permission.Create(p.ResourceID,p.RoleID));
+                var role = _context.AlpsRoles.Include(p => p.Permissions).FirstOrDefault(p => p.ID == roleID);
+                var newPermissions = dtos.Where(dto => !role.Permissions.Any(p => p.ResourceID == dto.ResourceID && roleID == dto.RoleID));
+                var deletedPermissions = role.Permissions.Where(p => !dtos.Any(dto => p.ResourceID == dto.ResourceID && roleID == dto.RoleID));
+                foreach (var p in deletedPermissions)
+                {
+                    role.RemovePermission(p.ResourceID);
+                }
+                foreach (var p in newPermissions)
+                {
+                    role.AddPermission(p.ResourceID);
+                }
             }
             _context.SaveChanges();
             return this.AlpsActionOk();
+
         }
     }
 }

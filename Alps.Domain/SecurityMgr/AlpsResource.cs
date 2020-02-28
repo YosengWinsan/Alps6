@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.Generic;
 
 namespace Alps.Domain.SecurityMgr
 {
@@ -10,5 +11,6 @@ namespace Alps.Domain.SecurityMgr
         public string Action { get; set; }
         public string Name { get; set; }
         public DateTimeOffset UpdateTime { get; set; }
+        public virtual ICollection<Permission> Permissions{get;set;}
     }
 }

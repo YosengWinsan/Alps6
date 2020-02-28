@@ -31,16 +31,16 @@ namespace Alps.Web.Service.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody]LoginDto dto)
         {
-            AlpsUser user = _context.AlpsUsers.Include(p => p.Roles).FirstOrDefault(p => p.IDName == dto.Username && p.Password == dto.Password);
+            AlpsUser user = _context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p => p.Role).FirstOrDefault(p => p.IDName == dto.Username && p.Password == dto.Password);
             if (user != null)
             {
                 var claims = new List<Claim> {
                     new Claim("idName",user.IDName),
                     new Claim("name",user.Name)
                                 };
-                foreach (var role in user.Roles)
+                foreach (var roleUser in user.RoleUsers)
                 {
-                    claims.Add(new Claim("role", role.Name));
+                    claims.Add(new Claim("role", roleUser.Role.Name));
                 }
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOption.SecurityKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -59,10 +59,25 @@ namespace Alps.Web.Service.Controllers
             }
             return this.AlpsActionOk(new { result = false, message = "密码有错" });
         }
-        
-       
 
-        
+        [HttpPost("register")]
+        public IActionResult Register([FromBody]RegisterDto dto)
+        {
+            AlpsUser newUser = AlpsUser.Create(dto.Username, dto.Password, dto.RealName, dto.IdentityNumber, dto.MobilePhoneNumber);
+            newUser.AddRole(_context.AlpsRoles.FirstOrDefault(p => p.Name == "User"));
+            _context.AlpsUsers.Add(newUser);
+            if (_context.SaveChanges() == 1)
+            {
+                return this.AlpsActionOk();
+            }
+            else
+            {
+                return this.AlpsActionWarning("身份信息有误，注册失败");
+
+            }
+        }
+
+
 
     }
 }

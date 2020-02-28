@@ -72,5 +72,8 @@ export class AuthService extends RepositoryService {
     }
 
   }
+  register(id: string, password: string, realname: string, identityNumber: string, mobilePhoneNumber: string) {
+    return this.action("register",  { userName: id, realName: realname, password: password, identityNumber: identityNumber, mobilePhoneNumber: mobilePhoneNumber });
+}
 
 }

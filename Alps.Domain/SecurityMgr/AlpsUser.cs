@@ -8,28 +8,28 @@ namespace Alps.Domain.SecurityMgr
         public string IDName { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
-        public ICollection<AlpsRole> Roles { get; set; }
+        public virtual ICollection<AlpsRoleUser> RoleUsers { get; set; }
         public string MobilePhoneNumber { get; set; }
         public string IdentityNumber { get; set; }
 
         public static AlpsUser Create(string idName, string password,string name, string identityNumber, string mobilePhoneNumber)
         {
-            return new AlpsUser() { IDName = idName, Password = password,Name=name, IdentityNumber = identityNumber, MobilePhoneNumber = mobilePhoneNumber, Roles = new HashSet<AlpsRole>() };
+            return new AlpsUser() { IDName = idName, Password = password,Name=name, IdentityNumber = identityNumber, MobilePhoneNumber = mobilePhoneNumber, RoleUsers = new HashSet<AlpsRoleUser>() };
         }
         public string GetRoles()
         {
-            return string.Join(",",this.Roles.Select(p=>p.Name));
+            return string.Join(",",this.RoleUsers.Select(p=>p.Role.Name));
         }
         public void AddRole(AlpsRole role)
         {
-            if (this.Roles.Count(p => p.ID == role.ID) == 0)
-                this.Roles.Add(role);
+            if (this.RoleUsers.Count(p => p.ID == role.ID) == 0)
+                this.RoleUsers.Add(AlpsRoleUser.Create(role.ID,this.ID));
         }
         public void RemoveRole(AlpsRole role)
         {
-            AlpsRole r = this.Roles.FirstOrDefault(p => p.ID == role.ID);
+            AlpsRoleUser r = this.RoleUsers.FirstOrDefault(p => p.ID == role.ID);
             if (r!=null)
-                this.Roles.Remove(r);
+                this.RoleUsers.Remove(r);
         }
     }
 }
