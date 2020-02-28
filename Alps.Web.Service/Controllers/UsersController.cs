@@ -29,7 +29,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet]
         public IActionResult GetUsers()
         {
-            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).Select(p => new UserListDto
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p=>p.Role).Select(p => new UserListDto
             {
                 ID = p.ID,
                 IDName = p.IDName,
@@ -111,7 +111,7 @@ namespace Alps.Web.Service.Controllers
             }).GroupBy(p => new { p.Controller, p.Action, p.Name })
                .Select(p => new AlpsResource { Controller = p.Key.Controller, Action = p.Key.Action, Name = p.Key.Name, UpdateTime = DateTimeOffset.Now });
             var existResource = _context.AlpsResources.ToList();
-            var deletedR = _context.AlpsResources.Where(p => !query.Any(k => k.Controller == p.Controller && k.Action == p.Action && p.Name == k.Name));
+            var deletedR = existResource.Where(p => !query.Any(k => k.Controller == p.Controller && k.Action == p.Action && p.Name == k.Name));
 
             var insertedR = query.Where(p => !_context.AlpsResources.Any(k => k.Controller == p.Controller && k.Action == p.Action && p.Name == k.Name));
             _context.AlpsResources.RemoveRange(deletedR);

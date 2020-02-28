@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Alps.Domain;
@@ -12,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Alps.Web.Service.Controllers
 {
-     [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LoanVouchersController : ControllerBase
@@ -44,7 +42,7 @@ namespace Alps.Web.Service.Controllers
         public IActionResult GetWaterBills()
         {            
             return this.AlpsActionOk(((_context.LoanVouchers.Where(p => p.ModifyDate.Date == DateTime.Now.Date)
-            .Select(l => new WaterBillDto() { ID = l.ID, Date = l.DepositDate, Name = l.Lender.Name, Amount = l.Amount, InterestRate = l.InterestRate, Type = OperateType.Deposit }))
+            .Select(l => new WaterBillDto() { ID = l.ID, Date = l.DepositDate, Name = l.Lender.Name, Amount = l.Amount, InterestRate = l.InterestRate,Interest=0, Type = OperateType.Deposit }))
             .Union(_context.WithdrawRecords.Where(p => p.ModifyDate.Date == DateTime.Now.Date && p.Amount > 0)
             .Select(l => new WaterBillDto() { ID = l.ID, Date = l.Date, Name = l.LoanVoucher.Lender.Name, Amount = l.Amount, InterestRate = l.InterestRate, Interest = l.Interest, Type =OperateType.Withdraw }))
             .Union(_context.WithdrawRecords.Where(p => p.ModifyDate.Date == DateTime.Now.Date && p.Amount == 0)
