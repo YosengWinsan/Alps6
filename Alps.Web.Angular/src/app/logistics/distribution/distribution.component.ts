@@ -18,5 +18,8 @@ totalItems=[];
     this.displayedColumns = Object.keys(this.totalItemsColumns);
 
   }
+  addItem(){}
+  editItem(item){}
+  deleteItem(item){}
 
 }

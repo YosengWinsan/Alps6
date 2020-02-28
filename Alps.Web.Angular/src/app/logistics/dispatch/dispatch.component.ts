@@ -19,6 +19,8 @@ export class DispatchComponent implements OnInit {
   selectedCar:any;
   vouchersColumns=["source","destination","aQuantity","quantity","amount","operator","action"];
   totalAmount;
+  totalAQuantity;
+  totalQuantity;
   ngOnInit() {    
     this.currentCar.subscribe(p => {
       this.selectedCar=p;

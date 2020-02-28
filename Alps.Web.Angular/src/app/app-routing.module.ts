@@ -14,20 +14,20 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: "dashboard", component: DashboardComponent },
       { path: 'forbid', component: ForbidComponent },
-      { path: "catagory", loadChildren: "./catagory/catagory.module#CatagoryModule" },
-      { path: "product", loadChildren: "./product/product.module#ProductModule" },
-      { path: "stock", loadChildren: "./stock/stock.module#StockModule" },
-      { path: "sale", loadChildren: "./sale/sale.module#SaleModule" },
-      { path: "logistics", loadChildren: "./logistics/logistics.module#LogisticsModule" },
-      { path: "loan", loadChildren: "./loan/loan.module#LoanModule" },
-      { path: "user", loadChildren: "./user/user.module#UserModule" },
-      { path: "purchase", loadChildren: "./purchase/purchase.module#PurchaseModule" }
+      { path: "catagory", loadChildren: () => import("./catagory/catagory.module").then(m => m.CatagoryModule) },
+      { path: "product", loadChildren: () => import("./product/product.module").then(m => m.ProductModule) },
+      { path: "stock", loadChildren: () => import("./stock/stock.module").then(m => m.StockModule) },
+      { path: "sale", loadChildren: () => import("./sale/sale.module").then(m => m.SaleModule) },
+      { path: "logistics", loadChildren: () => import("./logistics/logistics.module").then(m => m.LogisticsModule) },
+      { path: "loan", loadChildren: () => import("./loan/loan.module").then(m => m.LoanModule) },
+      { path: "user", loadChildren: () => import("./user/user.module").then(m => m.UserModule) },
+      { path: "purchase", loadChildren: () => import("./purchase/purchase.module").then(m => m.PurchaseModule) }
     ], canActivateChild: [AuthGuard], canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'register', component: RegisterComponent }
-]; 
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

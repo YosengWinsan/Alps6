@@ -91,9 +91,10 @@ namespace Alps.Web.Service
             }
             else
             {
-                Console.WriteLine("F");
                 app.UseHsts();
             }
+            //app.UseStatusCodePagesWithReExecute("/", null);
+            app.UseStatusCodePagesWithRedirects("/index.html");
             //app.UseCors();
             //app.UseHttpsRedirection();
             //app.UseStaticFiles(o=>{o.});
