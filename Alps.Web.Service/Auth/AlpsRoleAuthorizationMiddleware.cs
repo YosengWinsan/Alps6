@@ -49,28 +49,39 @@ namespace Alps.Web.Service.Auth
             var actionName = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>().ActionName;
             var userName = context.User.Identity.Name;
 
-            var query = await (
-                dbContext.AlpsUsers.Include(p=>p.RoleUsers).ThenInclude(p=>p.Role).ThenInclude(p=>p.Permissions).ThenInclude(p=>p.Resource)
-                .AnyAsync(p=>p.RoleUsers.Any(l=>l.Role.Permissions.Any(k=>k.Resource.Controller==controllerName&& k.Resource.Action==actionName))));
-                /*
-            from u in dbContext.AlpsUsers.Include(p=>p.RoleUsers).ThenInclude(p=>p.Role).ThenInclude(p=>p.Permissions).ThenInclude(p=>p.Resource)
 
-            from r in dbContext.AlpsResources
-            where r.Permissions.
-           // from role in dbContext.AlpsRoles
-            where u.IDName == userName && u.RoleUsers. &&
-            (from r in dbContext.AlpsResources
-             join p in dbContext.Permissions on r.ID equals p.ResourceID
-             where r.Controller == controllerName && r.Action == actionName
-             select p.RoleID).Contains(role.ID)
-            select u.ID).CountAsync();
+            var query = await (
+                dbContext.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p => p.Role).ThenInclude(p => p.Permissions).ThenInclude(p => p.Resource)
+                .AnyAsync(p => p.RoleUsers.Any(l => l.Role.Permissions.Any(k => k.Resource.Controller == controllerName && k.Resource.Action == actionName))));
+            /*
+        from u in dbContext.AlpsUsers.Include(p=>p.RoleUsers).ThenInclude(p=>p.Role).ThenInclude(p=>p.Permissions).ThenInclude(p=>p.Resource)
+
+        from r in dbContext.AlpsResources
+        where r.Permissions.
+       // from role in dbContext.AlpsRoles
+        where u.IDName == userName && u.RoleUsers. &&
+        (from r in dbContext.AlpsResources
+         join p in dbContext.Permissions on r.ID equals p.ResourceID
+         where r.Controller == controllerName && r.Action == actionName
+         select p.RoleID).Contains(role.ID)
+        select u.ID).CountAsync();
 */
-            if (query==false)
+            if (!query)
             {
-                context.Response.StatusCode = 401;
-                context.Response.Headers.Add("WWW-Authenticate", new Microsoft.Extensions.Primitives.StringValues("Login authentication failed"));
-                return;
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    context.Response.StatusCode = 403;
+                    context.Response.Headers.Add("WWW-Authenticate", new Microsoft.Extensions.Primitives.StringValues("Login authorization failed"));
+                    return;
+                }
+                else
+                {
+                    context.Response.StatusCode = 401;
+                    context.Response.Headers.Add("WWW-Authenticate", new Microsoft.Extensions.Primitives.StringValues("Login authentication failed"));
+                    return;
+                }
             }
+
             await _next(context);
             return;
         }

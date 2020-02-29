@@ -210,6 +210,9 @@ namespace Alps.Domain
             // modelBuilder.Entity<Commodity>().HasOne(p=>p.ProductSku).WithOne().HasForeignKey("");
             //modelBuilder.Entity<PurchaseOrderItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
             //modelBuilder.Entity<WarehouseVoucherItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Permission>().HasKey(p=>new {p.ResourceID,p.RoleID});
+            modelBuilder.Entity<Permission>().HasOne(p=>p.Role).WithMany(p=>p.Permissions).HasForeignKey(p=>p.RoleID).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Permission>().HasOne(p=>p.Resource).WithMany(p=>p.Permissions).HasForeignKey(p=>p.ResourceID).OnDelete(DeleteBehavior.Restrict);
 
         }
         public class AbstractEntityTypeConfiguration<T> : IEntityTypeConfiguration<T> where T : EntityBase
@@ -311,7 +314,11 @@ namespace Alps.Domain
                 user.AddRole(role);
                 context.AlpsUsers.Add(user);
 
-                context.AlpsRoles.Add(AlpsRole.Create("Cashier", "出纳"));
+                role=AlpsRole.Create("Cashier", "出纳");
+                context.AlpsRoles.Add(role);
+                user=AlpsUser.Create("cw","cw","财务","11","22");
+                user.AddRole(role);
+                context.AlpsUsers.Add(user);
 
 
 

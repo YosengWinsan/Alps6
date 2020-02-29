@@ -66,7 +66,7 @@ namespace Alps.Web.Service
                     };
 
                 });
-            services.AddControllers();//o => o.Filters.Add(typeof(AlpsAuthorizationFilter)));
+            services.AddControllers();//.AddJsonOptions();//o => o.Filters.Add(typeof(AlpsAuthorizationFilter)));
             //services.AddMvc(o=>{o.Filters.Add(typeof(AlpsAuthorizationFilter));}).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddDbContext<AlpsContext>(options =>
             {
@@ -78,7 +78,7 @@ namespace Alps.Web.Service
             services.AddSpaStaticFiles(
                 Configuration => { Configuration.RootPath = "wwwroot"; }
             );
-            
+            ConfigModelInvalid(services);
             //services.AddCors();
         }
 
@@ -94,7 +94,7 @@ namespace Alps.Web.Service
                 app.UseHsts();
             }
             //app.UseStatusCodePagesWithReExecute("/", null);
-            app.UseStatusCodePagesWithRedirects("/index.html");
+            //app.UseStatusCodePagesWithRedirects("/index.html");
             //app.UseCors();
             //app.UseHttpsRedirection();
             //app.UseStaticFiles(o=>{o.});
@@ -133,6 +133,32 @@ namespace Alps.Web.Service
             //         spa.UseAngularCliServer(npmScript: "start");
             //     }
             // });
+        }
+        private void ConfigModelInvalid(IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (context) =>
+                {
+                    if (context.ModelState.IsValid)
+                        return null;
+                    var error = "";
+                    foreach (var item in context.ModelState)
+                    {
+                        var state = item.Value;
+                        var message = state.Errors.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.ErrorMessage))?.ErrorMessage;
+                        if (string.IsNullOrWhiteSpace(message))
+                        {
+                            message = state.Errors.FirstOrDefault(o => o.Exception != null)?.Exception.Message;
+                        }
+                        if (string.IsNullOrWhiteSpace(message))
+                            continue;
+                        error = message;
+                        break;
+                    }
+                    return new  JsonResult(error.ToString());
+                };
+            });
         }
     }
 }

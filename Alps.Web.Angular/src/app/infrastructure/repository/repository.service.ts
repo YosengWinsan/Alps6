@@ -56,7 +56,7 @@ export class RepositoryService {
   action(action: string, param?: any) {
     this.startLoad();
     let body = JSON.stringify(param);
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    let headers =new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.processPipe(this.httpClient.post(this._baseUrl + "/" + action, body, { headers: headers }));
   }
   protected checkAndFillID(entity) {
