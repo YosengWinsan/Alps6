@@ -21,12 +21,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SettleInterestComponent } from './settle-interest/settle-interest.component';
 import { PrintVoucherComponent } from './print-voucher/print-voucher.component';
 import { LenderImportComponent } from './lender-import/lender-import.component';
+import { LoanSettingComponent } from './loan-setting/loan-setting.component';
 
 @NgModule({
   imports: [
     CommonModule, InfrastructureModule,FormsModule,
     LoanRoutingModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatAutocompleteModule, MatCheckboxModule//,MatToolbarModule
   ],
-  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent]
+  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent, LoanSettingComponent]
 })
 export class LoanModule { }

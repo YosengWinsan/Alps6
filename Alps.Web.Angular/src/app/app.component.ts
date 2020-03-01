@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from './auth/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,8 +16,12 @@ export class AppComponent {
       map(result => result.matches)
     );
   menuData: MenuItem[];
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver,private authService:AuthService,private router:Router) {
     this.menuData = MENU_DATA;
+    this.authService.loginStatus.subscribe(status => {
+      if (!status)
+        this.router.navigateByUrl('login');
+    });
   }
 }
 

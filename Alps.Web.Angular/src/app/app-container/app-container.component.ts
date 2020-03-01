@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
@@ -10,23 +10,28 @@ import { Router } from '@angular/router';
   templateUrl: './app-container.component.html',
   styleUrls: ['./app-container.component.css']
 })
-export class AppContainerComponent {
+export class AppContainerComponent implements OnDestroy {
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
     );
   menuData: MenuItem[];
   loginStatus = false;
+  loginStatusObserver;
   constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private router: Router) {
     this.menuData = MENU_DATA;
-    this.authService.loginStatus.subscribe(status => {
-      this.loginStatus = status;
-      if (!this.loginStatus)
-        this.router.navigateByUrl('login');
-    });
+    // this.loginStatusObserver = this.authService.loginStatus.subscribe(status => {
+    //   this.loginStatus = status;
+
+    //   if (!this.loginStatus)
+    //     this.router.navigateByUrl('login');
+    // });
   }
   logout() {
     this.authService.logout();
+  }
+  ngOnDestroy() {
+    //this.loginStatusObserver.unsubscribe();
   }
 }
 
@@ -36,8 +41,8 @@ interface MenuItem {
   children?: MenuItem[];
 }
 const MENU_DATA: MenuItem[] = [
-  { path: "dashboard", name: "实时动态" },  
-  { path: "crm", name: "客户关系" }, 
+  { path: "dashboard", name: "实时动态" },
+  { path: "crm", name: "客户关系" },
   { path: "product", name: "产品管理" },
   { path: "stock", name: "仓库管理" },
   { path: "purchase", name: "采购管理" },

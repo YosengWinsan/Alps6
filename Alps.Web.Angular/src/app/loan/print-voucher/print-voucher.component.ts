@@ -14,15 +14,28 @@ export class PrintVoucherComponent implements OnInit {
   }
   printInfo;
   type = "";
+  typeDecription = "";
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(param => {
       let id = param["id"] ? param["id"] : "";
       this.type = param["type"] ? param["type"] : "";
-      if (id != "" && (this.type !="")) {
+      if (id != "" && (this.type != "")) {
         this.loanService.getPrintInfo(this.type, id).subscribe((res) => {
           this.printInfo = res;
+          switch (this.type) {
+            case "Deposit":
+              this.typeDecription = "借本金款";
+              break;
+            case "Withdraw":
+              this.typeDecription = "取款结息";
+              break;
+            case "SettleInterest":
+              this.typeDecription = "结息";
+              break;
+          }
         });
       }
+
     });
   }
 

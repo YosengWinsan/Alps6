@@ -177,7 +177,8 @@ namespace Alps.Domain
 
             modelBuilder.Entity<StockInVoucher>().HasOne(p => p.Supplier).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<StockInVoucher>().HasOne(p => p.Department).WithMany().OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<StockInVoucherItem>().HasKey(p => new { p.ID, p.StockInVoucherID });
+            modelBuilder.Entity<StockInVoucherItem>().HasOne(p=>p.StockInVoucher).WithMany(p=>p.Items).HasForeignKey(p=>p.StockInVoucherID).OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<StockInVoucherItem>().HasKey(p => new { p.ID, p.StockInVoucherID });
 
             //modelBuilder.Entity<SaleOrderItem>().OwnsOne(p => p.Quantity);
             //modelBuilder.Entity<DistributionMgr.DistributionVoucherItem>().OwnsOne(p => p.Quantity);

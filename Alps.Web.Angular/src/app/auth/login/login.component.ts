@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
@@ -10,7 +10,7 @@ import { QueryService } from '../../infrastructure/infrastructure.module';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private authService: AuthService, private queryService: QueryService) {
     this.loginForm = formBuilder.group({ username: [, Validators.required], password: [, Validators.required] });
@@ -26,7 +26,10 @@ export class LoginComponent implements OnInit {
 
   }
   ngAfterViewInit() {
+    setTimeout(() => {
+      
     this.usernameInput.nativeElement.focus();
+    }, 100);
   }
   keyup(e: KeyboardEvent) {
     if (e.keyCode == 13)
@@ -50,6 +53,10 @@ export class LoginComponent implements OnInit {
         });
 
     }
+  }
+  ngOnDestroy() {
+    if (this.loginSubscription)
+      this.loginSubscription.unsubscribe();
   }
   clearWarn() { this.errorMsg = ""; }
   initDatabase() {

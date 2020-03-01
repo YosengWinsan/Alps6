@@ -1,9 +1,0 @@
-<div class="alps-commodity-catagory-container">
-  <a class="alps-commodity-catagory-button" mat-raised-button  [color]=" catagory==levelOneSelectedCatagory?'primary':''" *ngFor="let catagory of levelOneCatagories" (click)="select(catagory,1)">{{catagory.displayValue}}</a>
-</div>
-<div class="alps-commodity-catagory-container">
-  <a class="alps-commodity-catagory-button" mat-raised-button [color]=" catagory==levelTwoSelectedCatagory?'primary':''"  *ngFor="let catagory of levelTwoCatagories" (click)="select(catagory,2)">{{catagory.displayValue}}</a>
-</div>
-<div class="alps-commodity-catagory-container">
-  <a class="alps-commodity-catagory-button" mat-raised-button [color]=" catagory==levelThreeSelectedCatagory?'primary':''"  *ngFor="let catagory of levelThreeCatagories" (click)="select(catagory,3)">{{catagory.displayValue}}</a>
-</div>
