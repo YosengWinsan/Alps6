@@ -20,15 +20,14 @@ namespace Alps.Domain.LoanMgr
 
         public string VoucherNumber { get; set; }
         public string HashCode { get; set; }
-        public ICollection<WithdrawRecord> WithdrawRecords { get; set; }
+        public virtual ICollection<WithdrawRecord> WithdrawRecords { get; set; }
         public String Operator { get; set; }
         public DateTimeOffset ModifyDate { get; set; }
 
         protected LoanVoucher()
         {
             this.ModifyDate = DateTimeOffset.Now;
-            this.WithdrawRecords = new HashSet<WithdrawRecord>();
-
+            this.WithdrawRecords = new List<WithdrawRecord>();
         }
         public static LoanVoucher Create(Guid lenderID, decimal amount, decimal interestRate, string voucherNumber)
         {
@@ -43,6 +42,7 @@ namespace Alps.Domain.LoanMgr
             v.VoucherNumber = voucherNumber;
             v.DepositDate = date;
             v.InterestSettlementDate = v.DepositDate;
+            v.ModifyDate=DateTimeOffset.Now;
             return v;
         }
         public static DateTimeOffset GetSettlableDate()

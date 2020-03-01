@@ -11,7 +11,7 @@ namespace Alps.Domain
 
         public EntityBase()
         {
-            ID = IdentityGenerator.NewSequentialGuid();
+            //ID = IdentityGenerator.NewSequentialGuid();
         }
         public bool HasUpdated(byte[] oldTimestamp)
         {

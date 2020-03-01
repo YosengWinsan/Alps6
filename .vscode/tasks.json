@@ -13,7 +13,6 @@
             "options": {
                 "cwd": "${workspaceFolder}/Alps.Web.Service"
             }
-           // ,            "problemMatcher": "$msCompile"
         },
         {
             "label": "Client Build",
@@ -25,16 +24,18 @@
             "options": {
                 "cwd": "${workspaceFolder}/Alps.Web.Angular"
             }
-            //,            "problemMatcher": "$msCompile"
         },
         {
-            "label": "Build",
-            "dependsOn": [ "Client Build","Server Build"],
+            "label": "Alps Build",
+            "dependsOn": [
+                "Client Build",
+                "Server Build"
+            ],
             "dependsOrder": "sequence",
             "presentation": {
                 "reveal": "always"
             }
-        },        
+        },
         {
             "label": "Client Start",
             "command": "ng serve --o --proxy-config proxy.conf.json",
@@ -45,7 +46,6 @@
             "options": {
                 "cwd": "${workspaceFolder}/Alps.Web.Angular"
             }
-           // ,            "problemMatcher": "$msCompile"
         },
         {
             "label": "Server Start",
@@ -57,14 +57,23 @@
             "options": {
                 "cwd": "${workspaceFolder}/Alps.Web.Service"
             }
-           // ,            "problemMatcher": "$msCompile"
-        }        ,
+        },
         {
             "label": "Start",
-            "dependsOn": [ "Client Start","Server Start"],
+            "dependsOn": [
+                "Client Start",
+                "Server Start"
+            ],
             "presentation": {
                 "reveal": "always"
             }
+        },
+        {
+            "type": "npm",
+            "script": "build",
+            "path": "Alps.Web.Angular/",
+            "group": "build",
+            "problemMatcher": []
         }
     ]
 }

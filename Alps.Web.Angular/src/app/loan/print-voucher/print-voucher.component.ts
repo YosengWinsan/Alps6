@@ -13,12 +13,12 @@ export class PrintVoucherComponent implements OnInit {
     this.printInfo = {};
   }
   printInfo;
-  type = 1;
+  type = "";
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(param => {
       let id = param["id"] ? param["id"] : "";
       this.type = param["type"] ? param["type"] : "";
-      if (id != "" && (this.type > 0)) {
+      if (id != "" && (this.type !="")) {
         this.loanService.getPrintInfo(this.type, id).subscribe((res) => {
           this.printInfo = res;
         });

@@ -59,5 +59,9 @@ export class LoanService extends RepositoryService {
     this.setLender();
     return this.action("invalidate/" + id);
   }
+  importLender(importstr:string){
+    this.setLender();
+    return this.action("importlender",importstr);
+  }
 
 }

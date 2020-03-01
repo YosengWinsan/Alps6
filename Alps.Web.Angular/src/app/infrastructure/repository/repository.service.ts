@@ -104,6 +104,7 @@ export class RepositoryService {
       this.router.navigate(['/forbid']);
       return throwError("权限不够");
     }
+
     this.queryError();
     return throwError('与服务器交互失败！');
   }

@@ -206,6 +206,9 @@ namespace Alps.Domain
 
             modelBuilder.Entity<LoanVoucher>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
             modelBuilder.Entity<WithdrawRecord>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
+            // modelBuilder.Entity<WithdrawRecord>().HasOne(p=>p.LoanVoucher).WithMany(p=>p.WithdrawRecords).HasForeignKey(p=>p.LoanVoucherID);
+            // modelBuilder.Entity<LoanVoucher>().HasMany(p=>p.WithdrawRecords).WithOne(p=>p.LoanVoucher);
+            //modelBuilder.Entity<LoanVoucher>().OwnsMany(p=>p.WithdrawRecords).;
             //modelBuilder.Entity<Commodity>().HasKey(p => new { p.OwnerID, p.ProductSkuID });
             // modelBuilder.Entity<Commodity>().HasOne(p=>p.ProductSku).WithOne().HasForeignKey("");
             //modelBuilder.Entity<PurchaseOrderItem>().HasOne(p => p.Unit).WithMany().OnDelete(DeleteBehavior.Restrict);
@@ -264,7 +267,6 @@ namespace Alps.Domain
             Guid jiaoCatagoryID = Guid.Empty;
             public void Seed(AlpsContext context)
             {
-
                 //base.Seed(context);
                 CommonMgrSeed(context);
                 ProductMgrSeed(context);
@@ -294,6 +296,7 @@ namespace Alps.Domain
                 context.LoanVouchers.Add(loanvoucher);
                 loanvoucher = LoanVoucher.Create(lender.ID, 2000000, 0.006m, "456124");
                 context.LoanVouchers.Add(loanvoucher);
+                loanvoucher.Withdraw(10000);
                 context.SaveChanges();
             }
             void CommonMgrSeed(AlpsContext context)
@@ -585,22 +588,25 @@ namespace Alps.Domain
                 var sID = context.Suppliers.FirstOrDefault().ID;
                 var dID = context.Departments.OrderByDescending(p => p.ID).FirstOrDefault().ID;
                 StockInVoucher voucher = StockInVoucher.Create(sID, dID, "系统初始化");
-                voucher.AddItem(positionID, skuID, "12345", 2.3m, 1, 2100);
-                voucher.AddItem(positionID, skuID, "151515", 2.5m, 1, 2100);
                 context.StockInVouchers.Add(voucher);
+                voucher.AddItem(positionID, skuID, "12345", 2.3m, 1, 2100);
+                voucher.AddItem(positionID, skuID, "151515", 2.5m, 1, 2100);                
                 context.SaveChanges();
                 voucher = StockInVoucher.Create(sID, dID, "系统初始化2");
+                context.StockInVouchers.Add(voucher);
                 voucher.AddItem(positionID, skuID, "600001", 2.4m, 1, 2000);
                 voucher.AddItem(positionID, skuID, "600002", 2.6m, 1, 2000);
-                context.StockInVouchers.Add(voucher);
+                
                 skuID = context.ProductSkus.Find(gpSkuID).ID;
                 voucher = StockInVoucher.Create(sID, dID, "系统初始化3");
+                context.StockInVouchers.Add(voucher);
                 voucher.AddItem(positionID, skuID, "", 1000m, 1500, 1800);
                 voucher.AddItem(positionID, skuID, "", 2000m, 3000, 1700);
-                context.StockInVouchers.Add(voucher);
+                
                 voucher = StockInVoucher.Create(sID, dID, "系统初始化3");
-                voucher.AddItem(positionID, skuID, "", 500m, 750, 1700);
                 context.StockInVouchers.Add(voucher);
+                voucher.AddItem(positionID, skuID, "", 500m, 750, 1700);
+                
                 context.SaveChanges();
                 #endregion
 

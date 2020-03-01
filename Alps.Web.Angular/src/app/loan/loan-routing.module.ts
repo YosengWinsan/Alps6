@@ -9,6 +9,7 @@ import { DepositComponent } from './deposit/deposit.component';
 import { WaterBillsComponent } from './water-bills/water-bills.component';
 import { SettleInterestComponent } from './settle-interest/settle-interest.component';
 import { PrintVoucherComponent } from './print-voucher/print-voucher.component';
+import { LenderImportComponent } from './lender-import/lender-import.component';
 
 const routes: Routes = [{
   path: "", component: LoanComponent, children: [
@@ -20,7 +21,8 @@ const routes: Routes = [{
     { path: "deposit", component: DepositComponent },
     { path: "waterbills", component: WaterBillsComponent },
     { path: "settleinterest", component: SettleInterestComponent },
-    { path: "printvoucher", component: PrintVoucherComponent }]
+    { path: "printvoucher", component: PrintVoucherComponent },
+    { path: "lenderimport", component: LenderImportComponent }],
 }];
 
 @NgModule({

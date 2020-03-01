@@ -5,7 +5,7 @@
 <alps-info-chip label="已存天数" [value]="loanVoucher.interestDays"></alps-info-chip>
 <form [formGroup]="withdrawForm">
   <mat-form-field>
-    <input matInput placeholder="取款金额" formControlName="amount">
+    <input matInput type="number" placeholder="取款金额" formControlName="amount">
   </mat-form-field>
   <button mat-button (click)="confirm()">确认</button>
 </form>

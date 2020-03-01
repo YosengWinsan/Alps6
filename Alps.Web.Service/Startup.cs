@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Alps.Web.Service.Auth;
+using Newtonsoft.Json;
 
 namespace Alps.Web.Service
 {
@@ -71,6 +72,7 @@ namespace Alps.Web.Service
             services.AddDbContext<AlpsContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("AlpsContext"), b => b.MigrationsAssembly("Alps.Web.Service"));
+                
             });
             //services.AddSingleton<AlpsAuthorizationFilter>();
             services.AddScoped<Alps.Domain.Service.StockService>();
@@ -78,6 +80,7 @@ namespace Alps.Web.Service
             services.AddSpaStaticFiles(
                 Configuration => { Configuration.RootPath = "wwwroot"; }
             );
+            
             ConfigModelInvalid(services);
             //services.AddCors();
         }
@@ -99,6 +102,8 @@ namespace Alps.Web.Service
             //app.UseHttpsRedirection();
             //app.UseStaticFiles(o=>{o.});
             //app.UseSpaStaticFiles();
+            
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             //app.UseSpa();
 
@@ -136,6 +141,7 @@ namespace Alps.Web.Service
         }
         private void ConfigModelInvalid(IServiceCollection services)
         {
+            
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (context) =>
@@ -156,7 +162,7 @@ namespace Alps.Web.Service
                         error = message;
                         break;
                     }
-                    return new  JsonResult(error.ToString());
+                    return new  JsonResult(new {resultCode=400,messages=error.ToString()});
                 };
             });
         }
