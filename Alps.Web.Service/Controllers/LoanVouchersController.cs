@@ -173,7 +173,20 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(r.ID);
         }
         // GET: api/LoanVouchers/5
-
+        [HttpPost("invalidvoucher")]
+        public async Task<IActionResult> InvalidVoucher([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            LoanVoucher v = _context.LoanVouchers.Include(p => p.WithdrawRecords).FirstOrDefault(p => p.ID == id);
+            if (v == null)
+                return this.AlpsActionWarning("无此ID");
+            //v.Invalid();
+            await _context.SaveChangesAsync();
+            return this.AlpsActionOk();
+        }
 
 
         private bool LoanVoucherExists(Guid id)
