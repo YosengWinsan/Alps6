@@ -23,8 +23,8 @@ namespace Alps.Domain.LoanMgr
         public virtual ICollection<WithdrawRecord> WithdrawRecords { get; set; }
         public String Operator { get; set; }
         public DateTimeOffset ModifyDate { get; set; }
-        // public bool IsInvalid { get; set; }
-        // public DateTimeOffset? InvalidDate { get; set; }
+        public bool IsInvalid { get; set; }
+        public DateTimeOffset? InvalidDate { get; set; }
         protected LoanVoucher()
         {
             this.ModifyDate = DateTimeOffset.Now;
@@ -122,16 +122,19 @@ namespace Alps.Domain.LoanMgr
             this.ModifyDate = DateTimeOffset.Now;
             return r;
         }
-        // public void Invalid()
-        // {
-        //     if (!this.IsInvalid)
-        //     {
-        //         this.IsInvalid = true;
-        //         this.InvalidDate = DateTimeOffset.Now.Date;
-        //     }
-        //     else
-        //         throw new DomainException("不可重复作废");
+        public void Invalid()
+        {
+            if (!this.IsInvalid)
+            {
+                foreach(var r in this.WithdrawRecords){
+                    
+                }
+                this.IsInvalid = true;
+                this.InvalidDate = DateTimeOffset.Now.Date;
+            }
+            else
+                throw new DomainException("不可重复作废");
 
-        // }
+        }
     }
 }

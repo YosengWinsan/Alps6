@@ -183,7 +183,7 @@ namespace Alps.Web.Service.Controllers
             LoanVoucher v = _context.LoanVouchers.Include(p => p.WithdrawRecords).FirstOrDefault(p => p.ID == id);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
-            //v.Invalid();
+            v.Invalid();
             await _context.SaveChangesAsync();
             return this.AlpsActionOk();
         }

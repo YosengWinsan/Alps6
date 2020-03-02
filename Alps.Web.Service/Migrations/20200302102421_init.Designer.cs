@@ -4,14 +4,16 @@ using Alps.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Alps.Web.Service.Migrations
 {
     [DbContext(typeof(AlpsContext))]
-    partial class AlpsContextModelSnapshot : ModelSnapshot
+    [Migration("20200302102421_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,12 +284,6 @@ namespace Alps.Web.Service.Migrations
 
                     b.Property<DateTimeOffset>("InterestSettlementDate")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("InvalidDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsInvalid")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("LenderID")
                         .HasColumnType("uniqueidentifier");
