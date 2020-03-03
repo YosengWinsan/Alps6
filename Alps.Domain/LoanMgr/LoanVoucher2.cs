@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Alps.Domain.LoanMgr
 {
 
-    public class LoanVoucher2
+    public class LoanVoucher2 : EntityBase
     {
         public DateTimeOffset CreateTime { get; set; }
         public string Creater { get; set; }
@@ -17,14 +17,16 @@ namespace Alps.Domain.LoanMgr
         [Column(TypeName = "decimal(18,2)")]
         public decimal InterestRate { get; set; }
         public string VoucherNumber { get; set; }
-        public int IdentifyingCode { get; set; }
+        public string IdentityCode { get; set; }
 
         public virtual Lender Lender { get; set; }
         public virtual ICollection<LoanRecord> Records { get; set; }
 
         public bool IsInvalid { get; set; }
         public DateTimeOffset? InvalidDate { get; set; }
-        public string InvalidMaker{get;set;}
+        public string InvalidMaker { get; set; }
+
+        public DateTimeOffset DepositTime { get; set; }
         protected LoanVoucher2()
         {
             this.CreateTime = DateTimeOffset.Now;
@@ -52,6 +54,7 @@ namespace Alps.Domain.LoanMgr
             }
             LoanRecord record = LoanRecord.Create(LoanRecordType.Deposit, operateTime, amount, memo, creater);
             this.Records.Add(record);
+            this.DepositTime = operateTime;
         }
         public void Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater)
         {
@@ -70,11 +73,18 @@ namespace Alps.Domain.LoanMgr
                 if (!r.IsInvalid)
                     throw new DomainException("存在存取记录，不能作废");
             }
-            if(!IsInvalid)
-             throw new DomainException("已作废，不能重复作废");
-             this.IsInvalid=true;
-             this.InvalidDate=DateTimeOffset.Now;
-             this.InvalidMaker=invalidMaker;
+            if (!IsInvalid)
+                throw new DomainException("已作废，不能重复作废");
+            this.IsInvalid = true;
+            this.InvalidDate = DateTimeOffset.Now;
+            this.InvalidMaker = invalidMaker;
+        }
+
+        public static DateTimeOffset GetSettlableDate()
+        {
+            DateTimeOffset settlableDate = new DateTimeOffset(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
+            settlableDate = settlableDate.AddMonths(DateTimeOffset.Now.Month / 3 * 3 - DateTimeOffset.Now.Month);
+            return settlableDate;
         }
     }
 

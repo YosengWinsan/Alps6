@@ -1,71 +1,43 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Alps.Domain;
-using Alps.Domain.LoanMgr;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Alps.Web.Service.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    [ApiController]
-    public class LoanVouchersController : ControllerBase
+    [ApiController]    public class LoanVoucher2sController:ControllerBase
     {
         private readonly AlpsContext _context;
 
-        public LoanVouchersController(AlpsContext context)
+        public LoanVoucher2sController(AlpsContext context)
         {
             _context = context;
         }
-
-        [HttpGet("getByHashCode/{hashCode}")]
-        public IActionResult GetLoanVouchers([FromRoute]string hashCode)
-        {
-            var settlableDate = LoanVoucher.GetSettlableDate();
-            return this.AlpsActionOk(_context.LoanVouchers.Where(p => (p.HashCode.Contains(hashCode) || p.Lender.Name.Contains(hashCode)) && p.Amount > 0)
-            .Select(l => new LoanVoucherListDto()
-            {
-                ID = l.ID,
-                Date = l.DepositDate,
-                Amount = l.Amount,
-                InterestRate = l.InterestRate,
-                Lender = l.Lender.Name,
-                InterestSettlable = LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false
-            }));
-        }
-        [HttpGet("getWaterBills")]
+         [HttpGet("getWaterBills")]
         public IActionResult GetWaterBills()
         {
 
-            var todayBills = _context.LoanVouchers.Include(p => p.WithdrawRecords).Include(p => p.Lender).Where(p => p.ModifyDate.Date == DateTime.Now.Date || p.DepositDate == DateTimeOffset.Now.Date);
-            List<WaterBillDto> billDtos = new List<WaterBillDto>();
-            foreach (LoanVoucher l in todayBills)
-            {
-                if (l.DepositDate.Date == DateTimeOffset.Now.Date)
-                {
-                    billDtos.Add(new WaterBillDto() { ID = l.ID, Date = l.DepositDate, Name = l.Lender.Name, Amount = l.Amount, InterestRate = l.InterestRate, Interest = 0, Type = OperateType.Deposit });
-                }
-                foreach (WithdrawRecord r in l.WithdrawRecords)
-                {
-                    if (r.ModifyDate.Date == DateTimeOffset.Now.Date)
-                    {
-                        billDtos.Add(new WaterBillDto() { ID = r.ID, Date = r.DepositDate, Name = l.Lender.Name, Amount = r.Amount, InterestRate = r.InterestRate, Interest = 0, Type = r.Amount > 0 ? OperateType.Withdraw : OperateType.SettleInterest });
-                    }
-                }
-            }
+            var billDtos = _context.LoanVoucher2s.SelectMany(p => p.Records).Where(p => p.CreateTime.Date == DateTimeOffset.Now.Date)
+            .Select(p => new LoanRecordDto { ID = p.ID, Date = p.OperateTime, Name = p.LoanVoucher.Lender.Name, Amount = p.Amount, Interest = p.Interest, Type = p.Type });
             return this.AlpsActionOk(billDtos);
         }
-
-        public class PrintInfoRequest
+        [HttpGet("getByHashCode/{hashCode}")]
+        public IActionResult GetLoanVouchers([FromRoute]string hashCode)
         {
-            public OperateType Type { get; set; }
-            public Guid ID { get; set; }
+            return this.AlpsActionOk(_context.LoanVoucher2s.Where(p => (p.IdentityCode.Contains(hashCode) || p.Lender.Name.Contains(hashCode)) && p.Amount > 0)
+            .Select(l => new LoanVoucherListDto()
+            {
+                ID = l.ID,
+                Date = l.DepositTime,
+                Amount = l.Amount,
+                InterestRate = l.InterestRate,
+                Lender = l.Lender.Name,
+                InterestSettlable = LoanVoucher2.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false
+            }));
         }
         [HttpPost("getprintinfo")]
         public IActionResult GetPrintInfo([FromBody]PrintInfoRequest req)
@@ -187,4 +159,5 @@ namespace Alps.Web.Service.Controllers
             return _context.LoanVouchers.Any(e => e.ID == id);
         }
     }
+    
 }

@@ -1,4 +1,5 @@
 using System;
+using Alps.Domain.LoanMgr;
 
 namespace Alps.Web.Service.Model
 {
@@ -13,7 +14,7 @@ namespace Alps.Web.Service.Model
     }
     public class DepositDto
     {
-         public Guid LenderID { get; set; }
+        public Guid LenderID { get; set; }
         public decimal Amount { get; set; }
         public string VoucherNumber { get; set; }
         public DateTimeOffset Date { get; set; }
@@ -32,6 +33,17 @@ namespace Alps.Web.Service.Model
         public decimal InterestRate { get; set; }
         public decimal Interest { get; set; }
         public OperateType Type { get; set; }
+
+    }
+    public class LoanRecordDto
+    {
+        public Guid ID { get; set; }
+        public DateTimeOffset Date { get; set; }
+        public string Name { get; set; }
+        public decimal Amount { get; set; }
+        public decimal InterestRate { get; set; }
+        public decimal Interest { get; set; }
+        public LoanRecordType Type { get; set; }
 
     }
     public class LoanVoucherInfoDto
@@ -55,20 +67,26 @@ namespace Alps.Web.Service.Model
         public string Operator { get; set; }
         //For Withdraw
         public decimal Interest { get; set; }
-        public string VoucherNumber{get;set;}
-        public string MobilePhoneNumber{get;set;}
+        public string VoucherNumber { get; set; }
+        public string MobilePhoneNumber { get; set; }
 
     }
 
-    public class LenderEditDto{
-        public Guid ID{get;set;}
-        public string Name{get;set;}
-        public string IDNumber{get;set;}
-        public string MobilePhoneNumber{get;set;}
-        public string Memo{get;set;}
-        public DateTimeOffset CreateDate{get;set;}
-        public DateTimeOffset ModifyDate{get;set;}
-        public DateTimeOffset? InvalidDate{get;set;}
-        public bool Invalid{get;set;}
+    public class LenderEditDto
+    {
+        public Guid ID { get; set; }
+        public string Name { get; set; }
+        public string IDNumber { get; set; }
+        public string MobilePhoneNumber { get; set; }
+        public string Memo { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
+        public DateTimeOffset ModifyDate { get; set; }
+        public DateTimeOffset? InvalidDate { get; set; }
+        public bool Invalid { get; set; }
+    }
+    public class PrintInfoRequest
+    {
+        public OperateType Type { get; set; }
+        public Guid ID { get; set; }
     }
 }

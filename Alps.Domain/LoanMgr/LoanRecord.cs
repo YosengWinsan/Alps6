@@ -10,6 +10,7 @@ namespace Alps.Domain.LoanMgr
 
         public DateTimeOffset OperateTime { get; set; }
         public Guid LoanVoucherID { get; set; }
+        public virtual LoanVoucher2 LoanVoucher { get; set; }
         public LoanRecordType Type { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
