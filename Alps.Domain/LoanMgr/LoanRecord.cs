@@ -26,7 +26,7 @@ namespace Alps.Domain.LoanMgr
         public DateTimeOffset? InvalidDate { get; set; }
         public string InvalidMaker { get; set; }
 
-        public static LoanRecord Create(LoanRecordType type, DateTimeOffset operateTime, decimal amount, string memo, string creater)
+        public static LoanRecord Create(LoanRecordType type, DateTimeOffset operateTime, decimal amount,decimal Interest, string memo, string creater)
         {
             return new LoanRecord()
             {
@@ -35,7 +35,8 @@ namespace Alps.Domain.LoanMgr
                 Amount = amount,
                 CreateTime = DateTimeOffset.Now,
                 Creater = creater,
-                Memo = memo
+                Memo = memo,
+                Interest=Interest
             };
         }
     }

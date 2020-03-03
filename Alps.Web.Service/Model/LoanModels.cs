@@ -18,11 +18,20 @@ namespace Alps.Web.Service.Model
         public decimal Amount { get; set; }
         public string VoucherNumber { get; set; }
         public DateTimeOffset Date { get; set; }
+        public string Memo { get; set; }
     }
     public class WithdrawDto
     {
+        public DateTimeOffset OperateTime { get; set; }
+        public string Memo { get; set; }
         public Guid LoanVoucherID { get; set; }
         public decimal Amount { get; set; }
+    }
+    public class SettleInterestDto
+    {
+        public DateTimeOffset OperateTime { get; set; }
+        public string Memo { get; set; }
+        public Guid LoanVoucherID { get; set; }
     }
     public class WaterBillDto
     {
@@ -60,6 +69,7 @@ namespace Alps.Web.Service.Model
     }
     public class PrintInfo
     {
+        public Guid ID { get; set; }
         public DateTimeOffset Date { get; set; }
         public string Name { get; set; }
         public decimal Amount { get; set; }

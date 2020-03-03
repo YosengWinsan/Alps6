@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 //using System.Linq;
 
 namespace Alps.Domain.LoanMgr
@@ -45,26 +46,31 @@ namespace Alps.Domain.LoanMgr
             // v.ModifyDate = DateTimeOffset.Now;
             return v;
         }
-        public void Deposit(DateTimeOffset operateTime, decimal amount, string memo, string creater)
+        public LoanRecord Deposit(DateTimeOffset operateTime, decimal amount, string memo, string creater)
         {
             foreach (var r in this.Records)
             {
                 if (r.Type == LoanRecordType.Deposit)
                     throw new DomainException("已经存在存款记录");
             }
-            LoanRecord record = LoanRecord.Create(LoanRecordType.Deposit, operateTime, amount, memo, creater);
+            LoanRecord record = LoanRecord.Create(LoanRecordType.Deposit, operateTime, amount, 0, memo, creater);
             this.Records.Add(record);
             this.DepositTime = operateTime;
+            return record;
         }
-        public void Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater)
+        public LoanRecord Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater)
         {
-            LoanRecord record = LoanRecord.Create(LoanRecordType.Withdraw, operateTime, amount, memo, creater);
+            var interest = 0;
+            LoanRecord record = LoanRecord.Create(LoanRecordType.Withdraw, operateTime, amount, interest, memo, creater);
             this.Records.Add(record);
+            return record;
         }
-        public void SettleInterest(DateTimeOffset operateTime, decimal amount, string memo, string creater)
+        public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater)
         {
-            LoanRecord record = LoanRecord.Create(LoanRecordType.SettleInterest, operateTime, amount, memo, creater);
+            var interest = 0;
+            LoanRecord record = LoanRecord.Create(LoanRecordType.SettleInterest, operateTime, 0, interest, memo, creater);
             this.Records.Add(record);
+            return record;
         }
         public void Invalid(string invalidMaker)
         {
@@ -86,6 +92,53 @@ namespace Alps.Domain.LoanMgr
             settlableDate = settlableDate.AddMonths(DateTimeOffset.Now.Month / 3 * 3 - DateTimeOffset.Now.Month);
             return settlableDate;
         }
-    }
+        public static int GetInterestDay(DateTimeOffset startdate, DateTimeOffset stopdate)
+        {
 
-}
+            DateTime fromdate = startdate.LocalDateTime;
+            DateTime todate = stopdate.LocalDateTime;
+
+            if (fromdate.Date >= todate.Date)
+                return 0;
+
+            var enddate = todate.Date.AddDays(-1);
+            var months = (enddate.Year - fromdate.Year) * 12 + (enddate.Month - fromdate.Month) - 1;
+
+            var fromMonthDays = fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day;
+            if (months < 0)
+            {
+                var days = enddate.Subtract(fromdate.Date).Days + 1;
+                return days == fromMonthDays ? 30 : 0;
+            }
+            var fromDays = fromMonthDays + 1 - fromdate.Date.Day;
+            if (fromDays > 30 || fromDays == fromMonthDays)
+                fromDays = 30;
+
+            var endMonthDays = enddate.AddDays(1 - enddate.Day).AddMonths(1).AddDays(-1).Day;
+            var endDays = enddate.Day;
+            if (endDays > 30 || endDays == endMonthDays)
+                endDays = 30;
+
+            var interestDays = months * 30 + fromDays + endDays;
+            interestDays = interestDays < 30 ? 0 : interestDays;
+
+            return interestDays;
+        }
+        public void InvalidRecord(Guid id, string invalidMaker)
+        {
+            var r = this.Records.OrderByDescending(p => p.CreateTime).FirstOrDefault();
+            if (r == null)
+                throw new DomainException("不存在存取记录");
+            if (|| r.ID != id)
+                throw new DomainException("不存在此ID");
+
+            r.IsInvalid = true;
+            r.InvalidDate = DateTimeOffset.Now;
+            r.InvalidMaker = invalidMaker;
+            RefreshAmount();
+        }
+        private void RefreshAmount(){
+
+        }
+
+    }

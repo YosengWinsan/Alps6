@@ -1,15 +1,19 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Alps.Domain;
+using Alps.Domain.LoanMgr;
 using Alps.Web.Service.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Alps.Web.Service.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    [ApiController]    public class LoanVoucher2sController:ControllerBase
+    [ApiController]
+    public class LoanVoucher2sController : ControllerBase
     {
         private readonly AlpsContext _context;
 
@@ -17,7 +21,7 @@ namespace Alps.Web.Service.Controllers
         {
             _context = context;
         }
-         [HttpGet("getWaterBills")]
+        [HttpGet("getWaterBills")]
         public IActionResult GetWaterBills()
         {
 
@@ -36,62 +40,42 @@ namespace Alps.Web.Service.Controllers
                 Amount = l.Amount,
                 InterestRate = l.InterestRate,
                 Lender = l.Lender.Name,
-                InterestSettlable = LoanVoucher2.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false
+                InterestSettlable = LoanVoucher2.GetInterestDay(l.InterestSettlementDate, LoanVoucher2.GetSettlableDate()) >= 30 ? true : false
             }));
         }
         [HttpPost("getprintinfo")]
         public IActionResult GetPrintInfo([FromBody]PrintInfoRequest req)
         {
-            PrintInfo dto = null;
-            if (req.Type == OperateType.Deposit)
-                dto = _context.LoanVouchers.Where(p => p.ID == req.ID).Select(p => new PrintInfo
-                {
-                    Name = p.Lender.Name,
-                    Date = p.DepositDate,
-                    Amount = p.Amount,
-                    InterestRate = p.InterestRate,
-                    Operator = p.Operator,
-                    Interest = 0,
-                    VoucherNumber = p.VoucherNumber,
-                    MobilePhoneNumber = p.Lender.MobilePhoneNumber
-                }).FirstOrDefault();
-            if (req.Type == OperateType.Withdraw || req.Type == OperateType.SettleInterest)
-                dto = _context.LoanVouchers.SelectMany(p => p.WithdrawRecords).Where(p => p.ID == req.ID).Select(p => new PrintInfo
-                {
-                    Name = p.LoanVoucher.Lender.Name,
-                    Date = p.Date,
-                    Amount = p.Amount,
-                    InterestRate = p.InterestRate,
-                    Operator = p.Operator,
-                    Interest = p.Interest
-                }).FirstOrDefault();
-            // dto = _context.WithdrawRecords.Where(p => p.ID == req.ID).Select(p => new PrintInfo
-            // {
-            //     Name = p.LoanVoucher.Lender.Name,
-            //     Date = p.Date,
-            //     Amount = p.Amount,
-            //     InterestRate = p.InterestRate,
-            //     Operator = p.Operator,
-            //     Interest = p.Interest
-            // }).FirstOrDefault();
+            var dto = _context.LoanVoucher2s.SelectMany(p => p.Records).Select(p => new PrintInfo
+            {
+                ID = p.ID,
+                Name = p.LoanVoucher.Lender.Name,
+                Date = p.OperateTime,
+                Amount = p.Amount,
+                InterestRate = p.LoanVoucher.InterestRate,
+                Operator = p.Creater,
+                Interest = p.Interest,
+                VoucherNumber = p.LoanVoucher.VoucherNumber,
+                MobilePhoneNumber = p.LoanVoucher.Lender.MobilePhoneNumber
+            }).FirstOrDefault(p => p.ID == req.ID);
             return this.AlpsActionOk(dto);
         }
+
         [HttpGet("getloanvoucherinfo/{id}")]
         public IActionResult GetLoanVoucherInfo([FromRoute]Guid id)
         {
-            LoanVoucherInfoDto dto = _context.LoanVouchers.Select(p => new LoanVoucherInfoDto
+
+            LoanVoucherInfoDto dto = _context.LoanVoucher2s.Select(p => new LoanVoucherInfoDto
             {
                 ID = p.ID,
-                InterestDays = LoanVoucher.GetInterestDay(p.InterestSettlementDate, DateTime.Now),
+                InterestDays = LoanVoucher2.GetInterestDay(p.InterestSettlementDate, DateTime.Now),
                 Name = p.Lender.Name,
-                Date = p.DepositDate,
+                Date = p.DepositTime,
                 InterestSettlementDate = p.InterestSettlementDate,
                 Amount = p.Amount,
-                InterestRate = p.InterestRate
-              ,
+                InterestRate = p.InterestRate,
                 SettlableInterestDays = LoanVoucher.GetInterestDay(p.InterestSettlementDate, LoanVoucher.GetSettlableDate())
-            })
-            .Where(p => p.ID == id).FirstOrDefault();
+            }).FirstOrDefault(p => p.ID == id);
             dto.SettlableInterest = dto.SettlableInterestDays * dto.InterestRate * dto.Amount / 30;
             return this.AlpsActionOk(dto);
         }
@@ -103,22 +87,24 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest(ModelState);
             }
-            LoanVoucher v = LoanVoucher.Create(dto.LenderID, dto.Amount, 0.006m, dto.VoucherNumber, dto.Date);
-            _context.LoanVouchers.Add(v);
+
+            LoanVoucher2 v = LoanVoucher2.Create(dto.LenderID, User.Identity.Name);// dto.Amount, 0.006m, dto.VoucherNumber, dto.Date);
+            v.Deposit(dto.Date, dto.Amount, dto.Memo, User.Identity.Name);
+            _context.LoanVoucher2s.Add(v);
             await _context.SaveChangesAsync();
             return this.AlpsActionOk(v.ID);
         }
         [HttpPost("settleInterest/{id}")]
-        public async Task<IActionResult> SettleInterest([FromRoute] Guid id)
+        public async Task<IActionResult> SettleInterest([FromBody] SettleInterestDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            LoanVoucher v = _context.LoanVouchers.Include(p => p.WithdrawRecords).FirstOrDefault(p => p.ID == id);
+            LoanVoucher2 v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.ID == dto.LoanVoucherID);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
-            var r = v.InterestSettle();
+            var r = v.SettleInterest(dto.OperateTime, dto.Memo, User.Identity.Name);
             await _context.SaveChangesAsync();
             return this.AlpsActionOk(r.ID);
         }
@@ -129,10 +115,10 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest(ModelState);
             }
-            LoanVoucher v = _context.LoanVouchers.Include(p => p.WithdrawRecords).FirstOrDefault(p => p.ID == dto.LoanVoucherID);
+            LoanVoucher2 v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.ID == dto.LoanVoucherID);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
-            var r = v.Withdraw(dto.Amount);
+            var r = v.Withdraw(dto.OperateTime, dto.Amount, dto.Memo, User.Identity.Name);
             //_context.WithdrawRecords.Add(r);
             await _context.SaveChangesAsync();
             return this.AlpsActionOk(r.ID);
@@ -145,10 +131,24 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest(ModelState);
             }
-            LoanVoucher v = _context.LoanVouchers.Include(p => p.WithdrawRecords).FirstOrDefault(p => p.ID == id);
+            LoanVoucher v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.ID == id);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
             v.Invalid();
+            await _context.SaveChangesAsync();
+            return this.AlpsActionOk();
+        }
+        [HttpPost("invalidrecord")]
+        public async Task<IActionResult> InvalidRecord([FromRoute] Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            LoanVoucher2 v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.Records.Any(k => k.ID == id));
+            if (v == null)
+                return this.AlpsActionWarning("无此ID");
+            v.InvalidRecord(id);
             await _context.SaveChangesAsync();
             return this.AlpsActionOk();
         }
@@ -159,5 +159,5 @@ namespace Alps.Web.Service.Controllers
             return _context.LoanVouchers.Any(e => e.ID == id);
         }
     }
-    
+
 }
