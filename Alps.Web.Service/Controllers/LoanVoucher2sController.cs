@@ -124,20 +124,20 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(r.ID);
         }
         // GET: api/LoanVouchers/5
-        [HttpPost("invalidvoucher")]
-        public async Task<IActionResult> InvalidVoucher([FromRoute] Guid id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            LoanVoucher v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.ID == id);
-            if (v == null)
-                return this.AlpsActionWarning("无此ID");
-            v.Invalid();
-            await _context.SaveChangesAsync();
-            return this.AlpsActionOk();
-        }
+        // [HttpPost("invalidvoucher")]
+        // public async Task<IActionResult> InvalidVoucher([FromRoute] Guid id)
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return BadRequest(ModelState);
+        //     }
+        //     LoanVoucher2 v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.ID == id);
+        //     if (v == null)
+        //         return this.AlpsActionWarning("无此ID");
+        //     v.Invalid();
+        //     await _context.SaveChangesAsync();
+        //     return this.AlpsActionOk();
+        // }
         [HttpPost("invalidrecord")]
         public async Task<IActionResult> InvalidRecord([FromRoute] Guid id)
         {
@@ -148,12 +148,10 @@ namespace Alps.Web.Service.Controllers
             LoanVoucher2 v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.Records.Any(k => k.ID == id));
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
-            v.InvalidRecord(id);
+            v.InvalidRecord(id, User.Identity.Name);
             await _context.SaveChangesAsync();
             return this.AlpsActionOk();
         }
-
-
         private bool LoanVoucherExists(Guid id)
         {
             return _context.LoanVouchers.Any(e => e.ID == id);

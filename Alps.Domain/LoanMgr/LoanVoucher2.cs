@@ -129,16 +129,24 @@ namespace Alps.Domain.LoanMgr
             var r = this.Records.OrderByDescending(p => p.CreateTime).FirstOrDefault();
             if (r == null)
                 throw new DomainException("不存在存取记录");
-            if (|| r.ID != id)
+            if (r.ID != id)
                 throw new DomainException("不存在此ID");
 
             r.IsInvalid = true;
             r.InvalidDate = DateTimeOffset.Now;
             r.InvalidMaker = invalidMaker;
-            RefreshAmount();
+            switch (r.Type)
+            {
+                case LoanRecordType.Withdraw:
+                    this.Amount = this.Amount + r.Amount;
+                    break;
+                case LoanRecordType.Deposit:
+                    this.Amount = this.Amount - r.Amount;
+                    this.IsInvalid = true;
+                    this.InvalidDate = DateTimeOffset.Now;
+                    this.InvalidMaker = invalidMaker;
+                    break;
+            }
         }
-        private void RefreshAmount(){
-
-        }
-
     }
+}

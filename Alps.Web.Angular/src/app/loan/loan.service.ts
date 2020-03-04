@@ -13,7 +13,7 @@ export class LoanService extends RepositoryService {
     this.setBaseUrl("api/lenders");
   }
   private setLoanVoucher() {
-    this.setBaseUrl("api/loanvouchers");
+    this.setBaseUrl("api/loanvoucher2s");
   }
   getLenders() {
     this.setLender();
