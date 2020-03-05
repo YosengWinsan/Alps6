@@ -31,10 +31,11 @@ namespace Alps.Web.Service.Migrations
                     InterestSettlementDate = table.Column<DateTimeOffset>(nullable: false),
                     InterestRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     VoucherNumber = table.Column<string>(nullable: true),
-                    IdentifyingCode = table.Column<int>(nullable: false),
+                    IdentityCode = table.Column<string>(nullable: true),
                     IsInvalid = table.Column<bool>(nullable: false),
                     InvalidDate = table.Column<DateTimeOffset>(nullable: true),
-                    InvalidMaker = table.Column<string>(nullable: true)
+                    InvalidMaker = table.Column<string>(nullable: true),
+                    DepositTime = table.Column<DateTimeOffset>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,24 +66,23 @@ namespace Alps.Web.Service.Migrations
                     ReviewTime = table.Column<DateTimeOffset>(nullable: false),
                     IsInvalid = table.Column<bool>(nullable: false),
                     InvalidDate = table.Column<DateTimeOffset>(nullable: true),
-                    InvalidMaker = table.Column<string>(nullable: true),
-                    LoanVoucher2ID = table.Column<Guid>(nullable: true)
+                    InvalidMaker = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Loan_LoanRecord", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Loan_LoanRecord_Loan_LoanVoucher2s_LoanVoucher2ID",
-                        column: x => x.LoanVoucher2ID,
+                        name: "FK_Loan_LoanRecord_Loan_LoanVoucher2s_LoanVoucherID",
+                        column: x => x.LoanVoucherID,
                         principalTable: "Loan_LoanVoucher2s",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Loan_LoanRecord_LoanVoucher2ID",
+                name: "IX_Loan_LoanRecord_LoanVoucherID",
                 table: "Loan_LoanRecord",
-                column: "LoanVoucher2ID");
+                column: "LoanVoucherID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loan_LoanVoucher2s_LenderID",

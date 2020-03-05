@@ -11,6 +11,7 @@ import { SettleInterestComponent } from './settle-interest/settle-interest.compo
 import { PrintVoucherComponent } from './print-voucher/print-voucher.component';
 import { LenderImportComponent } from './lender-import/lender-import.component';
 import { LoanSettingComponent } from './loan-setting/loan-setting.component';
+import { LoanVoucherDetailComponent } from './loan-voucher-detail/loan-voucher-detail.component';
 
 const routes: Routes = [{
   path: "", component: LoanComponent, children: [
@@ -24,7 +25,8 @@ const routes: Routes = [{
     { path: "settleinterest", component: SettleInterestComponent },
     { path: "printvoucher", component: PrintVoucherComponent },
     { path: "lenderimport", component: LenderImportComponent },
-    { path: "loansetting", component: LoanSettingComponent }
+    { path: "loansetting", component: LoanSettingComponent },
+    { path: "loanvoucherdetail", component: LoanVoucherDetailComponent }
   ],
 }];
 

@@ -10,7 +10,7 @@ export class WaterBillsComponent implements OnInit {
 
   constructor(private loanService:LoanService) { }
   waterbills;
-  displayedColumns=["date","type","name","amount","interestRate","interest","action"];
+  displayedColumns=["date","type","name","amount","interestRate","interest","isInvalid","action"];
   ngOnInit() {
     this.waterbills= this.loanService.getWaterBills();
   }

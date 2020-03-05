@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Alps.Domain.LoanMgr;
 
 namespace Alps.Web.Service.Model
@@ -53,6 +54,8 @@ namespace Alps.Web.Service.Model
         public decimal InterestRate { get; set; }
         public decimal Interest { get; set; }
         public LoanRecordType Type { get; set; }
+        public Guid LoanVoucherID { get; set; }
+        public bool IsInvalid { get; set; }
 
     }
     public class LoanVoucherInfoDto
@@ -99,4 +102,27 @@ namespace Alps.Web.Service.Model
         public OperateType Type { get; set; }
         public Guid ID { get; set; }
     }
+    public class LoanVoucherDetailDto
+    {
+        public DateTimeOffset OperateTime { get; set; }
+        public string Lender { get; set; }
+        public decimal Amount { get; set; }
+        public decimal DepositAmount { get; set; }
+        public ICollection<LoanRecordDto> Records { get; set; }
+        public bool Isinvalid { get; set; }
+
+    }
+    public class InterestRateListDto
+    {
+        public DateTimeOffset PublishDate { get; set; }
+        public string Publisher { get; set; }
+        public decimal Rate { get; set; }
+        public DateTimeOffset StartExecutionDate { get; set; }
+    }
+    public class InterestRatePublishDto
+    {
+        public decimal Rate { get; set; }
+        public DateTimeOffset StartExecutionDate { get; set; }
+    }
+
 }

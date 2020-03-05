@@ -22,12 +22,13 @@ import { SettleInterestComponent } from './settle-interest/settle-interest.compo
 import { PrintVoucherComponent } from './print-voucher/print-voucher.component';
 import { LenderImportComponent } from './lender-import/lender-import.component';
 import { LoanSettingComponent } from './loan-setting/loan-setting.component';
+import { LoanVoucherDetailComponent } from './loan-voucher-detail/loan-voucher-detail.component';
 
 @NgModule({
   imports: [
     CommonModule, InfrastructureModule,FormsModule,
     LoanRoutingModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatAutocompleteModule, MatCheckboxModule//,MatToolbarModule
   ],
-  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent, LoanSettingComponent]
+  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent, LoanSettingComponent, LoanVoucherDetailComponent]
 })
 export class LoanModule { }

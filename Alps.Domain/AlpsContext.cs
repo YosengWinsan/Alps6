@@ -94,6 +94,7 @@ namespace Alps.Domain
         public DbSet<WithdrawRecord> WithdrawRecords { get; set; }
 
         public DbSet<LoanVoucher2> LoanVoucher2s { get; set; }
+        public DbSet<LoanSetting> LoanSettings{get;set;}
 
         #endregion
         #region LogisticsMgr

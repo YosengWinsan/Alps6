@@ -26,8 +26,10 @@ namespace Alps.Domain.LoanMgr
         public bool IsInvalid { get; set; }
         public DateTimeOffset? InvalidDate { get; set; }
         public string InvalidMaker { get; set; }
-
         public DateTimeOffset DepositTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal DepositAmount { get; set; }
         protected LoanVoucher2()
         {
             this.CreateTime = DateTimeOffset.Now;
@@ -56,6 +58,8 @@ namespace Alps.Domain.LoanMgr
             LoanRecord record = LoanRecord.Create(LoanRecordType.Deposit, operateTime, amount, 0, memo, creater);
             this.Records.Add(record);
             this.DepositTime = operateTime;
+            this.Amount = this.Amount + record.Amount;
+            this.DepositAmount = record.Amount;
             return record;
         }
         public LoanRecord Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater)
@@ -63,6 +67,7 @@ namespace Alps.Domain.LoanMgr
             var interest = 0;
             LoanRecord record = LoanRecord.Create(LoanRecordType.Withdraw, operateTime, amount, interest, memo, creater);
             this.Records.Add(record);
+            this.Amount = this.Amount - record.Amount;
             return record;
         }
         public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater)
@@ -134,7 +139,7 @@ namespace Alps.Domain.LoanMgr
 
             r.IsInvalid = true;
             r.InvalidDate = DateTimeOffset.Now;
-            r.InvalidMaker = invalidMaker;
+            r.InvalidMaker = invalidMaker;            
             switch (r.Type)
             {
                 case LoanRecordType.Withdraw:

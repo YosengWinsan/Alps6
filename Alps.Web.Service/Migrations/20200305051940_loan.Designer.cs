@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alps.Web.Service.Migrations
 {
     [DbContext(typeof(AlpsContext))]
-    [Migration("20200303012051_loan")]
+    [Migration("20200305051940_loan")]
     partial class loan
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -291,9 +291,6 @@ namespace Alps.Web.Service.Migrations
                     b.Property<bool>("IsInvalid")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("LoanVoucher2ID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("LoanVoucherID")
                         .HasColumnType("uniqueidentifier");
 
@@ -319,7 +316,7 @@ namespace Alps.Web.Service.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("LoanVoucher2ID");
+                    b.HasIndex("LoanVoucherID");
 
                     b.ToTable("Loan_LoanRecord");
                 });
@@ -393,8 +390,11 @@ namespace Alps.Web.Service.Migrations
                     b.Property<string>("Creater")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdentifyingCode")
-                        .HasColumnType("int");
+                    b.Property<DateTimeOffset>("DepositTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("IdentityCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("InterestRate")
                         .HasColumnType("decimal(18,2)");
@@ -1901,9 +1901,11 @@ namespace Alps.Web.Service.Migrations
 
             modelBuilder.Entity("Alps.Domain.LoanMgr.LoanRecord", b =>
                 {
-                    b.HasOne("Alps.Domain.LoanMgr.LoanVoucher2", null)
+                    b.HasOne("Alps.Domain.LoanMgr.LoanVoucher2", "LoanVoucher")
                         .WithMany("Records")
-                        .HasForeignKey("LoanVoucher2ID");
+                        .HasForeignKey("LoanVoucherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Alps.Domain.LoanMgr.LoanVoucher", b =>

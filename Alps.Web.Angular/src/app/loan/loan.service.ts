@@ -60,12 +60,40 @@ export class LoanService extends RepositoryService {
     return this.action("invalidate/" + id);
   }
   importLender(importstr:string){
-    this.setLender();
+    this.setLoanVoucher();
     return this.action("importlender",importstr);
   }
   invalidvoucher(id:string){
     this.setLoanVoucher();
     return this.action("invalidvoucher/"+id);
   }
+  invalidrecord(id:string){
+    this.setLoanVoucher();
+    return this.action("invalidrecord/"+id);
+  }
+  getloanvoucherdetail(id:string){
+    this.setLoanVoucher();
+    return this.get('getloanvoucherdetail/'+id);
+  }
+  getloansetting (){
+    this.setLoanVoucher();
+    return this.get('getloansetting');
+  }
+  saveloansetting(){
+    this.setLoanVoucher();
+    return this.action('saveloansetting');
+  }
+  getloaninterestrates(){
+    this.setLoanVoucher();
+    return this.get('getloaninterestrates');
+  }
+  publishnewrate(sedate:Date,rate:Number){
+    this.setLoanVoucher();
+    return this.action("publishnewrate",{startExecutionDate:sedate,rate:rate});
+  }
+  // getloanvoucherdetailbyrecordid(id:string){
+  //   this.setLoanVoucher();
+  //   return this.action('getloanvoucherdetailbyrecordid/'+id);
+  // }
 
 }

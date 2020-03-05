@@ -158,21 +158,21 @@ namespace Alps.Web.Service.Controllers
 
             return this.AlpsActionOk();
         }
-        [HttpPost("importlender")]
-        public async Task<IActionResult> ImportLender([FromBody]string list)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var lenderList = list.Split(",");
-            foreach (string lender in lenderList)
-            {
-                if (lender != string.Empty)
-                    _context.Lenders.Add(Lender.Create(lender, "Import", "Import"));
-            }
-            await _context.SaveChangesAsync();
-            return this.AlpsActionOk();
-        }
+        // [HttpPost("importlender")]
+        // public async Task<IActionResult> ImportLender([FromBody]string list)
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return BadRequest(ModelState);
+        //     }
+        //     var lenderList = list.Split(",");
+        //     foreach (string lender in lenderList)
+        //     {
+        //         if (lender != string.Empty)
+        //             _context.Lenders.Add(Lender.Create(lender, "Import", "Import"));
+        //     }
+        //     await _context.SaveChangesAsync();
+        //     return this.AlpsActionOk();
+        // }
     }
 }

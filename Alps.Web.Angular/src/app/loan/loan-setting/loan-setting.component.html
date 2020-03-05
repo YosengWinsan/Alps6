@@ -1,1 +1,29 @@
-<p>loan-setting works!</p>
+最少存款天数:<input type="number">
+最少存款金额:<input type="number">
+<div>
+    利率发布:
+    <form [formGroup]="rateForm">
+        <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="开始执行时间"  formControlName="startExecutionDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="利率" formControlName="rate">
+        </mat-form-field>
+    </form>
+    <div class="action-toolbar">
+        <button mat-stroked-button (click)="publishNewInterestRate()">发布</button>
+    </div>
+</div>
+<table>
+    <tr>
+        <td>发布日期</td><td>开始执行日期</td><td>利率</td><td>发布人</td>
+    </tr>
+    <tr *ngFor="let r of rateList">
+        <td>{{r.publishDate}}</td>
+        <td>{{r.startExecutionDate}}</td>
+        <td>{{r.rate}}</td>
+        <td>{{r.publisher}}</td>
+    </tr>
+</table>

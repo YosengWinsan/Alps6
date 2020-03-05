@@ -21,12 +21,40 @@ namespace Alps.Web.Service.Controllers
         {
             _context = context;
         }
+        private IQueryable<LoanVoucher2> GetLoanVoucher()
+        {
+            return _context.LoanVoucher2s.Include(p => p.Records);
+
+        }
+        private LoanVoucherDetailDto MapToDetailDto(LoanVoucher2 loanVoucher)
+        {
+            LoanVoucherDetailDto dto = new LoanVoucherDetailDto();
+            dto.OperateTime = loanVoucher.DepositTime;
+            dto.Lender = loanVoucher.Lender.Name;
+            dto.Amount = loanVoucher.Amount;
+            dto.DepositAmount = loanVoucher.DepositAmount;
+            dto.Isinvalid = loanVoucher.IsInvalid;
+            dto.Records = loanVoucher.Records.Select(p => new LoanRecordDto { IsInvalid = p.IsInvalid, LoanVoucherID = p.LoanVoucherID, ID = p.ID, Date = p.OperateTime, Name = p.LoanVoucher.Lender.Name, Amount = p.Amount, Interest = p.Interest, Type = p.Type }).ToList();
+            return dto;
+        }
+        [HttpGet("getloanvoucherdetail/{id}")]
+        public IActionResult GetLoanVoucherDetail([FromRoute]Guid id)
+        {
+            return this.AlpsActionOk(this.MapToDetailDto(this.GetLoanVoucher().Include(p => p.Lender).FirstOrDefault(p => p.ID == id)));
+        }
+        // [HttpGet("getloanvoucherdetailbyrecordID/{id}")]
+        // public IActionResult GetLoanVoucherDetailByRecordID([FromRoute]Guid id)
+        // {
+        //     return this.AlpsActionOk(this.MapToDetailDto(this.GetLoanVoucher().FirstOrDefault(p => p.Records.Any(k => k.ID == id))));
+        // }
+
+
         [HttpGet("getWaterBills")]
         public IActionResult GetWaterBills()
         {
 
             var billDtos = _context.LoanVoucher2s.SelectMany(p => p.Records).Where(p => p.CreateTime.Date == DateTimeOffset.Now.Date)
-            .Select(p => new LoanRecordDto { ID = p.ID, Date = p.OperateTime, Name = p.LoanVoucher.Lender.Name, Amount = p.Amount, Interest = p.Interest, Type = p.Type });
+            .Select(p => new LoanRecordDto { IsInvalid = p.IsInvalid, LoanVoucherID = p.LoanVoucherID, ID = p.ID, Date = p.OperateTime, Name = p.LoanVoucher.Lender.Name, Amount = p.Amount, Interest = p.Interest, Type = p.Type });
             return this.AlpsActionOk(billDtos);
         }
         [HttpGet("getByHashCode/{hashCode}")]
@@ -138,7 +166,7 @@ namespace Alps.Web.Service.Controllers
         //     await _context.SaveChangesAsync();
         //     return this.AlpsActionOk();
         // }
-        [HttpPost("invalidrecord")]
+        [HttpPost("invalidrecord/{id}")]
         public async Task<IActionResult> InvalidRecord([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
@@ -156,6 +184,90 @@ namespace Alps.Web.Service.Controllers
         {
             return _context.LoanVouchers.Any(e => e.ID == id);
         }
+        [HttpGet("getloaninterestrates")]
+        public IActionResult GetInterestRates()
+        {
+            return this.AlpsActionOk(_context.LoanSettings.SelectMany(p => p.InterestRates));
+        }
+        [HttpPost("publishnewrate")]
+        public async Task<IActionResult> PublishNewRate([FromBody] InterestRatePublishDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            LoanSetting setting = DoGetLoanSetting();
+            setting.PublishInterestRate(dto.StartExecutionDate, dto.Rate, User.Identity.Name);
+            await _context.SaveChangesAsync();
+            return this.AlpsActionOk(setting.InterestRates);
+        }
+        [HttpPost("saveloansetting")]
+        public async Task<IActionResult> SaveLoanSetting([FromBody] InterestRatePublishDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            LoanSetting setting = DoGetLoanSetting();
+            setting.PublishInterestRate(dto.StartExecutionDate, dto.Rate, User.Identity.Name);
+            await _context.SaveChangesAsync();
+            return this.AlpsActionOk(setting.InterestRates);
+        }
+        [HttpGet("getloansetting")]
+        public IActionResult GetLoanSetting()
+        {
+            return this.AlpsActionOk(DoGetLoanSetting());
+        }
+
+        private LoanSetting DoGetLoanSetting()
+        {
+            LoanSetting setting = _context.LoanSettings.Include(p => p.InterestRates).FirstOrDefault();
+            if (setting == null)
+                setting = LoanSetting.Create(0, 0);
+            _context.SaveChanges();
+            return setting;
+        }
+        [HttpPost("importlender")]
+        public async Task<IActionResult> ImportLender([FromBody]string list)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var lenderList = list.Split("^");
+            foreach (string lender in lenderList)
+            {
+                if (lender != string.Empty)
+                {
+                    var lenderPropert = lender.Split(",");
+                    if (lenderPropert.Length == 3)
+                        _context.Lenders.Add(Lender.Create(lenderPropert[0], lenderPropert[1], lenderPropert[2]));
+                }
+            }
+            await _context.SaveChangesAsync();
+            return this.AlpsActionOk();
+        }
+        [HttpPost("importloanrecord")]
+        public async Task<IActionResult> ImportLoanRecord([FromBody]string list)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var lenderList = list.Split("^");
+            foreach (string lender in lenderList)
+            {
+                if (lender != string.Empty)
+                {
+                    var lenderPropert = lender.Split(",");
+                    if (lenderPropert.Length == 3)
+                        _context.Lenders.Add(Lender.Create(lenderPropert[0], lenderPropert[1], lenderPropert[2]));
+                }
+            }
+            await _context.SaveChangesAsync();
+            return this.AlpsActionOk();
+        }
+
     }
 
 }
