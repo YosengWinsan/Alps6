@@ -14,7 +14,7 @@ export class LenderEditComponent implements OnInit {
 
   constructor(private loanService: LoanService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) { }
   lenderForm = this.formBuilder.group({
-    id: [], name: [, Validators.required], idNumber: [, Validators.required], mobilePhoneNumber: [], memo: [],
+    id: [], name: [, Validators.required], idNumber: [], mobilePhoneNumber: [], memo: [],
     createDate: [{ value: '', disabled: true }], modifyDate: [{ value: '', disabled: true }], invalid: [{ value: '', disabled: true }], invalidDate: [{ value: '', disabled: true }]
   });
   currentID:string;

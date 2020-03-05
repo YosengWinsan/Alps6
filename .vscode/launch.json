@@ -4,21 +4,28 @@
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    {
-        "name": ".NET Core Attach",
-        "type": "coreclr",
-        "request": "attach",
-        "processId": "${command:pickProcess}"
-        //"processName": "Alps.Web.Service.dll"
-    },
-{
-    "type": "chrome",
-    "request": "launch",
-    "name": "启动Chrome调试",
-    "url": "http://localhost:4200",
-    "webRoot": "${workspaceFolder}/Alps.Web.Angular"
-},
-     
+        {
+            "name": "启动Edge调试",
+            "type": "edge",
+            "version": "dev",
+            "request": "launch",
+            "url": "http://localhost:4200/",
+            "webRoot": "${workspaceFolder}/Alps.Web.Angular"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+            //"processName": "Alps.Web.Service.dll"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "启动Chrome调试",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}/Alps.Web.Angular"
+        },
         {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",

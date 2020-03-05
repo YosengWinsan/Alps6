@@ -90,10 +90,10 @@ namespace Alps.Domain
         #region LoanMgr
 
         public DbSet<Lender> Lenders { get; set; }
-        public DbSet<LoanVoucher> LoanVouchers { get; set; }
-        public DbSet<WithdrawRecord> WithdrawRecords { get; set; }
+        // public DbSet<LoanVoucher> LoanVouchers { get; set; }
+        // public DbSet<WithdrawRecord> WithdrawRecords { get; set; }
 
-        public DbSet<LoanVoucher2> LoanVoucher2s { get; set; }
+        public DbSet<LoanVoucher> LoanVouchers { get; set; }
         public DbSet<LoanSetting> LoanSettings{get;set;}
 
         #endregion
@@ -208,8 +208,8 @@ namespace Alps.Domain
 
             modelBuilder.Entity<Commodity>().HasOne(p => p.Sku).WithMany().HasForeignKey(f => f.ID);
 
-            modelBuilder.Entity<LoanVoucher>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
-            modelBuilder.Entity<WithdrawRecord>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
+            // modelBuilder.Entity<LoanVoucher>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
+            // modelBuilder.Entity<WithdrawRecord>().Property(p => p.InterestRate).HasColumnType("decimal(7,4)");
             // modelBuilder.Entity<WithdrawRecord>().HasOne(p=>p.LoanVoucher).WithMany(p=>p.WithdrawRecords).HasForeignKey(p=>p.LoanVoucherID);
             // modelBuilder.Entity<LoanVoucher>().HasMany(p=>p.WithdrawRecords).WithOne(p=>p.LoanVoucher);
             //modelBuilder.Entity<LoanVoucher>().OwnsMany(p=>p.WithdrawRecords).;
@@ -296,19 +296,19 @@ namespace Alps.Domain
                 lender = Lender.Create("王五", "3501821234121212", "13905911232");
                 context.Lenders.Add(lender);
 
-                LoanVoucher loanvoucher = LoanVoucher.Create(lender.ID, 1000000, 0.006m, "456123", new DateTimeOffset(DateTime.Now.AddMonths(-4)));
-                context.LoanVouchers.Add(loanvoucher);
-                loanvoucher = LoanVoucher.Create(lender.ID, 2000000, 0.006m, "456124");
-                context.LoanVouchers.Add(loanvoucher);
-                loanvoucher.Withdraw(10000);
-                context.SaveChanges();
+                // LoanVoucher loanvoucher = LoanVoucher.Create(lender.ID, 1000000, 0.006m, "456123", new DateTimeOffset(DateTime.Now.AddMonths(-4)));
+                // context.LoanVouchers.Add(loanvoucher);
+                // loanvoucher = LoanVoucher.Create(lender.ID, 2000000, 0.006m, "456124");
+                // context.LoanVouchers.Add(loanvoucher);
+                // loanvoucher.Withdraw(10000);
+                // context.SaveChanges();
 
-                LoanVoucher2 voucher = LoanVoucher2.Create(lender.ID, "系统");
+                LoanVoucher voucher = LoanVoucher.Create(lender.ID, "系统");
                 voucher.Deposit(DateTimeOffset.Now.AddMonths(-4), 100000, "系统测试", "系统测试");
-                context.LoanVoucher2s.Add(voucher);
-                voucher = LoanVoucher2.Create(lender.ID, "系统");
+                context.LoanVouchers.Add(voucher);
+                voucher = LoanVoucher.Create(lender.ID, "系统");
                 voucher.Deposit(DateTimeOffset.Now.AddDays(-4), 200000, "系统测试", "系统测试");
-                context.LoanVoucher2s.Add(voucher);
+                context.LoanVouchers.Add(voucher);
                 context.SaveChanges();
             }
             void CommonMgrSeed(AlpsContext context)

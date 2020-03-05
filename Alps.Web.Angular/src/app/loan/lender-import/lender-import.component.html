@@ -1,5 +1,77 @@
-
-<mat-form-field>
-    <textarea matInput placeholder="名称" [(ngModel)]="list"></textarea>
+<div>
+  借款人导入
+  <mat-form-field>
+    <textarea matInput placeholder="名称" [(ngModel)]="liststr"></textarea>
   </mat-form-field>
-  <button mat-stroked-button (click)="import()">提交</button>
+  <button mat-stroked-button (click)="parseLender()">解析</button>
+  <table border="1">
+    <tr>
+      <th>序号</th>
+      <th>姓名</th>
+
+      <th>手机</th>      <th>身份证号</th>
+    </tr>
+    <tr *ngFor="let l of lenders;let i = index">
+      <td>{{i+1}}</td>
+      <td>{{l.name}}</td>
+      <td>{{l.idNumber}}</td>
+      <td>{{l.mobilePhoneNumber}}</td>
+    </tr>
+  </table>
+  <button *ngIf="lenders.length>0" (click)="importLender()">提交</button>
+</div>
+<div>
+  条子导入
+  <mat-form-field>
+    <textarea matInput placeholder="名称" [(ngModel)]="voucherstr"></textarea>
+  </mat-form-field>
+  <button mat-stroked-button (click)="parsevoucher()">解析</button>
+  <table border="1">
+    <tr>
+      <th>序号</th>
+      <th>姓名</th>
+      <th>金额</th>
+      <th>存款时间</th>
+      <th>开条时间</th>
+      <th>备注</th>
+    </tr>
+    <tr *ngFor="let l of vouchers;let i = index">
+      <td>{{i+1}}</td>
+      <td>{{l.lender}}</td>
+      <td>{{l.amount}}</td>
+      <td>{{l.date}}</td>
+      <td>{{l.reWriteTime}}</td>
+      <td>{{l.memo}}</td>
+    </tr>
+  </table>
+  <button *ngIf="vouchers.length>0" (click)="importvoucher()">提交</button>
+</div>
+
+<div>
+  取款导入
+  <mat-form-field>
+    <textarea matInput placeholder="名称" [(ngModel)]="withdrawstr"></textarea>
+  </mat-form-field>
+  <button mat-stroked-button (click)="parsewithdraw()">解析</button>
+  <table border="1">
+    <tr>
+      <th>序号</th>
+      <th>姓名</th>
+      <th>取款时间</th>
+      <th>金额</th>
+      
+      <th>原存款时间</th>
+      <th>原条金额</th>
+    </tr>
+    <tr *ngFor="let l of withdraws;let i = index">
+      <td>{{i+1}}</td>
+      <td>{{l.lender}}</td>
+      <td>{{l.date}}</td>
+      <td>{{l.amount}}</td>
+
+      <td>{{l.depositDate}}</td>
+      <td>{{l.depositAmount}}</td>
+    </tr>
+  </table>
+  <button *ngIf="withdraws.length>0" (click)="importwithdraw()">提交</button>
+</div>

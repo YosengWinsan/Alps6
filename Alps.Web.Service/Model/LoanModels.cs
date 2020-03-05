@@ -42,7 +42,7 @@ namespace Alps.Web.Service.Model
         public decimal Amount { get; set; }
         public decimal InterestRate { get; set; }
         public decimal Interest { get; set; }
-        public OperateType Type { get; set; }
+        public LoanRecordType Type { get; set; }
 
     }
     public class LoanRecordDto
@@ -99,7 +99,7 @@ namespace Alps.Web.Service.Model
     }
     public class PrintInfoRequest
     {
-        public OperateType Type { get; set; }
+        public LoanRecordType Type { get; set; }
         public Guid ID { get; set; }
     }
     public class LoanVoucherDetailDto
@@ -123,6 +123,30 @@ namespace Alps.Web.Service.Model
     {
         public decimal Rate { get; set; }
         public DateTimeOffset StartExecutionDate { get; set; }
+    }
+    public class VoucherImportDto
+    {
+        public string Lender { get; set; }
+        public decimal Amount { get; set; }
+        public string VoucherNumber { get; set; }
+        public DateTimeOffset Date { get; set; }
+        public string Memo { get; set; }
+        public DateTimeOffset ReWriteTime { get; set; }
+    }
+    public class WithdrawImportDto
+    {
+        public string Lender { get; set; }
+        public decimal Amount { get; set; }
+        public decimal DepositAmount { get; set; }
+        public DateTimeOffset DepositDate { get; set; }
+        public DateTimeOffset Date { get; set; }
+
+    }
+    public class VoucherSummaryDto
+    {
+        public string Lender { get; set; }
+        public decimal TotalAmount { get; set; }
+        public int Count { get; set; }
     }
 
 }

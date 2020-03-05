@@ -13,7 +13,7 @@ export class LoanService extends RepositoryService {
     this.setBaseUrl("api/lenders");
   }
   private setLoanVoucher() {
-    this.setBaseUrl("api/loanvoucher2s");
+    this.setBaseUrl("api/loanvouchers");
   }
   getLenders() {
     this.setLender();
@@ -59,41 +59,53 @@ export class LoanService extends RepositoryService {
     this.setLender();
     return this.action("invalidate/" + id);
   }
-  importLender(importstr:string){
+
+  invalidvoucher(id: string) {
     this.setLoanVoucher();
-    return this.action("importlender",importstr);
+    return this.action("invalidvoucher/" + id);
   }
-  invalidvoucher(id:string){
+  invalidrecord(id: string) {
     this.setLoanVoucher();
-    return this.action("invalidvoucher/"+id);
+    return this.action("invalidrecord/" + id);
   }
-  invalidrecord(id:string){
+  getloanvoucherdetail(id: string) {
     this.setLoanVoucher();
-    return this.action("invalidrecord/"+id);
+    return this.get('getloanvoucherdetail/' + id);
   }
-  getloanvoucherdetail(id:string){
-    this.setLoanVoucher();
-    return this.get('getloanvoucherdetail/'+id);
-  }
-  getloansetting (){
+  getloansetting() {
     this.setLoanVoucher();
     return this.get('getloansetting');
   }
-  saveloansetting(){
+  saveloansetting() {
     this.setLoanVoucher();
     return this.action('saveloansetting');
   }
-  getloaninterestrates(){
+  getloaninterestrates() {
     this.setLoanVoucher();
     return this.get('getloaninterestrates');
   }
-  publishnewrate(sedate:Date,rate:Number){
+  publishnewrate(sedate: Date, rate: Number) {
     this.setLoanVoucher();
-    return this.action("publishnewrate",{startExecutionDate:sedate,rate:rate});
+    return this.action("publishnewrate", { startExecutionDate: sedate, rate: rate });
   }
-  // getloanvoucherdetailbyrecordid(id:string){
-  //   this.setLoanVoucher();
-  //   return this.action('getloanvoucherdetailbyrecordid/'+id);
-  // }
-
+  getVoucherSummary() {
+    this.setLoanVoucher();
+    return this.get("getloanvouchersummary");
+  }
+  importLender(dto) {
+    this.setLoanVoucher();
+    return this.action("importlender", dto);
+  }
+  importvoucher(dto) {
+    this.setLoanVoucher();
+    return this.action("importvoucher", dto);
+  }
+  importdeposit(dto) {
+    this.setLoanVoucher();
+    return this.action("importdeposit", dto);
+  }
+  importwithdraw(dto) {
+    this.setLoanVoucher();
+    return this.action("importwithdraw", dto);
+  }
 }
