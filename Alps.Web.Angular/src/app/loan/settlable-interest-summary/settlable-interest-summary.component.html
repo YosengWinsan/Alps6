@@ -1,0 +1,37 @@
+<mat-table #table [dataSource]="summary" matSort aria-label="Elements">
+    <!-- Id Column -->
+    <ng-container matColumnDef="lender">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>存款人</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.lender}}</mat-cell>
+        <mat-footer-cell *matFooterCellDef> 合计 </mat-footer-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="count">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>张数</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.count}}</mat-cell>
+        <mat-footer-cell *matFooterCellDef> {{totalCount}} </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="totalAmount">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>总金额</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.totalAmount}}</mat-cell>
+        <mat-footer-cell *matFooterCellDef> {{totalAmount}} </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="totalInterest">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>总利息</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.totalInterest}}</mat-cell>
+        <mat-footer-cell *matFooterCellDef> {{totalInterest}} </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef> 查看 </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+
+            <a routerLink="../loanvoucherlist" [queryParams]="{filter:row.lender}">
+                查看明细
+            </a>
+        </mat-cell>
+        <mat-footer-cell *matFooterCellDef>  </mat-footer-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-footer-row *matFooterRowDef="displayedColumns"></mat-footer-row>
+</mat-table>

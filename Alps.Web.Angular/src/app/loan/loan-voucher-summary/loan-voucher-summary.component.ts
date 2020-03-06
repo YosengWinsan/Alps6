@@ -21,10 +21,9 @@ export class LoanVoucherSummaryComponent implements OnInit {
         this.totalAmount = this.totalAmount + p.totalAmount;
         this.totalCount = this.totalCount + p.count;
       });
-      this.totalAmount = Math.round(this.totalAmount * 10000) / 10000;
+      this.totalAmount = Math.round(this.totalAmount ) ;
       this.totalCount = Math.round(this.totalCount);
     });
-
   }
 
 }

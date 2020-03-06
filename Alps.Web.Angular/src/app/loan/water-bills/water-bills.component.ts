@@ -8,11 +8,27 @@ import { LoanService } from '../loan.service';
 })
 export class WaterBillsComponent implements OnInit {
 
-  constructor(private loanService:LoanService) { }
-  waterbills;
-  displayedColumns=["date","type","name","amount","interestRate","interest","isInvalid","action"];
+  constructor(private loanService: LoanService) { }
+  waterbills: any[] = [];
+  totalDeposit = 0;
+  totalWithdraw = 0;
+  totalSettleInterest = 0;
+  displayedColumns = ["date", "type", "name", "amount", "interestRate", "interest", "isInvalid", "action"];
   ngOnInit() {
-    this.waterbills= this.loanService.getWaterBills();
+    this.loanService.getWaterBills().subscribe(rst => {
+      this.waterbills = rst;
+      this.waterbills.forEach(p => {
+        if (!p.isInvalid) {
+          if (p.type == 1)
+            this.totalDeposit = this.totalDeposit + p.amount;
+          if (p.type == 2)
+            this.totalWithdraw = this.totalWithdraw + p.amount;
+          if (p.type == 3)
+            this.totalSettleInterest = this.totalSettleInterest + p.amount;
+        }
+      });
+    });
+
   }
 
 }

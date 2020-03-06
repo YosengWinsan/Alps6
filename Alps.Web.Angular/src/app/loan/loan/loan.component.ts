@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class LoanComponent implements OnInit {
 
   constructor() { }
-  links = {"今日流水":"waterbills" ,"存款":"deposit", "取款结息": "loanvoucherlist", "凭证汇总": "loanvouchersummary","存款人信息": "lenderlist","基础设置":"loansetting"};
+  links = {"今日流水":"waterbills" ,"存款":"deposit", "取款结息": "loanvoucherlist", "凭证汇总": "loanvouchersummary", "利息汇总": "interestsummary","存款人信息": "lenderlist","基础设置":"loansetting"};
   //,"取款":"withdraw","结息":"settleinterest"
   ngOnInit() {
     

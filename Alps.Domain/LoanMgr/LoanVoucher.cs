@@ -39,6 +39,7 @@ namespace Alps.Domain.LoanMgr
         public static LoanVoucher Create(Guid lenderID, string creater)
         {
             LoanVoucher v = new LoanVoucher();
+            v.Creater = creater;
             v.LenderID = lenderID;
             v.Amount = 0;
 
@@ -62,6 +63,7 @@ namespace Alps.Domain.LoanMgr
             this.Amount = this.Amount + record.Amount;
             this.DepositAmount = record.Amount;
             this.VoucherTime = DateTimeOffset.Now;
+            this.InterestSettlementDate = operateTime;
             return record;
         }
         public LoanRecord Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater)
@@ -159,6 +161,60 @@ namespace Alps.Domain.LoanMgr
         public void ReWriteVoucher(DateTimeOffset printTime)
         {
             this.VoucherTime = printTime;
+        }
+        public decimal CalculateSettlableInterest(IList<InterestRate> rates)
+        {
+            var firstRate = rates.Where(p => p.StartExecutionDate <= this.InterestSettlementDate).OrderByDescending(p => p.StartExecutionDate).FirstOrDefault();
+            if (firstRate == null)
+                throw new DomainException("未设置利率");
+            var settlableDate = GetSettlableDate();
+            var calcRates = rates.Where(p => p.StartExecutionDate >= firstRate.StartExecutionDate).OrderBy(p => p.StartExecutionDate).ToList();
+            DateTimeOffset startDate, endDate;
+            decimal totalInterest = 0;
+            decimal rate;
+            for (var i = 0; i < calcRates.Count; i++)
+            {
+                startDate = this.InterestSettlementDate >= calcRates[i].StartExecutionDate ? this.InterestSettlementDate : calcRates[i].StartExecutionDate;
+                if (i == calcRates.Count - 1)
+                    endDate = settlableDate;
+                else
+                    endDate = calcRates[i + 1].StartExecutionDate;
+
+                rate = calcRates[i].Rate;
+                totalInterest = totalInterest + CalculatePeriodInterest(rate, startDate, endDate);
+            }
+            return totalInterest;
+        }
+        private decimal CalculatePeriodInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate)
+        {
+            DateTime fromdate = startDate.LocalDateTime;
+            DateTime todate = endDate.LocalDateTime;
+
+            if (fromdate.Date >= todate.Date)
+                return 0;
+
+            var enddate = todate.Date.AddDays(-1);
+            var months = (enddate.Year - fromdate.Year) * 12 + (enddate.Month - fromdate.Month) - 1;
+
+            var fromMonthDays = fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day;
+            if (months < 0)
+            {
+                var days = enddate.Subtract(fromdate.Date).Days + 1;
+                return days == fromMonthDays ? 30 : 0;
+            }
+            var fromDays = fromMonthDays + 1 - fromdate.Date.Day;
+            if (fromDays > 30 || fromDays == fromMonthDays)
+                fromDays = 30;
+
+            var endMonthDays = enddate.AddDays(1 - enddate.Day).AddMonths(1).AddDays(-1).Day;
+            var endDays = enddate.Day;
+            if (endDays > 30 || endDays == endMonthDays)
+                endDays = 30;
+
+            var interestDays = months * 30 + fromDays + endDays;
+            interestDays = interestDays < 30 ? 0 : interestDays;
+
+            return interestDays * this.Amount * rate / 30;
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alps.Web.Service.Migrations
 {
     [DbContext(typeof(AlpsContext))]
-    [Migration("20200305051940_loan")]
-    partial class loan
+    [Migration("20200306021208_LoanUpdate")]
+    partial class LoanUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -221,6 +221,39 @@ namespace Alps.Web.Service.Migrations
                     b.ToTable("County_Counties");
                 });
 
+            modelBuilder.Entity("Alps.Domain.LoanMgr.InterestRate", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("LoanSettingID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("PublishDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Publisher")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Rate")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<DateTimeOffset>("StartExecutionDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("LoanSettingID");
+
+                    b.ToTable("Loan_InterestRate");
+                });
+
             modelBuilder.Entity("Alps.Domain.LoanMgr.Lender", b =>
                 {
                     b.Property<Guid>("ID")
@@ -321,61 +354,29 @@ namespace Alps.Web.Service.Migrations
                     b.ToTable("Loan_LoanRecord");
                 });
 
-            modelBuilder.Entity("Alps.Domain.LoanMgr.LoanVoucher", b =>
+            modelBuilder.Entity("Alps.Domain.LoanMgr.LoanSetting", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("MinDepositAmount")
+                        .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("DepositDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("HashCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(7,4)");
-
-                    b.Property<DateTimeOffset>("InterestSettlementDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset?>("InvalidDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsInvalid")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LenderID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("ModifyDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Operator")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("OriginAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("MinDepositDay")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<string>("VoucherNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ID");
 
-                    b.HasIndex("LenderID");
-
-                    b.ToTable("Loan_LoanVouchers");
+                    b.ToTable("Loan_LoanSettings");
                 });
 
-            modelBuilder.Entity("Alps.Domain.LoanMgr.LoanVoucher2", b =>
+            modelBuilder.Entity("Alps.Domain.LoanMgr.LoanVoucher", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -389,6 +390,9 @@ namespace Alps.Web.Service.Migrations
 
                     b.Property<string>("Creater")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DepositAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTimeOffset>("DepositTime")
                         .HasColumnType("datetimeoffset");
@@ -422,56 +426,14 @@ namespace Alps.Web.Service.Migrations
                     b.Property<string>("VoucherNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset>("VoucherTime")
+                        .HasColumnType("datetimeoffset");
+
                     b.HasKey("ID");
 
                     b.HasIndex("LenderID");
 
-                    b.ToTable("Loan_LoanVoucher2s");
-                });
-
-            modelBuilder.Entity("Alps.Domain.LoanMgr.WithdrawRecord", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("DepositDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<decimal>("Interest")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("InterestRate")
-                        .HasColumnType("decimal(7,4)");
-
-                    b.Property<Guid>("LoanVoucherID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("ModifyDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Operator")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("LoanVoucherID");
-
-                    b.ToTable("Loan_WithdrawRecords");
+                    b.ToTable("Loan_LoanVouchers");
                 });
 
             modelBuilder.Entity("Alps.Domain.LogisticsMgr.DispatchRecord", b =>
@@ -1899,9 +1861,16 @@ namespace Alps.Web.Service.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Alps.Domain.LoanMgr.InterestRate", b =>
+                {
+                    b.HasOne("Alps.Domain.LoanMgr.LoanSetting", null)
+                        .WithMany("InterestRates")
+                        .HasForeignKey("LoanSettingID");
+                });
+
             modelBuilder.Entity("Alps.Domain.LoanMgr.LoanRecord", b =>
                 {
-                    b.HasOne("Alps.Domain.LoanMgr.LoanVoucher2", "LoanVoucher")
+                    b.HasOne("Alps.Domain.LoanMgr.LoanVoucher", "LoanVoucher")
                         .WithMany("Records")
                         .HasForeignKey("LoanVoucherID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1913,24 +1882,6 @@ namespace Alps.Web.Service.Migrations
                     b.HasOne("Alps.Domain.LoanMgr.Lender", "Lender")
                         .WithMany()
                         .HasForeignKey("LenderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Alps.Domain.LoanMgr.LoanVoucher2", b =>
-                {
-                    b.HasOne("Alps.Domain.LoanMgr.Lender", "Lender")
-                        .WithMany()
-                        .HasForeignKey("LenderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Alps.Domain.LoanMgr.WithdrawRecord", b =>
-                {
-                    b.HasOne("Alps.Domain.LoanMgr.LoanVoucher", "LoanVoucher")
-                        .WithMany("WithdrawRecords")
-                        .HasForeignKey("LoanVoucherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

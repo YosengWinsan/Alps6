@@ -13,6 +13,7 @@ import { LenderImportComponent } from './lender-import/lender-import.component';
 import { LoanSettingComponent } from './loan-setting/loan-setting.component';
 import { LoanVoucherDetailComponent } from './loan-voucher-detail/loan-voucher-detail.component';
 import { LoanVoucherSummaryComponent } from './loan-voucher-summary/loan-voucher-summary.component';
+import { SettlableInterestSummaryComponent } from './settlable-interest-summary/settlable-interest-summary.component';
 
 const routes: Routes = [{
   path: "", component: LoanComponent, children: [
@@ -28,7 +29,8 @@ const routes: Routes = [{
     { path: "lenderimport", component: LenderImportComponent },
     { path: "loansetting", component: LoanSettingComponent },
     { path: "loanvoucherdetail", component: LoanVoucherDetailComponent },
-    { path: "loanvouchersummary", component: LoanVoucherSummaryComponent }
+    { path: "loanvouchersummary", component: LoanVoucherSummaryComponent },
+    { path: "interestsummary", component: SettlableInterestSummaryComponent }
   ],
 }];
 

@@ -16,6 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSortModule } from '@angular/material/sort';
 //import { MatToolbarModule } from "@angular/material/toolbar";
 
 import { SettleInterestComponent } from './settle-interest/settle-interest.component';
@@ -24,12 +25,13 @@ import { LenderImportComponent } from './lender-import/lender-import.component';
 import { LoanSettingComponent } from './loan-setting/loan-setting.component';
 import { LoanVoucherDetailComponent } from './loan-voucher-detail/loan-voucher-detail.component';
 import { LoanVoucherSummaryComponent } from './loan-voucher-summary/loan-voucher-summary.component';
+import { SettlableInterestSummaryComponent } from './settlable-interest-summary/settlable-interest-summary.component';
 
 @NgModule({
   imports: [
     CommonModule, InfrastructureModule,FormsModule,
-    LoanRoutingModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatAutocompleteModule, MatCheckboxModule//,MatToolbarModule
+    LoanRoutingModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatAutocompleteModule, MatCheckboxModule,MatSortModule//,MatToolbarModule
   ],
-  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent, LoanSettingComponent, LoanVoucherDetailComponent, LoanVoucherSummaryComponent]
+  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent, LoanSettingComponent, LoanVoucherDetailComponent, LoanVoucherSummaryComponent, SettlableInterestSummaryComponent]
 })
 export class LoanModule { }

@@ -12,7 +12,7 @@ export class LoanVoucherListComponent implements OnInit {
 
   constructor(private loanService: LoanService,private activatedRoute:ActivatedRoute,private router:Router) { }
   loanvouchers;
-  displayedColumns=["date","lender","amount","interestRate","interestSettlable","action"];
+  displayedColumns=["date","lender","amount","interest","interestSettlable","action"];
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(param => {
       var filter = param["filter"] ? param["filter"] : "";

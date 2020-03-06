@@ -9,7 +9,6 @@ namespace Alps.Domain.LoanMgr
         public DateTimeOffset PublishDate { get; set; }
         public string Publisher { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-
         public decimal Rate { get; set; }
         public DateTimeOffset StartExecutionDate { get; set; }
         public static InterestRate Create(DateTimeOffset seDate, decimal rate, string publisher)

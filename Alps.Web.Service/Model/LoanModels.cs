@@ -10,7 +10,7 @@ namespace Alps.Web.Service.Model
         public string Lender { get; set; }
         public DateTimeOffset Date { get; set; }
         public decimal Amount { get; set; }
-        public decimal InterestRate { get; set; }
+        public decimal Interest { get; set; }
         public bool InterestSettlable { get; set; }
     }
     public class DepositDto
@@ -148,5 +148,29 @@ namespace Alps.Web.Service.Model
         public decimal TotalAmount { get; set; }
         public int Count { get; set; }
     }
+        public class SettlableInterestSummaryDto
+    {
+        public string Lender { get; set; }
+        public decimal TotalInterest { get; set; }
+        public int Count { get; set; }
+        public decimal TotalAmount{get;set;}
+    }
+    public class LoanSettingEditDto
+    {
+        public int MinDepositDay { get; set; }
+        public int MinDepositAmount { get; set; }
+        public ICollection<InterestRateEditDto> InterestRates { get; set; }
+    }
+    public class InterestRateEditDto
+    {
+        public Guid ID { get; set; }
+        public string Publisher { get; set; }
+
+        public decimal Rate { get; set; }
+        public DateTimeOffset StartExecutionDate { get; set; }
+        public DateTimeOffset PublishDate { get; set; }
+
+    }
+
 
 }

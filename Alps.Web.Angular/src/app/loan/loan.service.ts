@@ -76,21 +76,25 @@ export class LoanService extends RepositoryService {
     this.setLoanVoucher();
     return this.get('getloansetting');
   }
-  saveloansetting() {
+  saveloansetting(setting) {
     this.setLoanVoucher();
-    return this.action('saveloansetting');
+    return this.action('saveloansetting',setting);
   }
-  getloaninterestrates() {
-    this.setLoanVoucher();
-    return this.get('getloaninterestrates');
-  }
-  publishnewrate(sedate: Date, rate: Number) {
-    this.setLoanVoucher();
-    return this.action("publishnewrate", { startExecutionDate: sedate, rate: rate });
-  }
+  // getloaninterestrates() {
+  //   this.setLoanVoucher();
+  //   return this.get('getloaninterestrates');
+  // }
+  // publishnewrate(sedate: Date, rate: Number) {
+  //   this.setLoanVoucher();
+  //   return this.action("publishnewrate", { startExecutionDate: sedate, rate: rate });
+  // }
   getVoucherSummary() {
     this.setLoanVoucher();
     return this.get("getloanvouchersummary");
+  }
+  getinterestsummary(){    
+    this.setLoanVoucher();
+    return this.get("getinterestsummary");
   }
   importLender(dto) {
     this.setLoanVoucher();
