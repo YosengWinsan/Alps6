@@ -1,4 +1,7 @@
-<mat-table #table [dataSource]="summary" matSort aria-label="Elements">
+<mat-form-field>
+    <input matInput (keyup.enter)="search($event.target.value)" placeholder="筛选">
+  </mat-form-field>
+<mat-table #table [dataSource]="summmayDataSource" matSort aria-label="Elements">
     <!-- Id Column -->
     <ng-container matColumnDef="lender">
         <mat-header-cell *matHeaderCellDef mat-sort-header>存款人</mat-header-cell>

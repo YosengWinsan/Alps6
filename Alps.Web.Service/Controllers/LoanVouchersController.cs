@@ -128,18 +128,23 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(v.ID);
         }
         [HttpPost("settleInterest/{id}")]
-        public async Task<IActionResult> SettleInterest([FromBody] SettleInterestDto dto)
+        public async Task<IActionResult> SettleInterest([FromRoute]Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).FirstOrDefault(p => p.ID == dto.LoanVoucherID);
+
+            LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).FirstOrDefault(p => p.ID == id);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
-            var r = v.SettleInterest(dto.OperateTime, dto.Memo, User.Identity.Name);
-            await _context.SaveChangesAsync();
-            return this.AlpsActionOk(r.ID);
+            if (v.CanSettleInterest())
+            {
+                var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
+                v.SettleInterest(DateTimeOffset.Now, "", User.Identity.Name, interestRates);
+                await _context.SaveChangesAsync();
+            }
+            return this.AlpsActionOk();
         }
         [HttpPost("withdraw")]
         public async Task<IActionResult> Withdraw([FromBody] WithdrawDto dto)
@@ -321,11 +326,16 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(_context.LoanVouchers.Where(p => !p.IsInvalid && p.Amount > 0).GroupBy(p => p.Lender.Name)
             .Select(p => new VoucherSummaryDto { Lender = p.Key, TotalAmount = p.Sum(l => l.Amount), Count = p.Count() }));
         }
-        [HttpGet("getinterestsummary")]
-        public IActionResult GetSettlabeInterestSummary()
+
+        [HttpPost("getinterestsummary")]
+        public IActionResult GetSettlabeInterestSummary([FromBody]FilterDto filter)
         {
             var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
-            var vouchers = _context.LoanVouchers.Include(p => p.Lender).Where(p => !p.IsInvalid && p.Amount > 0).ToList();
+            List<LoanVoucher> vouchers;
+            if (filter.Filter.ToLower() == "ysjs")
+                vouchers = _context.LoanVouchers.Include(p => p.Lender).Where(p => !p.IsInvalid && p.Amount > 0).ToList();
+            else
+                vouchers = _context.LoanVouchers.Include(p => p.Lender).Where(p => !p.IsInvalid && p.Amount > 0 && p.Lender.Name.Contains(filter.Filter)).ToList();
             var dto = vouchers.Select(p => new
             {
                 Lender = p.Lender.Name,
@@ -343,6 +353,51 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(dto);
 
         }
+        [HttpGet("getinteresetdetal/{hashCode}")]
+        public IActionResult GetInteresetDetal([FromRoute]string hashCode)
+        {
+
+            var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
+            var vouchers = _context.LoanVouchers.Include(p => p.Records).Where(p => p.Lender.Name == hashCode && p.Amount > 0).ToList();
+            var detailDto = new SettleInterestDetailDto
+            {
+                Vouchers = vouchers.Select(l => new LoanVoucherListDto()
+                {
+                    ID = l.ID,
+                    Date = l.DepositTime,
+                    Amount = l.Amount,
+                    Interest = l.CalculateSettlableInterest(interestRates),
+                    Lender = hashCode,
+                    InterestSettlable = l.CanSettleInterest()
+                }),
+                Records = vouchers.SelectMany(p => p.Records).Select(p => new LoanRecordDto
+                {
+                    IsInvalid = p.IsInvalid,
+                    LoanVoucherID = p.LoanVoucherID,
+                    ID = p.ID,
+                    Date = p.OperateTime,
+                    Name = hashCode,
+                    Amount = p.Amount,
+                    Interest = p.Interest,
+                    Type = p.Type
+                }).Where(p => p.Type == LoanRecordType.SettleInterest)
+            };
+
+            return this.AlpsActionOk(detailDto);
+        }
+        [HttpGet("getSettleInteresetPrintInfo/{id}")]
+        public IActionResult GetSettleInteresetPrintInfo([FromRoute]string id)
+        {
+            var dto=new SettleInterestPrintDto{Lender=id,Interest=0,Date=DateTimeOffset.Now};
+
+            dto.Interest = _context.LoanVouchers.Where(p => p.Lender.Name == id && p.Amount > 0).SelectMany(p=>p.Records).Where(p=>p.Type==LoanRecordType.SettleInterest &&
+            p.OperateTime.Date==DateTimeOffset.Now.Date).Sum(p=>p.Interest);
+            
+
+            return this.AlpsActionOk(dto);
+        }
+
     }
+
 
 }

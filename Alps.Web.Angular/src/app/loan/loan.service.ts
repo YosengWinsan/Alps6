@@ -92,10 +92,14 @@ export class LoanService extends RepositoryService {
     this.setLoanVoucher();
     return this.get("getloanvouchersummary");
   }
-  getinterestsummary(){    
+  getinterestsummary(str){    
     this.setLoanVoucher();
-    return this.get("getinterestsummary");
+    return this.action("getinterestsummary",{filter:str});
   }
+  // getinterestbyName(){
+  //   this.setLoanVoucher();
+  //   return this.get("getinterestbyName");
+  // }
   importLender(dto) {
     this.setLoanVoucher();
     return this.action("importlender", dto);
@@ -111,5 +115,15 @@ export class LoanService extends RepositoryService {
   importwithdraw(dto) {
     this.setLoanVoucher();
     return this.action("importwithdraw", dto);
+  }
+  getinteresetdetal(hashcode)
+  {
+    this.setLoanVoucher();
+    return this.get("getinteresetdetal/"+hashcode);
+  }
+  getSettleInteresetPrintInfo(id)
+  {
+    this.setLoanVoucher();
+    return this.get("getSettleInteresetPrintInfo/"+id);
   }
 }

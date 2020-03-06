@@ -26,12 +26,13 @@ import { LoanSettingComponent } from './loan-setting/loan-setting.component';
 import { LoanVoucherDetailComponent } from './loan-voucher-detail/loan-voucher-detail.component';
 import { LoanVoucherSummaryComponent } from './loan-voucher-summary/loan-voucher-summary.component';
 import { SettlableInterestSummaryComponent } from './settlable-interest-summary/settlable-interest-summary.component';
+import { PrintSettleInterestComponent } from './print-settle-interest/print-settle-interest.component';
 
 @NgModule({
   imports: [
     CommonModule, InfrastructureModule,FormsModule,
     LoanRoutingModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatAutocompleteModule, MatCheckboxModule,MatSortModule//,MatToolbarModule
   ],
-  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent, LoanSettingComponent, LoanVoucherDetailComponent, LoanVoucherSummaryComponent, SettlableInterestSummaryComponent]
+  declarations: [LoanComponent, LenderListComponent, LenderEditComponent, LoanVoucherListComponent, DepositComponent, WithdrawComponent, WaterBillsComponent, SettleInterestComponent, PrintVoucherComponent, LenderImportComponent, LoanSettingComponent, LoanVoucherDetailComponent, LoanVoucherSummaryComponent, SettlableInterestSummaryComponent, PrintSettleInterestComponent]
 })
 export class LoanModule { }

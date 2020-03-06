@@ -75,12 +75,21 @@ namespace Alps.Domain.LoanMgr
             this.VoucherTime = DateTimeOffset.Now;
             return record;
         }
-        public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater)
+        public bool CanSettleInterest()
         {
-            var interest = 0;
+            return this.InterestSettlementDate < GetSettlableDate();
+        }
+        public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater,IList<InterestRate> rates)
+        {
+            if (!this.CanSettleInterest())
+                throw new DomainException("无法结息");
+            var interest = CalculateSettlableInterest(rates);
             LoanRecord record = LoanRecord.Create(LoanRecordType.SettleInterest, operateTime, 0, interest, memo, creater);
             this.Records.Add(record);
+            record.Memo = this.InterestSettlementDate.ToString();
+            this.InterestSettlementDate = GetSettlableDate();
             return record;
+
         }
         public void Invalid(string invalidMaker)
         {
@@ -156,6 +165,9 @@ namespace Alps.Domain.LoanMgr
                     this.InvalidDate = DateTimeOffset.Now;
                     this.InvalidMaker = invalidMaker;
                     break;
+                case LoanRecordType.SettleInterest:
+                    this.InterestSettlementDate = DateTimeOffset.Parse(r.Memo);
+                    break;
             }
         }
         public void ReWriteVoucher(DateTimeOffset printTime)
@@ -183,7 +195,7 @@ namespace Alps.Domain.LoanMgr
                 rate = calcRates[i].Rate;
                 totalInterest = totalInterest + CalculatePeriodInterest(rate, startDate, endDate);
             }
-            return totalInterest;
+            return Math.Round(totalInterest);
         }
         private decimal CalculatePeriodInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate)
         {
@@ -197,24 +209,39 @@ namespace Alps.Domain.LoanMgr
             var months = (enddate.Year - fromdate.Year) * 12 + (enddate.Month - fromdate.Month) - 1;
 
             var fromMonthDays = fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day;
+            var interestDays = 0;
             if (months < 0)
             {
                 var days = enddate.Subtract(fromdate.Date).Days + 1;
-                return days == fromMonthDays ? 30 : 0;
+
+                if (enddate.Month > fromdate.Month)
+                    days = days - (fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day - 30);
+                else
+                {
+                    if (enddate.Day == enddate.AddDays(1 - enddate.Day).AddMonths(1).AddDays(-1).Day && enddate.Month == 2)
+                    {
+                        days = days - (fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day - 30);
+                    }
+                }
+                interestDays = days - 2;
+                //return days == fromMonthDays ? 30 : 0;
             }
-            var fromDays = fromMonthDays + 1 - fromdate.Date.Day;
-            if (fromDays > 30 || fromDays == fromMonthDays)
-                fromDays = 30;
+            else
+            {
+                var fromDays = fromMonthDays + 1 - fromdate.Date.Day - (fromMonthDays > 30 && fromdate.Day <= 30 ? 1 : 0);
+                if (fromDays > 30 || fromDays == fromMonthDays)
+                    fromDays = 30;
 
-            var endMonthDays = enddate.AddDays(1 - enddate.Day).AddMonths(1).AddDays(-1).Day;
-            var endDays = enddate.Day;
-            if (endDays > 30 || endDays == endMonthDays)
-                endDays = 30;
+                var endMonthDays = enddate.AddDays(1 - enddate.Day).AddMonths(1).AddDays(-1).Day;
+                var endDays = enddate.Day;
+                if (endDays > 30 || endDays == endMonthDays)
+                    endDays = 30;
+                interestDays = months * 30 + fromDays + endDays;
+            }
 
-            var interestDays = months * 30 + fromDays + endDays;
-            interestDays = interestDays < 30 ? 0 : interestDays;
-
+            //interestDays = interestDays < 30 ? 0 : interestDays;
             return interestDays * this.Amount * rate / 30;
+            //return Math.Floor(interestDays * this.Amount * rate / 30);
         }
     }
 }

@@ -32,7 +32,7 @@
         </mat-header-cell>
     <mat-cell *matCellDef="let row">
       
-        <a routerLink="../settleinterest" [queryParams]="{id:row.id}" *ngIf="row.interestSettlable">
+        <a routerLink="../settleinterest" [queryParams]="{id:row.lender}" *ngIf="row.interestSettlable">
           结息
         </a>&nbsp;&nbsp;
       <a routerLink="../withdraw" [queryParams]="{id:row.id}">

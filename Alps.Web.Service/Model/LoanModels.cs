@@ -148,12 +148,12 @@ namespace Alps.Web.Service.Model
         public decimal TotalAmount { get; set; }
         public int Count { get; set; }
     }
-        public class SettlableInterestSummaryDto
+    public class SettlableInterestSummaryDto
     {
         public string Lender { get; set; }
         public decimal TotalInterest { get; set; }
         public int Count { get; set; }
-        public decimal TotalAmount{get;set;}
+        public decimal TotalAmount { get; set; }
     }
     public class LoanSettingEditDto
     {
@@ -170,7 +170,23 @@ namespace Alps.Web.Service.Model
         public DateTimeOffset StartExecutionDate { get; set; }
         public DateTimeOffset PublishDate { get; set; }
 
-    }
 
+    }
+    public class FilterDto
+    {
+        public String Filter { get; set; }
+    }
+    public class SettleInterestDetailDto
+    {
+        public IEnumerable<LoanRecordDto> Records { get; set; }
+        public IEnumerable<LoanVoucherListDto> Vouchers { get; set; }
+
+    }
+    public class SettleInterestPrintDto
+    {
+        public string Lender { get; set; }
+        public decimal Interest { get; set; }
+        public DateTimeOffset Date { get; set; }
+    }
 
 }

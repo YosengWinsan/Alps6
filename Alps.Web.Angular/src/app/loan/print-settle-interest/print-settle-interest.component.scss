@@ -1,0 +1,15 @@
+.print-table{
+    width: 14cm;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+.print-table th{
+    font-size: 18px;
+}
+.print-table td{
+    border: 2px solid black;
+    text-align: center;
+    font-size: 16px;
+    height: 30px;
+}

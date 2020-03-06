@@ -1,0 +1,65 @@
+<div id="printDiv">
+    <table   class="print-table">
+        <tr>
+            <th colspan="4">结   息   条</th>
+        </tr>
+        <tr>
+            <td>姓  名</td>
+            <td>金  额</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>签收日期</td>
+        </tr>
+        <tr>
+            <td>{{printInfo.lender}}</td>
+            <td>{{printInfo.interest}}</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <!-- <table class="loan-voucher-container">
+        <tr class="noprint">
+            <td style="width:18%"></td>
+            <td style="width:12%"></td>
+            <td style="width:20%"></td>
+            <td style="width:20%"></td>
+            <td style="width:30%"></td>
+        </tr>
+        <tr  > 
+            <td colspan="5" class="loan-voucher-title noprintcontent"  >收 款 收 据</td>
+        </tr>
+        <tr class="loan-voucher-date-tr ">
+            <td colspan="2"></td>
+            <td colspan="2" class="loan-voucher-date">{{printInfo.date|date:'yyyy年MM月dd日'}}</td>
+            <td class="loan-voucher-vn">No!{{printInfo.voucherNumber}}</td>
+        </tr>
+        <tr class="loan-voucher-tr ">
+            <td class="loan-voucher-item noprintcontent">交款单位<br>(或交款人)</td>
+            <td colspan="3">{{printInfo.name}}</td>
+            <td>电话:{{printInfo.mobilePhoneNumber}}</td>
+        </tr>
+        <tr class="loan-voucher-tr " style="height: 120px">
+            <td class="loan-voucher-item noprintcontent">交 款 项 目</td>
+            <td colspan="4">{{typeDecription}}</td>
+        </tr>
+        <tr class="loan-voucher-tr "  style="height: 40px">
+            <td class="loan-voucher-item noprintcontent">金额大写</td>
+            <td colspan="3" class="loan-voucher-amount-cap">{{printInfo.amount}}元整</td>
+            <td>¥{{printInfo.amount}}</td>
+        </tr>
+        <tr class="loan-voucher-tr "  style="height: 60px">
+            <td class="loan-voucher-item noprintcontent">备注</td>
+            <td colspan="4" class="loan-voucher-amount-cap">利率:{{printInfo.interestRate}}</td>
+        </tr>
+        <tr class="loan-voucher-footer">
+            <td class="noprintcontent">收款单位公章</td>
+            <td colspan="3" class="loan-voucher-receiver noprintcontent">收款人</td>
+            <td class="noprintcontent">交款人</td>
+        </tr>
+
+    </table> -->
+</div>
+<hr>
+<div style="text-align:center">
+<alps-print section="printDiv" color="primary"></alps-print>
+</div>

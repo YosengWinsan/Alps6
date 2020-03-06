@@ -8,7 +8,7 @@
     现存金额:{{detail.amount}}</div>
 <div>已作废:{{detail.isinvalid?"是":"否"}}</div>
 <div><button (click)="printvoucher()">打印利息条</button></div>
-<div> <a  routerLink="../settleinterest" [queryParams]="{id:currentID}">
+<div> <a  routerLink="../settleinterest" [queryParams]="{id:detail.lender}">
         结息
     </a>&nbsp;&nbsp;
     <a *ngIf="detail.amount>0" routerLink="../withdraw" [queryParams]="{id:currentID}">
