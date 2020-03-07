@@ -1,16 +1,20 @@
 <div id="printDiv">
     <table   class="print-table">
         <tr>
-            <th colspan="4">结   息   条</th>
+            <th colspan="6">结   息   条</th>
         </tr>
         <tr>
             <td>姓  名</td>
-            <td>金  额</td>
+            <td>本  金</td>
+            <td>结算截止日期</td>
+            <td>利  息</td>
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>签收日期</td>
         </tr>
         <tr>
             <td>{{printInfo.lender}}</td>
+            <td>{{printInfo.amount}}</td>
+            <td>{{printInfo.endDate|date:"yyyy-MM-dd"}}</td>
             <td>{{printInfo.interest}}</td>
             <td></td>
             <td></td>

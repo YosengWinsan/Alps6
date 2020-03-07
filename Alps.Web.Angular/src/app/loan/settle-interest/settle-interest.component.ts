@@ -30,7 +30,6 @@ export class SettleInterestComponent implements OnInit {
         this.loanService.getinteresetdetal(id).subscribe(rst => {
           this.vouchers = rst.vouchers;
           this.records = rst.records;
-          this.totalSettleInterest = 0;
           this.totalSettleInterest=this.records.reduce((t,c)=>t+(c.isInvalid ? 0 : c.interest),0);
           // this.records.forEach(c=>{
           //   console.log(c.interest);

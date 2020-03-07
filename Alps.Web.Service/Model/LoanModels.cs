@@ -187,6 +187,8 @@ namespace Alps.Web.Service.Model
         public string Lender { get; set; }
         public decimal Interest { get; set; }
         public DateTimeOffset Date { get; set; }
+        public DateTimeOffset EndDate { get; set; }
+        public decimal Amount { get; set; }
     }
 
 }

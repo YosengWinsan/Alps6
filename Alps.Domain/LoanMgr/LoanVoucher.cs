@@ -50,6 +50,8 @@ namespace Alps.Domain.LoanMgr
             // v.ModifyDate = DateTimeOffset.Now;
             return v;
         }
+
+
         public LoanRecord Deposit(DateTimeOffset operateTime, decimal amount, string memo, string creater)
         {
             foreach (var r in this.Records)
@@ -63,12 +65,17 @@ namespace Alps.Domain.LoanMgr
             this.Amount = this.Amount + record.Amount;
             this.DepositAmount = record.Amount;
             this.VoucherTime = DateTimeOffset.Now;
-            this.InterestSettlementDate = operateTime;
+            
+            this.InterestSettlementDate = (operateTime>=DateTimeOffset.Parse("2019/12/1 0:00:00 +08:00")?operateTime:DateTimeOffset.Parse("2019/12/1 0:00:00 +08:00"));
+
             return record;
         }
-        public LoanRecord Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater)
+        public LoanRecord Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater, IList<InterestRate> rates)
         {
-            var interest = 0;
+
+            // if (!this.CanSettleInterest())
+            //     throw new DomainException("无法结息");
+            var interest = CalculateSettlableInterest(rates); ;
             LoanRecord record = LoanRecord.Create(LoanRecordType.Withdraw, operateTime, amount, interest, memo, creater);
             this.Records.Add(record);
             this.Amount = this.Amount - record.Amount;
@@ -79,7 +86,7 @@ namespace Alps.Domain.LoanMgr
         {
             return this.InterestSettlementDate < GetSettlableDate();
         }
-        public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater,IList<InterestRate> rates)
+        public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater, IList<InterestRate> rates)
         {
             if (!this.CanSettleInterest())
                 throw new DomainException("无法结息");
@@ -89,7 +96,6 @@ namespace Alps.Domain.LoanMgr
             record.Memo = this.InterestSettlementDate.ToString();
             this.InterestSettlementDate = GetSettlableDate();
             return record;
-
         }
         public void Invalid(string invalidMaker)
         {

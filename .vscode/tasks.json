@@ -26,6 +26,17 @@
             }
         },
         {
+            "label": "Server Clean",
+            "command": "ng build --prod --aot",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Alps.Web.Service"
+            }
+        },
+        {
             "label": "Alps Build",
             "dependsOn": [
                 "Client Build",

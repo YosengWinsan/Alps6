@@ -44,12 +44,6 @@ namespace Alps.Web.Service.Controllers
         {
             return this.AlpsActionOk(this.MapToDetailDto(this.GetLoanVoucher().Include(p => p.Lender).FirstOrDefault(p => p.ID == id)));
         }
-        // [HttpGet("getloanvoucherdetailbyrecordID/{id}")]
-        // public IActionResult GetLoanVoucherDetailByRecordID([FromRoute]Guid id)
-        // {
-        //     return this.AlpsActionOk(this.MapToDetailDto(this.GetLoanVoucher().FirstOrDefault(p => p.Records.Any(k => k.ID == id))));
-        // }
-
 
         [HttpGet("getWaterBills")]
         public IActionResult GetWaterBills()
@@ -62,7 +56,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("getByHashCode/{hashCode}")]
         public IActionResult GetLoanVouchers([FromRoute]string hashCode)
         {
-            var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
+            var interestRates = GetInterestRates();
             return this.AlpsActionOk(_context.LoanVouchers.Where(p => (p.IdentityCode.Contains(hashCode) || p.Lender.Name.Contains(hashCode)) && p.Amount > 0)
             .Select(l => new LoanVoucherListDto()
             {
@@ -134,17 +128,20 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).FirstOrDefault(p => p.ID == id);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
             if (v.CanSettleInterest())
             {
-                var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
+                var interestRates = GetInterestRates();
                 v.SettleInterest(DateTimeOffset.Now, "", User.Identity.Name, interestRates);
                 await _context.SaveChangesAsync();
             }
             return this.AlpsActionOk();
+        }
+        private IList<InterestRate> GetInterestRates()
+        {
+            return _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
         }
         [HttpPost("withdraw")]
         public async Task<IActionResult> Withdraw([FromBody] WithdrawDto dto)
@@ -156,26 +153,13 @@ namespace Alps.Web.Service.Controllers
             LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).FirstOrDefault(p => p.ID == dto.LoanVoucherID);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
-            var r = v.Withdraw(dto.OperateTime, dto.Amount, dto.Memo, User.Identity.Name);
-            //_context.WithdrawRecords.Add(r);
+            if (v.Amount < dto.Amount)
+                return this.AlpsActionError("取款金额超过存款金额");
+            var r = v.Withdraw(dto.OperateTime, dto.Amount, dto.Memo, User.Identity.Name, GetInterestRates());
             await _context.SaveChangesAsync();
             return this.AlpsActionOk(r.ID);
         }
-        // GET: api/LoanVouchers/5
-        // [HttpPost("invalidvoucher")]
-        // public async Task<IActionResult> InvalidVoucher([FromRoute] Guid id)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {
-        //         return BadRequest(ModelState);
-        //     }
-        //     LoanVoucher2 v = _context.LoanVoucher2s.Include(p => p.Records).FirstOrDefault(p => p.ID == id);
-        //     if (v == null)
-        //         return this.AlpsActionWarning("无此ID");
-        //     v.Invalid();
-        //     await _context.SaveChangesAsync();
-        //     return this.AlpsActionOk();
-        // }
+
         [HttpPost("invalidrecord/{id}")]
         public async Task<IActionResult> InvalidRecord([FromRoute] Guid id)
         {
@@ -315,7 +299,7 @@ namespace Alps.Web.Service.Controllers
                 LoanVoucher v = _context.LoanVouchers.FirstOrDefault(p => p.Lender.Name == dto.Lender && p.DepositTime == dto.DepositDate && p.Amount == dto.DepositAmount);
                 if (v == null)
                     return this.AlpsActionError("找不到" + dto.Lender + "在" + dto.DepositDate.ToString() + "的" + dto.DepositAmount.ToString() + "元的条子");
-                v.Withdraw(dto.Date, dto.Amount, "", User.Identity.Name);
+                v.Withdraw(dto.Date, dto.Amount, "", User.Identity.Name, GetInterestRates());
             }
             var rst = await _context.SaveChangesAsync();
             return this.AlpsActionOk(rst);
@@ -330,7 +314,7 @@ namespace Alps.Web.Service.Controllers
         [HttpPost("getinterestsummary")]
         public IActionResult GetSettlabeInterestSummary([FromBody]FilterDto filter)
         {
-            var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
+            var interestRates = GetInterestRates();
             List<LoanVoucher> vouchers;
             if (filter.Filter.ToLower() == "ysjs")
                 vouchers = _context.LoanVouchers.Include(p => p.Lender).Where(p => !p.IsInvalid && p.Amount > 0).ToList();
@@ -357,7 +341,7 @@ namespace Alps.Web.Service.Controllers
         public IActionResult GetInteresetDetal([FromRoute]string hashCode)
         {
 
-            var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates).ToList();
+            var interestRates = GetInterestRates();
             var vouchers = _context.LoanVouchers.Include(p => p.Records).Where(p => p.Lender.Name == hashCode && p.Amount > 0).ToList();
             var detailDto = new SettleInterestDetailDto
             {
@@ -388,11 +372,13 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("getSettleInteresetPrintInfo/{id}")]
         public IActionResult GetSettleInteresetPrintInfo([FromRoute]string id)
         {
-            var dto=new SettleInterestPrintDto{Lender=id,Interest=0,Date=DateTimeOffset.Now};
+            var dto = new SettleInterestPrintDto { Lender = id, Interest = 0, Date = DateTimeOffset.Now };
 
-            dto.Interest = _context.LoanVouchers.Where(p => p.Lender.Name == id && p.Amount > 0).SelectMany(p=>p.Records).Where(p=>p.Type==LoanRecordType.SettleInterest &&
-            p.OperateTime.Date==DateTimeOffset.Now.Date).Sum(p=>p.Interest);
-            
+            var list = _context.LoanVouchers.Where(p => p.Lender.Name == id && p.Amount > 0).SelectMany(p => p.Records).Include(p=>p.LoanVoucher).Where(p => p.Type == LoanRecordType.SettleInterest &&
+              p.OperateTime.Date == DateTimeOffset.Now.Date && !p.IsInvalid);
+            dto.Amount = list.Sum(p => p.LoanVoucher.Amount);
+            dto.Interest = list.Sum(p => p.Interest);
+            dto.EndDate = LoanVoucher.GetSettlableDate().AddDays(-1);
 
             return this.AlpsActionOk(dto);
         }

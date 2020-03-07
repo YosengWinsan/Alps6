@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class WithdrawComponent implements OnInit {
 
   constructor(private loanService: LoanService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private router: Router) {
-    this.withdrawForm = formBuilder.group({ loanVoucherID: [], amount: [] });
+    this.withdrawForm = formBuilder.group({ loanVoucherID: [], amount: [],operateTime:[] });
     this.loanVoucher={};
   }
   withdrawForm: FormGroup;

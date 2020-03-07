@@ -91,7 +91,7 @@
       <mat-footer-cell *matFooterCellDef></mat-footer-cell>
       </ng-container>
     <ng-container matColumnDef="action">
-      <mat-header-cell *matHeaderCellDef> <a mat-stroked-button  routerLink="../printsettleinterest" [queryParams]="{id:lender}">打印</a>
+      <mat-header-cell *matHeaderCellDef> <a mat-stroked-button *ngIf="totalSettleInterest>0"  routerLink="../printsettleinterest" [queryParams]="{id:lender}">打印</a>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <button *ngIf="!row.isInvalid"  (click)="invalidrecord(row.id)">作废</button>
