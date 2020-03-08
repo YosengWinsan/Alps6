@@ -63,7 +63,7 @@ namespace Alps.Web.Service.Controllers
                 ID = l.ID,
                 Date = l.DepositTime,
                 Amount = l.Amount,
-                Interest = l.CalculateSettlableInterest(interestRates),
+                Interest = l.CalculateVoucherInterest(interestRates),
                 Lender = l.Lender.Name,
                 InterestSettlable = LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
 
@@ -102,7 +102,7 @@ namespace Alps.Web.Service.Controllers
                 Amount = loanVoucher.Amount,
                 InterestRate = loanVoucher.InterestRate,
                 SettlableInterestDays = LoanVoucher.GetInterestDay(loanVoucher.InterestSettlementDate, LoanVoucher.GetSettlableDate()),
-                SettlableInterest = loanVoucher.CalculateSettlableInterest(interestRates.ToList())
+                SettlableInterest = loanVoucher.CalculateVoucherInterest(interestRates.ToList())
             };
             return this.AlpsActionOk(dto);
         }
@@ -324,7 +324,7 @@ namespace Alps.Web.Service.Controllers
             {
                 Lender = p.Lender.Name,
                 Amount = p.Amount,
-                Interest = p.CalculateSettlableInterest(interestRates)
+                Interest = p.CalculateQuarterInterest(interestRates)
             }).GroupBy(p => p.Lender).Select(p => new SettlableInterestSummaryDto
             {
                 Lender = p.Key,
@@ -350,7 +350,7 @@ namespace Alps.Web.Service.Controllers
                     ID = l.ID,
                     Date = l.DepositTime,
                     Amount = l.Amount,
-                    Interest = l.CalculateSettlableInterest(interestRates),
+                    Interest = l.CalculateQuarterInterest(interestRates),
                     Lender = hashCode,
                     InterestSettlable = l.CanSettleInterest()
                 }),
@@ -374,12 +374,11 @@ namespace Alps.Web.Service.Controllers
         {
             var dto = new SettleInterestPrintDto { Lender = id, Interest = 0, Date = DateTimeOffset.Now };
 
-            var list = _context.LoanVouchers.Where(p => p.Lender.Name == id && p.Amount > 0).SelectMany(p => p.Records).Include(p=>p.LoanVoucher).Where(p => p.Type == LoanRecordType.SettleInterest &&
-              p.OperateTime.Date == DateTimeOffset.Now.Date && !p.IsInvalid);
-            dto.Amount = list.Sum(p => p.LoanVoucher.Amount);
+            var list = _context.LoanVouchers.Where(p => p.Lender.Name == id).SelectMany(p => p.Records).Where(p => p.Type == LoanRecordType.SettleInterest &&
+             p.OperateTime.Date == DateTimeOffset.Now.Date && !p.IsInvalid);
+            dto.Amount = list.Sum(p => p.Amount);
             dto.Interest = list.Sum(p => p.Interest);
             dto.EndDate = LoanVoucher.GetSettlableDate().AddDays(-1);
-
             return this.AlpsActionOk(dto);
         }
 

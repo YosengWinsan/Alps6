@@ -26,7 +26,6 @@ export class LoanVoucherDetailComponent implements OnInit {
     this.loanService.getloanvoucherdetail(id).subscribe((rst) => {
       if (rst) {
         this.detail = rst;
-        console.log("X");
       }
     });
   }

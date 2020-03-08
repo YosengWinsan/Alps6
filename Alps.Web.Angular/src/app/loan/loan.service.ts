@@ -45,6 +45,7 @@ export class LoanService extends RepositoryService {
   }
   settleInterest(id) {
     this.setLoanVoucher();
+    // return this.httpClient.post("settleInterest/" + id);
     return this.action("settleInterest/" + id);
   }
   getWaterBills() {

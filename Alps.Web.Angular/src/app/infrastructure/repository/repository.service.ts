@@ -37,7 +37,7 @@ export class RepositoryService {
     this._baseUrl = url;
   }
   processPipe(ob: Observable<any>): Observable<any> {
-    return ob.pipe(tap(() => { this.finishLoad(); }), catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
+    return ob.pipe(tap(() => {console.log("F"); this.finishLoad(); }), catchError((err: any) => this.handleError(err)), filter(this.filterError), map(this.upPackResponse));
   }
   getall() {
     this.startLoad();

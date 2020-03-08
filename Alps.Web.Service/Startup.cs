@@ -96,6 +96,7 @@ namespace Alps.Web.Service
             {
                 app.UseHsts();
             }
+
             //app.UseStatusCodePagesWithReExecute("/", null);
             //app.UseStatusCodePagesWithRedirects("/index.html");
             //app.UseCors();
@@ -108,8 +109,19 @@ namespace Alps.Web.Service
             //app.UseSpa();
             app.Use(async (context, next) =>
             {
-                await next();
-                if (context.Response.StatusCode == 404 && context.Request.Path.Value.Substring(0,5).ToLower() != "/api/")
+                try
+                {
+                    await next();
+                }
+                catch (DomainException ex)
+                {
+                    context.Response.Headers.Add("content-type", "application/json; charset=utf-8");
+                    var errMsg =Encoding.UTF8.GetBytes( "{resultCode:-1,'message':'"+ex.Message+"','data':{}}");
+                    await context.Response.Body.WriteAsync(errMsg, 0,errMsg.Length);
+                    await context.Response.CompleteAsync();
+                }
+                if (context.Response.StatusCode == 404 && context.Request.Path.Value.Substring(0, 5).ToLower() != "/api/"
+                && context.Request.Path.Value.Substring(0, 8).ToLower() != "/assets/")
                     context.Response.Redirect("/");
             });
 

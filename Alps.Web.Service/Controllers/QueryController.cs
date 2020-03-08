@@ -62,7 +62,7 @@ namespace Alps.Web.Service.Controllers
             paths.Add(11);
             return this.AlpsActionOk();
         }
-                [HttpGet("SupplierOptions")]
+        [HttpGet("SupplierOptions")]
         public IActionResult SupplierOptions()
         {
             var query = from sc in _context.SupplierClasses
@@ -214,6 +214,13 @@ namespace Alps.Web.Service.Controllers
         {
             //Where(p=>p.Types.Contains(type))
             return Ok(_context.AlpsRoles.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
+        }
+        [HttpGet("error/{msg}")]
+        public IActionResult Error([FromRoute]string msg)
+        {
+            return this.AlpsActionError(msg);
+            //Where(p=>p.Types.Contains(type))
+            //return Ok(_context.AlpsRoles.Select(p => new AlpsSelectorItemDto { Value = p.ID, DisplayValue = p.Name }));
         }
     }
 }
