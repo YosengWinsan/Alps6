@@ -63,10 +63,18 @@ namespace Alps.Web.Service.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody]RegisterDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            if(_context.AlpsUsers.Count(p=>p.IDName==dto.Username)>0)
+            {
+                return this.AlpsActionWarning("已有相同用户名了，请更改用户名");
+            }
             AlpsUser newUser = AlpsUser.Create(dto.Username, dto.Password, dto.RealName, dto.IdentityNumber, dto.MobilePhoneNumber);
             newUser.AddRole(_context.AlpsRoles.FirstOrDefault(p => p.Name == "User"));
             _context.AlpsUsers.Add(newUser);
-            if (_context.SaveChanges() == 1)
+            if (_context.SaveChanges() ==2)
             {
                 return this.AlpsActionOk();
             }

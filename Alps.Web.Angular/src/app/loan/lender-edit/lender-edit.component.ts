@@ -17,11 +17,11 @@ export class LenderEditComponent implements OnInit {
     id: [], name: [, Validators.required], idNumber: [], mobilePhoneNumber: [], memo: [],
     createDate: [{ value: '', disabled: true }], modifyDate: [{ value: '', disabled: true }], invalid: [{ value: '', disabled: true }], invalidDate: [{ value: '', disabled: true }]
   });
-  currentID:string;
+  currentID: string;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(param => {
       var id = param["id"] ? param["id"] : "";
-      this.currentID=id;
+      this.currentID = id;
       if (id != "") {
         this.loanService.getLender(id).subscribe((res) => {
           this.lenderForm.patchValue(res);

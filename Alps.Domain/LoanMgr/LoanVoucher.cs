@@ -76,7 +76,7 @@ namespace Alps.Domain.LoanMgr
                 throw new DomainException("已作废的条子无法取款");
             // if (!this.CanSettleInterest())
             //     throw new DomainException("无法结息");
-            var interest = CalculateInterest(rates, operateTime,amount); ;
+            var interest = CalculateInterest(rates, operateTime, amount, 0); ;
 
             LoanRecord record = LoanRecord.Create(LoanRecordType.Withdraw, operateTime, amount, interest, memo, creater);
             this.Records.Add(record);
@@ -94,7 +94,7 @@ namespace Alps.Domain.LoanMgr
                 throw new DomainException("已作废的条子无法结息");
             if (!this.CanSettleInterest())
                 throw new DomainException("无法结息");
-            var interest =CalculateQuarterInterest(rates);
+            var interest = CalculateQuarterInterest(rates);
             LoanRecord record = LoanRecord.Create(LoanRecordType.SettleInterest, operateTime, this.Amount, interest, memo, creater);
             this.Records.Add(record);
             record.Memo = this.InterestSettlementDate.ToString();
@@ -184,7 +184,7 @@ namespace Alps.Domain.LoanMgr
         {
             this.VoucherTime = printTime;
         }
-        public decimal CalculateInterest(IList<InterestRate> rates, DateTimeOffset settlingDate,decimal amount)
+        public decimal CalculateInterest(IList<InterestRate> rates, DateTimeOffset settlingDate, decimal amount, int notEnoughAMonthSubDay = 2)
         {
             var firstRate = rates.Where(p => p.StartExecutionDate <= this.InterestSettlementDate).OrderByDescending(p => p.StartExecutionDate).FirstOrDefault();
             if (firstRate == null)
@@ -202,18 +202,19 @@ namespace Alps.Domain.LoanMgr
                     endDate = calcRates[i + 1].StartExecutionDate;
 
                 rate = calcRates[i].Rate;
-                totalInterest = totalInterest + CalculatePeriodInterest(rate, startDate, endDate,amount);
+                totalInterest = totalInterest + CalculatePeriodInterest(rate, startDate, endDate, amount, notEnoughAMonthSubDay);
             }
             return Math.Round(totalInterest);
         }
-        public decimal CalculateVoucherInterest(IList<InterestRate> rates){
-            return CalculateInterest(rates,DateTimeOffset.Now,this.Amount);
+        public decimal CalculateVoucherInterest(IList<InterestRate> rates)
+        {
+            return CalculateInterest(rates, DateTimeOffset.Now, this.Amount);
         }
         public decimal CalculateQuarterInterest(IList<InterestRate> rates)
         {
-            return CalculateInterest(rates, GetSettlableDate(),this.Amount);
+            return CalculateInterest(rates, GetSettlableDate(), this.Amount);
         }
-        private decimal CalculatePeriodInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate,decimal amount)
+        private decimal CalculatePeriodInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate, decimal amount, int notEnoughAMonthSubDay)
         {
             DateTime fromdate = startDate.LocalDateTime;
             DateTime todate = endDate.LocalDateTime;
@@ -239,7 +240,7 @@ namespace Alps.Domain.LoanMgr
                         days = days - (fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day - 30);
                     }
                 }
-                interestDays = days - 2;
+                interestDays = days - notEnoughAMonthSubDay;
             }
             else
             {

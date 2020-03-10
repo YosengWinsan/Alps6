@@ -106,10 +106,13 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            _context.Lenders.Add(lender);
-            await _context.SaveChangesAsync();
-
+            if (_context.Lenders.Any(p => p.Name == lender.Name))
+            {
+                return this.AlpsActionWarning("已经有同名借款人");
+            }
+                _context.Lenders.Add(lender);
+                await _context.SaveChangesAsync();
+            
             return CreatedAtAction("GetLender", new { id = lender.ID }, lender);
         }
 
