@@ -17,6 +17,9 @@ export class UserService extends RepositoryService {
   getUser(id){
     return this.get(id);
   }
+  saveUser(user){
+    return this.action("saveuser",user);
+  }
   getRoles(){
 
     return this.query("getroles");

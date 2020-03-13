@@ -21,12 +21,12 @@ namespace Alps.Domain.SecurityMgr
         }
         public void AddRole(AlpsRole role)
         {
-            if (this.RoleUsers.Count(p => p.ID == role.ID) == 0)
+            if (this.RoleUsers.Count(p => p.RoleID == role.ID) == 0)
                 this.RoleUsers.Add(AlpsRoleUser.Create(role.ID,this.ID));
         }
         public void RemoveRole(AlpsRole role)
         {
-            AlpsRoleUser r = this.RoleUsers.FirstOrDefault(p => p.ID == role.ID);
+            AlpsRoleUser r = this.RoleUsers.FirstOrDefault(p => p.RoleID == role.ID);
             if (r!=null)
                 this.RoleUsers.Remove(r);
         }

@@ -3,6 +3,7 @@ Alps.Web.Service/gc.bat
 Alps.Web.Service/wwwroot
 Alps.Web.Service/bin
 Alps.Web.Service/obj
+alps.Web.Service/appsettings.development.json
 Alps.Domain/bin
 Alps.Domain/obj
 Alps.Domain.Service/bin

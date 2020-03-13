@@ -26,7 +26,8 @@ export class AuthorizeComponent implements OnInit {
       if (id != "") {
         this.userService.getUser(id).subscribe(data => {
           this.user = data;
-          this.roleSelection.writeValue((<any[]>this.user.roles).map(r=>r.name));
+          console.info((this.user.roles.split(",")).map(r=>r.name));
+          this.roleSelection.writeValue(this.user.roles.split(","));
           
         });
       }
@@ -34,10 +35,10 @@ export class AuthorizeComponent implements OnInit {
     this.roleOptions = this.queryService.getRoleOptions();
     
     this.roleSelection.selectionChange.subscribe(d => {
-      this.user.roles= this.roleSelection.selectedOptions.selected.map(o=>o.value);
+      this.user.roles= this.roleSelection.selectedOptions.selected.map(o=>o.value).join(",");
       //console.info(this.roleSelection.selectedOptions.selected);
     });
-    
+   
   }
 
   back(){
@@ -45,6 +46,8 @@ export class AuthorizeComponent implements OnInit {
   }
   save()
   {
-    
+    this.userService.saveUser(this.user).subscribe(rst=>{
+      this.back();
+    });
   }
 }

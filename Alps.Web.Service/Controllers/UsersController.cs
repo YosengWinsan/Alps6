@@ -42,7 +42,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(Guid id)
         {
-            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).Select(p => new UserDetailDto
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p=>p.Role).Select(p => new UserDetailDto
             {
                 ID = p.ID,
                 IDName = p.IDName,
@@ -52,42 +52,31 @@ namespace Alps.Web.Service.Controllers
                 Roles = p.GetRoles()
             }).FirstOrDefault(p => p.ID == id));
         }
-        [HttpPost("saveuserrole")]
-        public IActionResult SaveUserRole(UserDetailDto dto)
+        [HttpPost("saveuser")]
+        public IActionResult SaveUser(UserDetailDto dto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var user = _context.AlpsUsers.Include(p => p.RoleUsers).FirstOrDefault(p => p.ID == dto.ID);
-            if (user != null)
+            var user = _context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p=>p.Role).FirstOrDefault(p => p.ID == dto.ID);
+            if (user == null)
                 return this.AlpsActionWarning("该用户不存在");
 
             var updatedRoles = dto.Roles.Split(",");
             var existingRoles = user.GetRoles().Split(",");
-            foreach
-            existingRoles.Contains
-            if (dto.ID == Guid.Empty)
+            var addRoles=updatedRoles.Where(p=>!existingRoles.Any(l=>l==p)).ToArray();
+            var deleteRoles=existingRoles.Where(p=>!updatedRoles.Any(l=>l==p)).ToArray();
+            foreach(var r in addRoles)
             {
-                var role = AlpsRole.Create(dto.Name, dto.Description);
-                _context.AlpsRoles.Add(role);
+                var role=_context.AlpsRoles.FirstOrDefault(p=>p.Name==r);
+                user.AddRole(role);
             }
-            else
+            foreach(var r in deleteRoles)
             {
-                AlpsRole role = _context.AlpsRoles.Find(dto.ID);
-                if (role == null)
-                    return this.AlpsActionWarning("身份信息不存在");
-                else
-                {
-                    if (!role.Timestamp.SequenceEqual(dto.Timestamp))
-                        return this.AlpsActionWarning("身份信息已改变");
-                    else
-                    {
-                        role.Name = dto.Name;
-                        role.Description = dto.Description;
-                    }
-                }
-            }
+                var role=_context.AlpsRoles.FirstOrDefault(p=>p.Name==r);
+                user.RemoveRole(role);
+            }            
             try
             {
                 _context.SaveChanges();
