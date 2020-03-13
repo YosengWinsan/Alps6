@@ -3,6 +3,7 @@ import { UserService } from '../user.service';
 import { ActivatedRoute } from '@angular/router';
 import { QueryService } from '../../infrastructure/infrastructure.module';
 import { MatSelectionList } from '@angular/material/list';
+import { HttpBackend } from '@angular/common/http';
 
 @Component({
   selector: 'app-authorize',
@@ -33,8 +34,17 @@ export class AuthorizeComponent implements OnInit {
     this.roleOptions = this.queryService.getRoleOptions();
     
     this.roleSelection.selectionChange.subscribe(d => {
-      console.info(this.roleSelection.selectedOptions.selected);
+      this.user.roles= this.roleSelection.selectedOptions.selected.map(o=>o.value);
+      //console.info(this.roleSelection.selectedOptions.selected);
     });
+    
   }
 
+  back(){
+    history.back();
+  }
+  save()
+  {
+    
+  }
 }

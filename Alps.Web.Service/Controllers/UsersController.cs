@@ -29,7 +29,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet]
         public IActionResult GetUsers()
         {
-            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p=>p.Role).Select(p => new UserListDto
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p => p.Role).Select(p => new UserListDto
             {
                 ID = p.ID,
                 IDName = p.IDName,
@@ -49,8 +49,51 @@ namespace Alps.Web.Service.Controllers
                 IdentityNumber = p.IdentityNumber,
                 MobilePhoneNumber = p.MobilePhoneNumber,
                 Name = p.Name,
-                Roles = p.RoleUsers.Select(k => new RoleDto { ID = k.RoleID, Name = k.Role.Name })
+                Roles = p.GetRoles()
             }).FirstOrDefault(p => p.ID == id));
+        }
+        [HttpPost("saveuserrole")]
+        public IActionResult SaveUserRole(UserDetailDto dto)
+        {
+            if (ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var user = _context.AlpsUsers.Include(p => p.RoleUsers).FirstOrDefault(p => p.ID == dto.ID);
+            if (user != null)
+                return this.AlpsActionWarning("该用户不存在");
+
+            var updatedRoles = dto.Roles.Split(",");
+            var existingRoles = user.GetRoles().Split(",");
+            foreach
+            existingRoles.Contains
+            if (dto.ID == Guid.Empty)
+            {
+                var role = AlpsRole.Create(dto.Name, dto.Description);
+                _context.AlpsRoles.Add(role);
+            }
+            else
+            {
+                AlpsRole role = _context.AlpsRoles.Find(dto.ID);
+                if (role == null)
+                    return this.AlpsActionWarning("身份信息不存在");
+                else
+                {
+                    if (!role.Timestamp.SequenceEqual(dto.Timestamp))
+                        return this.AlpsActionWarning("身份信息已改变");
+                    else
+                    {
+                        role.Name = dto.Name;
+                        role.Description = dto.Description;
+                    }
+                }
+            }
+            try
+            {
+                _context.SaveChanges();
+                return this.AlpsActionOk();
+            }
+            catch { return this.AlpsActionWarning("保存失败"); }
         }
         [HttpGet("getroles")]
         public IActionResult GetRoles()
@@ -68,6 +111,7 @@ namespace Alps.Web.Service.Controllers
             else
                 return this.AlpsActionWarning("无此身份信息");
         }
+
         [HttpPost("saverole")]
         public IActionResult SaveRole(RoleDto dto)
         {
@@ -78,7 +122,6 @@ namespace Alps.Web.Service.Controllers
             }
             else
             {
-
                 AlpsRole role = _context.AlpsRoles.Find(dto.ID);
                 if (role == null)
                     return this.AlpsActionWarning("身份信息不存在");

@@ -27,6 +27,6 @@ namespace Alps.Web.Service.Model
         public string Name{get;set;}
         public string MobilePhoneNumber{get;set;}
         public string IdentityNumber{get;set;}
-        public IEnumerable<RoleDto> Roles{get;set;}
+        public string Roles{get;set;}
     }
 }
