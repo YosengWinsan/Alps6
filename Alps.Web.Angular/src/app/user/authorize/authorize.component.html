@@ -1,7 +1,9 @@
 <alps-info-chip label="用户名" [value]="user.name"></alps-info-chip>
 <alps-info-chip label="用户ID" [value]="user.idName"></alps-info-chip>
 <mat-selection-list #roles>
-    <mat-list-option *ngFor="let role of roleOptions|async">
+    <mat-list-option *ngFor="let role of roleOptions|async" [value]="role.displayValue">
       {{role.displayValue}}
     </mat-list-option>
   </mat-selection-list>
+
+  {{roles.selectedOptions.selected.length}}
