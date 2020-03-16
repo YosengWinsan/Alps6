@@ -51,8 +51,10 @@ export class AuthService extends RepositoryService {
   private parseToken() {
     let tokenString = sessionStorage.getItem(this.TOKEN_SIGN);
     let token = null;
-    if (tokenString)
-      token = JSON.parse((new Base64()).decode(tokenString.split('.')[1]));
+    if (tokenString) {
+      let decodeStr =(new Base64()).decode(tokenString.split('.')[1]);
+      token = JSON.parse(decodeStr);
+    }
 
 
     if (token && token.exp * 1000 > Date.now()) {
@@ -73,7 +75,7 @@ export class AuthService extends RepositoryService {
 
   }
   register(id: string, password: string, realname: string, identityNumber: string, mobilePhoneNumber: string) {
-    return this.action("register",  { userName: id, realName: realname, password: password, identityNumber: identityNumber, mobilePhoneNumber: mobilePhoneNumber });
-}
+    return this.action("register", { userName: id, realName: realname, password: password, identityNumber: identityNumber, mobilePhoneNumber: mobilePhoneNumber });
+  }
 
 }

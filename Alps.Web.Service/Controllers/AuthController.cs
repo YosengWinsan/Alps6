@@ -50,7 +50,6 @@ namespace Alps.Web.Service.Controllers
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: creds);
-
                 return this.AlpsActionOk(new
                 {
                     result = true,
@@ -84,8 +83,5 @@ namespace Alps.Web.Service.Controllers
 
             }
         }
-
-
-
     }
 }

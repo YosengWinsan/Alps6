@@ -16,7 +16,7 @@
         },
         {
             "label": "Client Build",
-            "command": "ng build --prod --aot",
+            "command": "ng build --prod --aot --delete-output-path",
             "type": "shell",
             "presentation": {
                 "reveal": "always"
@@ -26,8 +26,8 @@
             }
         },
         {
-            "label": "Server Clean",
-            "command": "ng build --prod --aot",
+            "label": "Wwwroot Clean",
+            "command": "rd wwwroot /s /q",
             "type": "shell",
             "presentation": {
                 "reveal": "always"
@@ -39,10 +39,13 @@
         {
             "label": "Alps Build",
             "dependsOn": [
+               
                 "Client Build",
                 "Server Build"
             ],
+            
             "dependsOrder": "sequence",
+            "group":"build",
             "presentation": {
                 "reveal": "always"
             }
