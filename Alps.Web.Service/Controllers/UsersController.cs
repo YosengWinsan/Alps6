@@ -176,8 +176,8 @@ namespace Alps.Web.Service.Controllers
             foreach (Guid roleID in roleIds)
             {
                 var role = _context.AlpsRoles.Include(p => p.Permissions).FirstOrDefault(p => p.ID == roleID);
-                var newPermissions = dtos.Where(dto => !role.Permissions.Any(p => p.ResourceID == dto.ResourceID && roleID == dto.RoleID));
-                var deletedPermissions = role.Permissions.Where(p => !dtos.Any(dto => p.ResourceID == dto.ResourceID && roleID == dto.RoleID));
+                var newPermissions = dtos.Where(dto =>roleID==dto.RoleID && !role.Permissions.Any(p => p.ResourceID == dto.ResourceID));
+                var deletedPermissions = role.Permissions.Where(p => !dtos.Any(dto => p.ResourceID == dto.ResourceID && roleID == dto.RoleID)).ToList();
                 foreach (var p in deletedPermissions)
                 {
                     role.RemovePermission(p.ResourceID);

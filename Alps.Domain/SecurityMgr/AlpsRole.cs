@@ -29,7 +29,7 @@ namespace Alps.Domain.SecurityMgr
         }
         public void RemovePermission(Guid resourceID)
         {
-            Permission r = this.Permissions.FirstOrDefault(p => p.ID == resourceID);
+            Permission r = this.Permissions.FirstOrDefault(p => p.ResourceID == resourceID);
             if (r != null)
                 this.Permissions.Remove(r);
         }
