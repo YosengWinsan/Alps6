@@ -18,7 +18,7 @@ export class AuthorizeComponent implements OnInit {
 
   user;
   roleOptions;
-  @ViewChild('roles',{static:true})
+  @ViewChild('roles', { static: true })
   roleSelection: MatSelectionList;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
@@ -26,27 +26,25 @@ export class AuthorizeComponent implements OnInit {
       if (id != "") {
         this.userService.getUser(id).subscribe(data => {
           this.user = data;
-          console.info((this.user.roles.split(",")).map(r=>r.name));
           this.roleSelection.writeValue(this.user.roles.split(","));
-          
+
         });
       }
     });
     this.roleOptions = this.queryService.getRoleOptions();
-    
+
     this.roleSelection.selectionChange.subscribe(d => {
-      this.user.roles= this.roleSelection.selectedOptions.selected.map(o=>o.value).join(",");
+      this.user.roles = this.roleSelection.selectedOptions.selected.map(o => o.value).join(",");
       //console.info(this.roleSelection.selectedOptions.selected);
     });
-   
+
   }
 
-  back(){
+  back() {
     history.back();
   }
-  save()
-  {
-    this.userService.saveUser(this.user).subscribe(rst=>{
+  save() {
+    this.userService.updateUserRole(this.user).subscribe(rst => {
       this.back();
     });
   }

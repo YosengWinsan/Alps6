@@ -29,4 +29,14 @@ namespace Alps.Web.Service.Model
         public string IdentityNumber{get;set;}
         public string Roles{get;set;}
     }
+    public class UserEditDto
+    {
+        public Guid ID{get;set;}
+        public string IDName{get;set;} 
+        public string Name{get;set;}
+        public string MobilePhoneNumber{get;set;}
+        public string IdentityNumber{get;set;}
+        public string Roles{get;set;}
+        public string Password{get;set;}
+    }
 }

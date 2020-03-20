@@ -42,7 +42,7 @@ namespace Alps.Web.Service.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(Guid id)
         {
-            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p=>p.Role).Select(p => new UserDetailDto
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p => p.Role).Select(p => new UserDetailDto
             {
                 ID = p.ID,
                 IDName = p.IDName,
@@ -52,31 +52,66 @@ namespace Alps.Web.Service.Controllers
                 Roles = p.GetRoles()
             }).FirstOrDefault(p => p.ID == id));
         }
+        [HttpGet("getuserbyidname/{idname}")]
+        public IActionResult GetUserByIDName(string idname)
+        {
+            return this.AlpsActionOk(_context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p => p.Role).Select(p => new UserEditDto
+            {
+                ID = p.ID,
+                IDName = p.IDName,
+                IdentityNumber = p.IdentityNumber,
+                MobilePhoneNumber = p.MobilePhoneNumber,
+                Name = p.Name,
+                Roles = p.GetRoles()
+            }).FirstOrDefault(p => p.IDName == idname));
+        }
         [HttpPost("saveuser")]
-        public IActionResult SaveUser(UserDetailDto dto)
+        public IActionResult SaveUser(UserEditDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var user = _context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p=>p.Role).FirstOrDefault(p => p.ID == dto.ID);
+            var user = _context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p => p.Role).FirstOrDefault(p => p.ID == dto.ID);
+            if (user == null)
+                return this.AlpsActionWarning("该用户不存在");
+            user.IdentityNumber = dto.IdentityNumber;
+            user.MobilePhoneNumber = dto.MobilePhoneNumber;
+            user.Name = dto.Name;
+            if (user.Password != string.Empty)
+                user.Password = dto.Password;
+            try
+            {
+                _context.SaveChanges();
+                return this.AlpsActionOk();
+            }
+            catch { return this.AlpsActionWarning("保存失败"); }
+        }
+        [HttpPost("updateuserrole")]
+        public IActionResult UpdateUserRole(UserDetailDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var user = _context.AlpsUsers.Include(p => p.RoleUsers).ThenInclude(p => p.Role).FirstOrDefault(p => p.ID == dto.ID);
             if (user == null)
                 return this.AlpsActionWarning("该用户不存在");
 
             var updatedRoles = dto.Roles.Split(",");
             var existingRoles = user.GetRoles().Split(",");
-            var addRoles=updatedRoles.Where(p=>!existingRoles.Any(l=>l==p)).ToArray();
-            var deleteRoles=existingRoles.Where(p=>!updatedRoles.Any(l=>l==p)).ToArray();
-            foreach(var r in addRoles)
+            var addRoles = updatedRoles.Where(p => !existingRoles.Any(l => l == p)).ToArray();
+            var deleteRoles = existingRoles.Where(p => !updatedRoles.Any(l => l == p)).ToArray();
+            foreach (var r in addRoles)
             {
-                var role=_context.AlpsRoles.FirstOrDefault(p=>p.Name==r);
+                var role = _context.AlpsRoles.FirstOrDefault(p => p.Name == r);
                 user.AddRole(role);
             }
-            foreach(var r in deleteRoles)
+            foreach (var r in deleteRoles)
             {
-                var role=_context.AlpsRoles.FirstOrDefault(p=>p.Name==r);
+                var role = _context.AlpsRoles.FirstOrDefault(p => p.Name == r);
                 user.RemoveRole(role);
-            }            
+            }
             try
             {
                 _context.SaveChanges();
@@ -176,7 +211,7 @@ namespace Alps.Web.Service.Controllers
             foreach (Guid roleID in roleIds)
             {
                 var role = _context.AlpsRoles.Include(p => p.Permissions).FirstOrDefault(p => p.ID == roleID);
-                var newPermissions = dtos.Where(dto =>roleID==dto.RoleID && !role.Permissions.Any(p => p.ResourceID == dto.ResourceID));
+                var newPermissions = dtos.Where(dto => roleID == dto.RoleID && !role.Permissions.Any(p => p.ResourceID == dto.ResourceID));
                 var deletedPermissions = role.Permissions.Where(p => !dtos.Any(dto => p.ResourceID == dto.ResourceID && roleID == dto.RoleID)).ToList();
                 foreach (var p in deletedPermissions)
                 {

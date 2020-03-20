@@ -11,38 +11,43 @@ export class UserService extends RepositoryService {
     this.setBaseUrl("api/Users");
   }
   //private setRoles(){this.setBaseUrl()}
-  getUsers(){
+  getUsers() {
     return this.getall();
   }
-  getUser(id){
+  getUser(id) {
     return this.get(id);
   }
-  saveUser(user){
-    return this.action("saveuser",user);
+  getUserByIdName(idname) {
+    return this.query('getuserbyidname/' + idname);
   }
-  getRoles(){
+
+  saveUser(user) {
+    return this.action("saveuser", user);
+  }
+  getRoles() {
 
     return this.query("getroles");
   }
-  getRole(id:string){
-    return this.query("getrole/"+id);
+  getRole(id: string) {
+    return this.query("getrole/" + id);
   }
-  saveRole(role)
-  {
+  saveRole(role) {
     this.checkAndFillID(role);
-    return this.action("saverole",role);
+    return this.action("saverole", role);
   }
-  getResources(){
+  getResources() {
     return this.query('getresources')
   }
-  updateResource(){
+  updateResource() {
     return this.action('updateresources');
   }
-  getPermissions(){
+  getPermissions() {
     return this.query("getPermissions");
   }
-  savePermissions(permissions)
-  {
-    return this.action("savepermissions",permissions);
+  savePermissions(permissions) {
+    return this.action("savepermissions", permissions);
+  }
+  updateUserRole(user) {
+    return this.action("updateuserrole", user)
   }
 }
