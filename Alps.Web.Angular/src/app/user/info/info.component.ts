@@ -17,9 +17,7 @@ export class InfoComponent implements OnInit {
     //this.user = {};
   }
   ngOnInit() {
-
     let idname = this.authService.IdName;
-
     this.userService.getUserByIdName(idname).subscribe(data => {
       this.userForm.patchValue(data);
       //this.user = data;

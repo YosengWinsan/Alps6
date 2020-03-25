@@ -80,7 +80,7 @@ namespace Alps.Web.Service
             services.AddSpaStaticFiles(
                 Configuration => { Configuration.RootPath = "wwwroot"; }
             );
-
+            services.AddHttpsRedirection(o => o.HttpsPort = 443);
             ConfigModelInvalid(services);
             //services.AddCors();
         }
@@ -100,7 +100,7 @@ namespace Alps.Web.Service
             //app.UseStatusCodePagesWithReExecute("/", null);
             //app.UseStatusCodePagesWithRedirects("/index.html");
             //app.UseCors();
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             //app.UseStaticFiles(o=>{o.});
             //app.UseSpaStaticFiles();
 
