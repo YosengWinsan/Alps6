@@ -100,9 +100,7 @@ namespace Alps.Web.Service
             //app.UseStatusCodePagesWithReExecute("/", null);
             //app.UseStatusCodePagesWithRedirects("/index.html");
             //app.UseCors();
-            app.UseHttpsRedirection();
-            //app.UseStaticFiles(o=>{o.});
-            //app.UseSpaStaticFiles();
+            //app.UseHttpsRedirection();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
