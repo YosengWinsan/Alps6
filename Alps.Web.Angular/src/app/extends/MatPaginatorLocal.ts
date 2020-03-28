@@ -1,5 +1,7 @@
 import { MatPaginatorIntl } from "@angular/material/paginator";
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class MatPaginatorLocal extends MatPaginatorIntl {
 
     itemsPerPageLabel: string = "每页显示";
