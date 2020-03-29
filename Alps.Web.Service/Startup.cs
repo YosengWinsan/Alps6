@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Alps.Web.Service.Auth;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Alps.Web.Service
 {
@@ -94,36 +95,33 @@ namespace Alps.Web.Service
             }
             else
             {
+                app.UseExceptionHandler(errapp =>
+                {
+                    errapp.Run(async context =>
+                    {
+                        Exception ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                        string errorMsg = string.Empty;
+                        if (ex is DomainException)
+                        {
+                            errorMsg = "领域错误:" + ex.Message;
+                        }
+                        else
+                            errorMsg = "系统错误：" + ex.Message;
+                        context.Response.StatusCode = 200;
+                        context.Response.Headers.Add("content-type", "application/json; charset=utf-8");
+                        var errMsg = Encoding.UTF8.GetBytes("{\"resultCode\":-1,\"messages\":[\"" + errorMsg + "\"],\"data\":null}");
+                        await context.Response.Body.WriteAsync(errMsg, 0, errMsg.Length);
+                        await context.Response.CompleteAsync();
+                    });
+                });
                 app.UseHsts();
             }
 
-            //app.UseStatusCodePagesWithReExecute("/", null);
-            //app.UseStatusCodePagesWithRedirects("/index.html");
-            //app.UseCors();
             //app.UseHttpsRedirection();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            //app.UseSpa();
-            app.Use(async (context, next) =>
-            {
-                try
-                {
-                    await next();
-                }
-                catch (DomainException ex)
-                {
-                    context.Response.Headers.Add("content-type", "application/json; charset=utf-8");
-                    var errMsg = Encoding.UTF8.GetBytes("{resultCode:-1,'message':'" + ex.Message + "','data':{}}");
-                    await context.Response.Body.WriteAsync(errMsg, 0, errMsg.Length);
-                    await context.Response.CompleteAsync();
-                }
 
-                // if (context.Response.StatusCode == 404 && context.Request.Path.Value.Substring(0, 5).ToLower() != "/api/"
-                // && context.Request.Path.Value.Substring(0, 8).ToLower() != "/assets/")
-                //     context.Response.Redirect("/");
-            });
-            //app.UseRewriter(new RewriteOptions().AddRedirect());
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -138,18 +136,6 @@ namespace Alps.Web.Service
                 endpoints.MapFallbackToFile("index.html");
             });
 
-            // app.UseSpa(spa =>
-            // {
-            //     // To learn more about options for serving an Angular SPA from ASP.NET Core,
-            //     // see https://go.microsoft.com/fwlink/?linkid=864501
-
-            //     spa.Options.SourcePath = "ClientApp";
-
-            //     if (env.IsDevelopment())
-            //     {
-            //         spa.UseAngularCliServer(npmScript: "start");
-            //     }
-            // });
         }
         private void ConfigModelInvalid(IServiceCollection services)
         {
