@@ -1,5 +1,5 @@
-<div><button mat-button (click)="initDatabase()">初始化样本数据库</button>
-  <button mat-button (click)="clearCache()">清除缓存</button></div>
+<!-- <div><button mat-button (click)="initDatabase()">初始化样本数据库</button>
+  <button mat-button (click)="clearCache()">清除缓存</button></div> -->
 <div class="login-form-container">
   <form [formGroup]="loginForm" autocomplete="off" enterToTab>
     <!-- <h1>永盛金属ERP</h1> -->
@@ -19,7 +19,7 @@
           请输入用户名
         </div>
         <mat-form-field>
-          <input matInput formControlName="password" (keyup.enter)="keyup($event)" (focusin)="clearWarn()">
+          <input matInput type="password" formControlName="password" (keyup.enter)="keyup($event)" (focusin)="clearWarn()">
           <mat-icon matPrefix>lock</mat-icon>
         </mat-form-field>
         <div class="warn"
