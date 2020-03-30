@@ -57,17 +57,32 @@ namespace Alps.Web.Service.Controllers
         public IActionResult GetLoanVouchers([FromRoute]string hashCode)
         {
             var interestRates = GetInterestRates();
-            return this.AlpsActionOk(_context.LoanVouchers.Where(p => (p.IdentityCode.Contains(hashCode) || p.Lender.Name.Contains(hashCode)) && p.Amount > 0)
-            .Select(l => new LoanVoucherListDto()
+            if (hashCode.StartsWith('$'))
             {
-                ID = l.ID,
-                Date = l.DepositTime,
-                Amount = l.Amount,
-                Interest = l.CalculateVoucherInterest(interestRates),
-                Lender = l.Lender.Name,
-                InterestSettlable = LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
+                hashCode = hashCode.Substring(1, hashCode.Length - 1);
+                return this.AlpsActionOk(_context.LoanVouchers.Where(p => (p.IdentityCode.Contains(hashCode) || p.Lender.Name.Contains(hashCode)) && p.Amount == 0).Select(l => new LoanVoucherListDto()
+                {
+                    ID = l.ID,
+                    Date = l.DepositTime,
+                    Amount = l.Amount,
+                    Interest = l.CalculateVoucherInterest(interestRates),
+                    Lender = l.Lender.Name,
+                    InterestSettlable = LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
 
-            }));
+                }));
+            }
+            else
+                return this.AlpsActionOk(_context.LoanVouchers.Where(p => (p.IdentityCode.Contains(hashCode) || p.Lender.Name.Contains(hashCode)) && p.Amount > 0)
+                .Select(l => new LoanVoucherListDto()
+                {
+                    ID = l.ID,
+                    Date = l.DepositTime,
+                    Amount = l.Amount,
+                    Interest = l.CalculateVoucherInterest(interestRates),
+                    Lender = l.Lender.Name,
+                    InterestSettlable = LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
+
+                }));
         }
         [HttpPost("getprintinfo")]
         public IActionResult GetPrintInfo([FromBody]PrintInfoRequest req)
