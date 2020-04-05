@@ -206,14 +206,22 @@ namespace Alps.Domain.LoanMgr
             }
             return Math.Round(totalInterest);
         }
+        //计算凭证总利息
         public decimal CalculateVoucherInterest(IList<InterestRate> rates)
         {
             return CalculateInterest(rates, DateTimeOffset.Now, this.Amount);
         }
+        //计算季度利息
         public decimal CalculateQuarterInterest(IList<InterestRate> rates)
         {
             return CalculateInterest(rates, GetSettlableDate(), this.Amount);
         }
+
+        public decimal TestCalculateInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate, decimal amount, int notEnoughAMonthSubDay)
+        {
+            return CalculatePeriodInterest(rate, startDate, endDate, amount, notEnoughAMonthSubDay);
+        }
+        //计算期间利息
         private decimal CalculatePeriodInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate, decimal amount, int notEnoughAMonthSubDay)
         {
             DateTime fromdate = startDate.LocalDateTime;
@@ -240,6 +248,7 @@ namespace Alps.Domain.LoanMgr
                         days = days - (fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day - 30);
                     }
                 }
+                days = days > 30 ? 30 : days;
                 interestDays = days - notEnoughAMonthSubDay;
             }
             else

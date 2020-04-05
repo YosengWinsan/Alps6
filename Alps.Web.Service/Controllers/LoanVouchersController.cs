@@ -397,6 +397,21 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(dto);
         }
 
+        public class TestDaysDto
+        {
+            public DateTimeOffset StartDate { get; set; }
+            public DateTimeOffset EndDate { get; set; }
+            public decimal Rate { get; set; }
+            public decimal Amount { get; set; }
+            public int NotEnoughSubDay { get; set; }
+        }
+        [HttpPost("testCalculateInterest")]
+        public IActionResult TestCalculateInterest([FromBody]TestDaysDto dto)
+        {
+            LoanVoucher voucher = LoanVoucher.Create(Guid.Empty, "");
+            return this.AlpsActionOk(voucher.TestCalculateInterest(dto.Rate, dto.StartDate, dto.EndDate, dto.Amount, dto.NotEnoughSubDay));
+        }
+
     }
 
 

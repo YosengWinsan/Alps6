@@ -127,4 +127,9 @@ export class LoanService extends RepositoryService {
     this.setLoanVoucher();
     return this.get("getSettleInteresetPrintInfo/"+id);
   }
+
+  testCalculateInterest(dto){
+    this.setLoanVoucher();
+    return this.action("testCalculateInterest", dto);
+  }
 }

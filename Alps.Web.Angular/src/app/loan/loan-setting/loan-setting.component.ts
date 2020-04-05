@@ -10,8 +10,12 @@ import { LoanService } from '../loan.service';
 export class LoanSettingComponent implements OnInit {
   newStartExecutionDate;
   newRate;
-  setting: any={};
+  setting: any = {};
+  testInterestForm: FormGroup;
+  interesestResult = 0;
   constructor(private formBuilder: FormBuilder, private loanService: LoanService) {
+    this.testInterestForm = formBuilder.group({ startDate: [new Date()], endDate: [new Date()], rate: [30], amount: [1], notEnoughSubDay: [0] });
+
     //this.settingForm = this.formBuilder.group({ rate: [, Validators.required], startExecutionDate: [, Validators.required] });
     // this.rateForm = this.formBuilder.group({ rate: [, Validators.required], startExecutionDate: [, Validators.required] });
   }
@@ -33,5 +37,9 @@ export class LoanSettingComponent implements OnInit {
   publishNewRate() {
     this.setting.interestRates.push({ startExecutionDate: this.newStartExecutionDate, rate: this.newRate });
   }
-
+  testcalculateInterest() {
+    this.loanService.testCalculateInterest(this.testInterestForm.value).subscribe(rst => {
+      this.interesestResult = rst;
+    });
+  }
 }
