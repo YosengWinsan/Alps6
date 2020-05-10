@@ -40,7 +40,7 @@ namespace Alps.Web.Service.Controllers
             return dto;
         }
         [HttpGet("getloanvoucherdetail/{id}")]
-        public IActionResult GetLoanVoucherDetail([FromRoute]Guid id)
+        public IActionResult GetLoanVoucherDetail([FromRoute] Guid id)
         {
             return this.AlpsActionOk(this.MapToDetailDto(this.GetLoanVoucher().Include(p => p.Lender).FirstOrDefault(p => p.ID == id)));
         }
@@ -54,7 +54,7 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(billDtos);
         }
         [HttpGet("getByHashCode/{hashCode}")]
-        public IActionResult GetLoanVouchers([FromRoute]string hashCode)
+        public IActionResult GetLoanVouchers([FromRoute] string hashCode)
         {
             var interestRates = GetInterestRates();
             if (hashCode.StartsWith('$'))
@@ -85,7 +85,7 @@ namespace Alps.Web.Service.Controllers
                 }));
         }
         [HttpPost("getprintinfo")]
-        public IActionResult GetPrintInfo([FromBody]PrintInfoRequest req)
+        public IActionResult GetPrintInfo([FromBody] PrintInfoRequest req)
         {
             var dto = _context.LoanVouchers.SelectMany(p => p.Records).Select(p => new PrintInfo
             {
@@ -103,7 +103,7 @@ namespace Alps.Web.Service.Controllers
         }
 
         [HttpGet("getloanvoucherinfo/{id}")]
-        public IActionResult GetLoanVoucherInfo([FromRoute]Guid id)
+        public IActionResult GetLoanVoucherInfo([FromRoute] Guid id)
         {
             var interestRates = _context.LoanSettings.SelectMany(p => p.InterestRates);
             var loanVoucher = _context.LoanVouchers.Include(p => p.Lender).FirstOrDefault(p => p.ID == id);
@@ -137,7 +137,7 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(v.ID);
         }
         [HttpPost("settleInterest/{id}")]
-        public async Task<IActionResult> SettleInterest([FromRoute]Guid id)
+        public async Task<IActionResult> SettleInterest([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -265,7 +265,7 @@ namespace Alps.Web.Service.Controllers
             return setting;
         }
         [HttpPost("importlender")]
-        public async Task<IActionResult> ImportLender([FromBody]ICollection<LenderEditDto> list)
+        public async Task<IActionResult> ImportLender([FromBody] ICollection<LenderEditDto> list)
         {
             if (!ModelState.IsValid)
             {
@@ -282,7 +282,7 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(rst);
         }
         [HttpPost("importvoucher")]
-        public async Task<IActionResult> ImportLoanVoucher([FromBody]ICollection<VoucherImportDto> list)
+        public async Task<IActionResult> ImportLoanVoucher([FromBody] ICollection<VoucherImportDto> list)
         {
             if (!ModelState.IsValid)
             {
@@ -303,7 +303,7 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(rst);
         }
         [HttpPost("importwithdraw")]
-        public async Task<IActionResult> ImportWithdraw([FromBody]ICollection<WithdrawImportDto> list)
+        public async Task<IActionResult> ImportWithdraw([FromBody] ICollection<WithdrawImportDto> list)
         {
             if (!ModelState.IsValid)
             {
@@ -327,7 +327,7 @@ namespace Alps.Web.Service.Controllers
         }
 
         [HttpPost("getinterestsummary")]
-        public IActionResult GetSettlabeInterestSummary([FromBody]FilterDto filter)
+        public IActionResult GetSettlabeInterestSummary([FromBody] FilterDto filter)
         {
             var interestRates = GetInterestRates();
             List<LoanVoucher> vouchers;
@@ -353,7 +353,7 @@ namespace Alps.Web.Service.Controllers
 
         }
         [HttpGet("getinteresetdetal/{hashCode}")]
-        public IActionResult GetInteresetDetal([FromRoute]string hashCode)
+        public IActionResult GetInteresetDetal([FromRoute] string hashCode)
         {
 
             var interestRates = GetInterestRates();
@@ -385,7 +385,7 @@ namespace Alps.Web.Service.Controllers
             return this.AlpsActionOk(detailDto);
         }
         [HttpGet("getSettleInteresetPrintInfo/{id}")]
-        public IActionResult GetSettleInteresetPrintInfo([FromRoute]string id)
+        public IActionResult GetSettleInteresetPrintInfo([FromRoute] string id)
         {
             var dto = new SettleInterestPrintDto { Lender = id, Interest = 0, Date = DateTimeOffset.Now };
 
@@ -406,7 +406,7 @@ namespace Alps.Web.Service.Controllers
             public int NotEnoughSubDay { get; set; }
         }
         [HttpPost("testCalculateInterest")]
-        public IActionResult TestCalculateInterest([FromBody]TestDaysDto dto)
+        public IActionResult TestCalculateInterest([FromBody] TestDaysDto dto)
         {
             LoanVoucher voucher = LoanVoucher.Create(Guid.Empty, "");
             return this.AlpsActionOk(voucher.TestCalculateInterest(dto.Rate, dto.StartDate, dto.EndDate, dto.Amount, dto.NotEnoughSubDay));
@@ -415,7 +415,8 @@ namespace Alps.Web.Service.Controllers
         public IActionResult GetNoReviewerRecorder()
         {
 
-            var billDtos = _context.LoanVouchers.SelectMany(p => p.Records).Where(p => (p.Reviewer == null || p.Reviewer == string.Empty || p.CreateTime.Date >= DateTimeOffset.Now.Date.AddDays(-1)) && p.IsInvalid == false)
+            var billDtos = _context.LoanVouchers.SelectMany(p => p.Records).Where(p => (p.Reviewer == null || p.Reviewer == string.Empty || p.CreateTime.Date >= DateTimeOffset.Now.Date.AddDays(-1) || p.ReviewTime.Date == DateTimeOffset.Now.Date) && p.IsInvalid == false)
+            .OrderBy(p => p.OperateTime)
             .Select(p => new LoanRecordReviewerDto
             {
                 IsInvalid = p.IsInvalid,
@@ -433,7 +434,7 @@ namespace Alps.Web.Service.Controllers
         }
 
         [HttpPost("reviewer/{id}")]
-        public async Task<IActionResult> Reviewer([FromRoute]Guid id)
+        public async Task<IActionResult> Reviewer([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
