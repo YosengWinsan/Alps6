@@ -79,7 +79,7 @@ export class LoanService extends RepositoryService {
   }
   saveloansetting(setting) {
     this.setLoanVoucher();
-    return this.action('saveloansetting',setting);
+    return this.action('saveloansetting', setting);
   }
   // getloaninterestrates() {
   //   this.setLoanVoucher();
@@ -93,9 +93,9 @@ export class LoanService extends RepositoryService {
     this.setLoanVoucher();
     return this.get("getloanvouchersummary");
   }
-  getinterestsummary(str){    
+  getinterestsummary(str) {
     this.setLoanVoucher();
-    return this.action("getinterestsummary",{filter:str});
+    return this.action("getinterestsummary", { filter: str });
   }
   // getinterestbyName(){
   //   this.setLoanVoucher();
@@ -117,19 +117,26 @@ export class LoanService extends RepositoryService {
     this.setLoanVoucher();
     return this.action("importwithdraw", dto);
   }
-  getinteresetdetal(hashcode)
-  {
+  getinteresetdetal(hashcode) {
     this.setLoanVoucher();
-    return this.get("getinteresetdetal/"+hashcode);
+    return this.get("getinteresetdetal/" + hashcode);
   }
-  getSettleInteresetPrintInfo(id)
-  {
+  getSettleInteresetPrintInfo(id) {
     this.setLoanVoucher();
-    return this.get("getSettleInteresetPrintInfo/"+id);
+    return this.get("getSettleInteresetPrintInfo/" + id);
   }
 
-  testCalculateInterest(dto){
+  testCalculateInterest(dto) {
     this.setLoanVoucher();
     return this.action("testCalculateInterest", dto);
+  }
+
+  reviewer(recorderID) {
+    this.setLoanVoucher();
+    return this.action("reviewer/" + recorderID);
+  }
+  getNoReviewerRecorder() {
+    this.setLoanVoucher();
+    return this.get("getNoReviewerRecorder" );
   }
 }

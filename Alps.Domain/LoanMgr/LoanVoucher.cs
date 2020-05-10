@@ -209,7 +209,10 @@ namespace Alps.Domain.LoanMgr
         //计算凭证总利息
         public decimal CalculateVoucherInterest(IList<InterestRate> rates)
         {
-            return CalculateInterest(rates, DateTimeOffset.Now, this.Amount);
+            if ((this.InterestSettlementDate.Month / 3 + 1) * 3 <= DateTimeOffset.Now.Month + (DateTimeOffset.Now.Year - this.InterestSettlementDate.Year) * 12)
+                return CalculateInterest(rates, DateTimeOffset.Now, this.Amount);
+            else
+                return CalculateInterest(rates, DateTimeOffset.Now, this.Amount, 0);
         }
         //计算季度利息
         public decimal CalculateQuarterInterest(IList<InterestRate> rates)
@@ -264,6 +267,16 @@ namespace Alps.Domain.LoanMgr
                 interestDays = months * 30 + fromDays + endDays;
             }
             return interestDays * amount * rate / 30;
+        }
+        public void ReviewerRecorder(Guid id, string reviewer)
+        {
+            LoanRecord record = this.Records.FirstOrDefault(p => p.ID == id);
+            if (record.IsInvalid)
+                throw new DomainException("作废凭证不能审核");
+            if (record.Reviewer != string.Empty && record.Reviewer != null)
+                throw new DomainException("凭证已审核");
+            record.Reviewer = reviewer;
+            record.ReviewTime = DateTimeOffset.Now;
         }
     }
 }

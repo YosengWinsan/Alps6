@@ -58,6 +58,20 @@ namespace Alps.Web.Service.Model
         public bool IsInvalid { get; set; }
 
     }
+        public class LoanRecordReviewerDto
+    {
+        public Guid ID { get; set; }
+        public DateTimeOffset Date { get; set; }
+        public string Name { get; set; }
+        public decimal Amount { get; set; }
+        public decimal InterestRate { get; set; }
+        public decimal Interest { get; set; }
+        public LoanRecordType Type { get; set; }
+        public Guid LoanVoucherID { get; set; }
+        public bool IsInvalid { get; set; }
+        public string Reviewer{get;set;}
+        public DateTimeOffset ReviewTime{get;set;}
+    }
     public class LoanVoucherInfoDto
     {
         public Guid ID { get; set; }

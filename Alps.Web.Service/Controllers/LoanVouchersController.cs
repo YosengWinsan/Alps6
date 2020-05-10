@@ -411,7 +411,55 @@ namespace Alps.Web.Service.Controllers
             LoanVoucher voucher = LoanVoucher.Create(Guid.Empty, "");
             return this.AlpsActionOk(voucher.TestCalculateInterest(dto.Rate, dto.StartDate, dto.EndDate, dto.Amount, dto.NotEnoughSubDay));
         }
+        [HttpGet("getNoReviewerRecorder")]
+        public IActionResult GetNoReviewerRecorder()
+        {
 
+            var billDtos = _context.LoanVouchers.SelectMany(p => p.Records).Where(p => (p.Reviewer == null || p.Reviewer == string.Empty || p.CreateTime.Date >= DateTimeOffset.Now.Date.AddDays(-1)) && p.IsInvalid == false)
+            .Select(p => new LoanRecordReviewerDto
+            {
+                IsInvalid = p.IsInvalid,
+                LoanVoucherID = p.LoanVoucherID,
+                ID = p.ID,
+                Date = p.OperateTime,
+                Name = p.LoanVoucher.Lender.Name,
+                Amount = p.Amount,
+                Interest = p.Interest,
+                Type = p.Type,
+                Reviewer = p.Reviewer == null ? string.Empty : p.Reviewer,
+                ReviewTime = p.ReviewTime
+            });
+            return this.AlpsActionOk(billDtos);
+        }
+
+        [HttpPost("reviewer/{id}")]
+        public async Task<IActionResult> Reviewer([FromRoute]Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).Include(p => p.Lender).FirstOrDefault(p => p.Records.Any(l => l.ID == id));
+            if (v == null)
+                return this.AlpsActionWarning("无此ID");
+            v.ReviewerRecorder(id, User.Identity.Name);
+            await _context.SaveChangesAsync();
+            var p = v.Records.FirstOrDefault(p => p.ID == id);
+            var dto = new LoanRecordReviewerDto
+            {
+                IsInvalid = p.IsInvalid,
+                LoanVoucherID = p.LoanVoucherID,
+                ID = p.ID,
+                Date = p.OperateTime,
+                Name = v.Lender.Name,
+                Amount = p.Amount,
+                Interest = p.Interest,
+                Type = p.Type,
+                Reviewer = p.Reviewer == null ? string.Empty : p.Reviewer,
+                ReviewTime = p.ReviewTime
+            };
+            return this.AlpsActionOk(dto);
+        }
     }
 
 

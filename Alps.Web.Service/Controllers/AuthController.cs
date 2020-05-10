@@ -21,6 +21,7 @@ namespace Alps.Web.Service.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        
         private readonly AlpsContext _context;
         private readonly AlpsJwtOption _jwtOption;
         public AuthController(AlpsContext context, AlpsJwtOption jwtOption)
