@@ -160,6 +160,8 @@ namespace Alps.Domain.LoanMgr
                 throw new DomainException("不存在存取记录");
             if (r.ID != id)
                 throw new DomainException("不存在此ID");
+            if (!string.IsNullOrWhiteSpace(r.Reviewer))
+                throw new DomainException("已审核单据不能作废");
 
             r.IsInvalid = true;
             r.InvalidDate = DateTimeOffset.Now;
@@ -202,7 +204,7 @@ namespace Alps.Domain.LoanMgr
                     endDate = calcRates[i + 1].StartExecutionDate;
 
                 rate = calcRates[i].Rate;
-                totalInterest = totalInterest + CalculatePeriodInterest(rate, startDate, endDate, amount, notEnoughAMonthSubDay);
+                totalInterest = totalInterest + CalculatePeriodInterestV2(rate, startDate, endDate, amount);
             }
             return Math.Round(totalInterest);
         }
@@ -210,19 +212,59 @@ namespace Alps.Domain.LoanMgr
         public decimal CalculateVoucherInterest(IList<InterestRate> rates)
         {
             if ((this.InterestSettlementDate.Month / 3 + 1) * 3 <= DateTimeOffset.Now.Month + (DateTimeOffset.Now.Year - this.InterestSettlementDate.Year) * 12)
-                return CalculateInterest(rates, DateTimeOffset.Now, this.Amount);
+            {
+                if ((DateTimeOffset.Now.Year > this.InterestSettlementDate.Year && DateTimeOffset.Now.Month >= 3) || (DateTimeOffset.Now.Month >= 3 && this.InterestSettlementDate.Month < 3))
+                    return CalculateInterest(rates, DateTimeOffset.Now, this.Amount);
+                else
+                    return CalculateInterest(rates, DateTimeOffset.Now, this.Amount, 0);
+            }
             else
                 return CalculateInterest(rates, DateTimeOffset.Now, this.Amount, 0);
         }
         //计算季度利息
         public decimal CalculateQuarterInterest(IList<InterestRate> rates)
         {
-            return CalculateInterest(rates, GetSettlableDate(), this.Amount);
+            var settlableDate = GetSettlableDate();
+
+            //if ((this.InterestSettlementDate.Month / 3 + 1) * 3 <= settlableDate.Month + (settlableDate.Year - this.InterestSettlementDate.Year) * 12)
+            return CalculateInterest(rates, settlableDate, this.Amount, settlableDate.Month == 3 ? 2 : 0);
+            //else
+            //    return CalculateInterest(rates, settlableDate, this.Amount, 0);
         }
 
         public decimal TestCalculateInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate, decimal amount, int notEnoughAMonthSubDay)
         {
-            return CalculatePeriodInterest(rate, startDate, endDate, amount, notEnoughAMonthSubDay);
+            return CalculatePeriodInterestV2(rate, startDate, endDate, amount);
+        }
+        //计算期间利息V2
+        private decimal CalculatePeriodInterestV2(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate, decimal amount)
+        {
+            DateTime fromdate = startDate.LocalDateTime;
+            DateTime todate = endDate.LocalDateTime;
+
+            if (fromdate.Date >= todate.Date)
+                return 0;
+
+            todate = todate.Date.AddDays(-1);
+            var months = (todate.Year - fromdate.Year) * 12 + (todate.Month - fromdate.Month) - 1;
+
+
+            var interestDays = 0;
+            if (months < 0)
+            {
+                var days = todate.Subtract(fromdate.Date).Days + 1;
+                if (todate.Day == 31)
+                    days = days - 1;
+                interestDays = days;
+            }
+            else
+            {
+                var fromDays = (fromdate.Month == 2 ? fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day : 30 )- fromdate.Day+1;
+                var endDateDays = todate.Day > 30 ? 30 : todate.Day;
+                interestDays = months * 30 + fromDays + endDateDays;
+            }
+
+            return interestDays * amount * rate / 30;
         }
         //计算期间利息
         private decimal CalculatePeriodInterest(decimal rate, DateTimeOffset startDate, DateTimeOffset endDate, decimal amount, int notEnoughAMonthSubDay)

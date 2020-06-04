@@ -95,28 +95,28 @@ namespace Alps.Web.Service
             }
             else
             {
-                app.UseExceptionHandler(errapp =>
-                {
-                    errapp.Run(async context =>
-                    {
-                        Exception ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-                        string errorMsg = string.Empty;
-                        if (ex is DomainException)
-                        {
-                            errorMsg = "领域错误:" + ex.Message;
-                        }
-                        else
-                            errorMsg = "系统错误：" + ex.Message;
-                        context.Response.StatusCode = 200;
-                        context.Response.Headers.Add("content-type", "application/json; charset=utf-8");
-                        var errMsg = Encoding.UTF8.GetBytes("{\"resultCode\":-1,\"messages\":[\"" + errorMsg + "\"],\"data\":null}");
-                        await context.Response.Body.WriteAsync(errMsg, 0, errMsg.Length);
-                        await context.Response.CompleteAsync();
-                    });
-                });
+
                 app.UseHsts();
             }
-
+            app.UseExceptionHandler(errapp =>
+                            {
+                                errapp.Run(async context =>
+                                {
+                                    Exception ex = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                                    string errorMsg = string.Empty;
+                                    if (ex is DomainException)
+                                    {
+                                        errorMsg = "领域错误:" + ex.Message;
+                                    }
+                                    else
+                                        errorMsg = "系统错误：" + ex.Message;
+                                    context.Response.StatusCode = 200;
+                                    context.Response.Headers.Add("content-type", "application/json; charset=utf-8");
+                                    var errMsg = Encoding.UTF8.GetBytes("{\"resultCode\":-1,\"messages\":[\"" + errorMsg + "\"],\"data\":null}");
+                                    await context.Response.Body.WriteAsync(errMsg, 0, errMsg.Length);
+                                    await context.Response.CompleteAsync();
+                                });
+                            });
             //app.UseHttpsRedirection();
 
             app.UseDefaultFiles();

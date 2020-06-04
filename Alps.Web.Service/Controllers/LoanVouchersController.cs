@@ -182,12 +182,27 @@ namespace Alps.Web.Service.Controllers
             {
                 return BadRequest(ModelState);
             }
-            LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).FirstOrDefault(p => p.Records.Any(k => k.ID == id));
+            LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).Include(p=>p.Lender).FirstOrDefault(p => p.Records.Any(k => k.ID == id));
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
             v.InvalidRecord(id, User.Identity.Name);
             await _context.SaveChangesAsync();
-            return this.AlpsActionOk();
+
+            var p = v.Records.FirstOrDefault(p => p.ID == id);
+            var dto = new LoanRecordReviewerDto
+            {
+                IsInvalid = p.IsInvalid,
+                LoanVoucherID = p.LoanVoucherID,
+                ID = p.ID,
+                Date = p.OperateTime,
+                Name = v.Lender.Name,
+                Amount = p.Amount,
+                Interest = p.Interest,
+                Type = p.Type,
+                Reviewer = p.Reviewer == null ? string.Empty : p.Reviewer,
+                ReviewTime = p.ReviewTime
+            };
+            return this.AlpsActionOk(dto);
         }
         private bool LoanVoucherExists(Guid id)
         {
@@ -460,7 +475,7 @@ namespace Alps.Web.Service.Controllers
                 ReviewTime = p.ReviewTime
             };
             return this.AlpsActionOk(dto);
-        }
+        }       
     }
 
 

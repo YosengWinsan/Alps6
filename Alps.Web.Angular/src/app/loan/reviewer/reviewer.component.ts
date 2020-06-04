@@ -46,6 +46,13 @@ export class ReviewerComponent implements OnInit {
     );
 
   }
+  invalidrecord(row) {
+    if (confirm("确定要作废此单据？")) {
+      this.loanService.invalidrecord(row.id).subscribe((rst) => {
+        row.isInvalid = rst.isInvalid;
+      });
+    }
+  }
 
 
 }

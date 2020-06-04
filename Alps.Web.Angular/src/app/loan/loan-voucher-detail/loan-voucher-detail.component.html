@@ -8,12 +8,12 @@
     现存金额:{{detail.amount}}</div>
 <div>已作废:{{detail.isinvalid?"是":"否"}}</div>
 <div><button (click)="printvoucher()">打印利息条</button></div>
-<div> <a  routerLink="../settleinterest" [queryParams]="{id:detail.lender}">
+<div> <a routerLink="../settleinterest" [queryParams]="{id:detail.lender}">
         结息
     </a>&nbsp;&nbsp;
     <a *ngIf="detail.amount>0" routerLink="../withdraw" [queryParams]="{id:currentID}">
         取款
-    </a> 
+    </a>
 </div>
 <mat-table #table [dataSource]="this.detail.records" matSort aria-label="Elements">
     <!-- Id Column -->
@@ -46,9 +46,7 @@
         <mat-cell *matCellDef="let row">{{row.isInvalid}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="action">
-        <mat-header-cell *matHeaderCellDef>
-            操作
-        </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef> 操作 </mat-header-cell>
         <mat-cell *matCellDef="let row">
             <a *ngIf="!row.isInvalid" (click)="invalidrecord(row.id)">
                 作废

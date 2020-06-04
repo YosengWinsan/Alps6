@@ -59,9 +59,13 @@
         <mat-form-field>
             <input matInput placeholder="扣除天数" formControlName="notEnoughSubDay" type="number">
         </mat-form-field>
+        <!-- <mat-form-field>
+            <input matInput placeholder="计算季度息" formControlName="season" type="checkbox">
+        </mat-form-field> -->
         计算结果为{{interesestResult}}
         <div class="action-toolbar">
             <button mat-stroked-button (click)="testcalculateInterest()">计算</button>
         </div>
     </form>
+
 </div>

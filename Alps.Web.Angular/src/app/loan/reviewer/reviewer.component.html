@@ -1,45 +1,47 @@
 <mat-table #table [dataSource]="waterbills" matSort aria-label="Elements">
-    <!-- Id Column -->
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>时间</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.date|date:'yyyy-MM-dd'}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="type">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>类型</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.type}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>存款人</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="amount">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>金额</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.amount}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="interestRate">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>利率</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.interestRate}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="interest">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>利息</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.interest}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="isInvalid">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>已作废</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.isInvalid?"是":"否"}}</mat-cell>
-      </ng-container>
-    <ng-container matColumnDef="action">
-      <mat-header-cell *matHeaderCellDef>审核
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <a *ngIf="row.reviewer==''" (click)="reviewerRecord(row)">
-            审核
-        </a>
-        {{row.reviewer}}
-      </mat-cell>
-    </ng-container>
-  
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    
-  </mat-table>
+  <!-- Id Column -->
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>时间</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.date|date:'yyyy-MM-dd'}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="type">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>类型</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.type}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>存款人</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="amount">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>金额</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.amount}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="interestRate">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>利率</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.interestRate}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="interest">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>利息</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.interest}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="isInvalid">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>已作废</mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.isInvalid?"是":"否"}}
+      <a *ngIf="!row.isInvalid && row.reviewer==''" (click)="invalidrecord(row)"> 《作废》 </a>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>审核
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <a *ngIf="row.reviewer=='' && !row.isInvalid" (click)="reviewerRecord(row)">
+        审核
+      </a>
+      {{row.reviewer}}
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
