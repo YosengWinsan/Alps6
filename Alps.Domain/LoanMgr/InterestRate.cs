@@ -11,6 +11,7 @@ namespace Alps.Domain.LoanMgr
         [Column(TypeName = "decimal(18,4)")]
         public decimal Rate { get; set; }
         public DateTimeOffset StartExecutionDate { get; set; }
+        //public bool JustForNew{get;set;}
         public static InterestRate Create(DateTimeOffset seDate, decimal rate, string publisher)
         {
             return new InterestRate() { PublishDate = DateTimeOffset.Now, Publisher = publisher, Rate = rate, StartExecutionDate = seDate };

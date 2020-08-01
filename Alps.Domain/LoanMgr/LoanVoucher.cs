@@ -263,7 +263,12 @@ namespace Alps.Domain.LoanMgr
                 var endDateDays = todate.Day > 30 ? 30 : todate.Day;
                 interestDays = months * 30 + fromDays + endDateDays;
             }
-
+            //临时调整利率
+            if(this.DepositTime>=new DateTimeOffset(2020,7,10,0,0,0,new TimeSpan(8,0,0)))
+            {
+                rate=0.0051m;
+            }
+            //临时调整利率
             return interestDays * amount * rate / 30;
         }
         //计算期间利息
