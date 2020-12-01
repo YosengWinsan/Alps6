@@ -30,8 +30,8 @@
             <td>发布人</td>
         </tr>
         <tr *ngFor="let r of setting?.interestRates">
-            <td>{{r.publishDate}}</td>
-            <td>{{r.startExecutionDate}}</td>
+            <td>{{r.publishDate|date:"yyyy-MM-dd"}}</td>
+            <td>{{r.startExecutionDate|date:"yyyy-MM-dd"}}</td>
             <td>{{r.rate}}</td>
             <td>{{r.publisher}}</td>
         </tr>

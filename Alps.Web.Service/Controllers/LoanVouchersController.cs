@@ -259,7 +259,7 @@ namespace Alps.Web.Service.Controllers
                     ID = l.ID,
                     Publisher = l.Publisher,
                     Rate = l.Rate,
-                    StartExecutionDate = l.StartExecutionDate,
+                    StartExecutionDate = l.StartExecutionDate.ToLocalTime(),
                     PublishDate = l.PublishDate
 
                 }).ToList()
