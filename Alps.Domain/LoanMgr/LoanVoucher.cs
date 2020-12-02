@@ -259,15 +259,15 @@ namespace Alps.Domain.LoanMgr
             }
             else
             {
-                var fromDays = (fromdate.Month == 2 ? fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day : 30 )- fromdate.Day+1;
+                var fromDays = (fromdate.Month == 2 ? fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day : 30) - fromdate.Day + 1;
                 var endDateDays = todate.Day > 30 ? 30 : todate.Day;
                 interestDays = months * 30 + fromDays + endDateDays;
             }
             //临时调整利率
-            // if(this.DepositTime>=new DateTimeOffset(2020,7,10,0,0,0,new TimeSpan(8,0,0)))
-            // {
-            //     rate=0.0051m;
-            // }
+            if(this.DepositTime>=new DateTimeOffset(2020,7,10,0,0,0,new TimeSpan(8,0,0)) && this.DepositTime<new DateTimeOffset(2020,12,1,0,0,0,new TimeSpan(8,0,0)))
+            {
+                rate=0.0051m;
+            }
             //临时调整利率
             return interestDays * amount * rate / 30;
         }
