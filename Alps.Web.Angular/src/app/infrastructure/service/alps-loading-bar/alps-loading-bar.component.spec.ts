@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlpsLoadingBarComponent } from './alps-loading-bar.component';
 
@@ -6,7 +6,7 @@ describe('AlpsLoadingBarComponent', () => {
   let component: AlpsLoadingBarComponent;
   let fixture: ComponentFixture<AlpsLoadingBarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlpsLoadingBarComponent ]
     })

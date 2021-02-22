@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlpsSelectorDialogComponent } from './alps-selector-dialog.component';
 
@@ -6,7 +6,7 @@ describe('AlpsSelectorDialogComponent', () => {
   let component: AlpsSelectorDialogComponent;
   let fixture: ComponentFixture<AlpsSelectorDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlpsSelectorDialogComponent ]
     })

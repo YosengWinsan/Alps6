@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AuthorizeComponent } from './authorize.component';
 
@@ -6,7 +6,7 @@ describe('AuthorizeComponent', () => {
   let component: AuthorizeComponent;
   let fixture: ComponentFixture<AuthorizeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AuthorizeComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PrintSettleInterestComponent } from './print-settle-interest.component';
 
@@ -6,7 +6,7 @@ describe('PrintSettleInterestComponent', () => {
   let component: PrintSettleInterestComponent;
   let fixture: ComponentFixture<PrintSettleInterestComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PrintSettleInterestComponent ]
     })

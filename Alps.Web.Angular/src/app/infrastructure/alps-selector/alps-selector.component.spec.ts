@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlpsSelectorComponent } from './alps-selector.component';
 
@@ -6,7 +6,7 @@ describe('AlpsSelectorComponent', () => {
   let component: AlpsSelectorComponent;
   let fixture: ComponentFixture<AlpsSelectorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlpsSelectorComponent ]
     })

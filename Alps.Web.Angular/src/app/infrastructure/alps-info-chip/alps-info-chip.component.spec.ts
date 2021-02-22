@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlpsInfoChipComponent } from './alps-info-chip.component';
 
@@ -6,7 +6,7 @@ describe('AlpsInfoChipComponent', () => {
   let component: AlpsInfoChipComponent;
   let fixture: ComponentFixture<AlpsInfoChipComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlpsInfoChipComponent ]
     })

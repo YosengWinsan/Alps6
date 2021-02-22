@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlpsSearchSelectorComponent } from './alps-search-selector.component';
 
@@ -6,7 +6,7 @@ describe('AlpsSearchSelectorComponent', () => {
   let component: AlpsSearchSelectorComponent;
   let fixture: ComponentFixture<AlpsSearchSelectorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlpsSearchSelectorComponent ]
     })

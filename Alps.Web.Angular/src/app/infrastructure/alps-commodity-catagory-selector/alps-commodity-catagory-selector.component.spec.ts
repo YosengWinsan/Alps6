@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlpsCommodityCatagorySelectorComponent } from './alps-commodity-catagory-selector.component';
 
@@ -6,7 +6,7 @@ describe('AlpsCommodityCatagorySelectorComponent', () => {
   let component: AlpsCommodityCatagorySelectorComponent;
   let fixture: ComponentFixture<AlpsCommodityCatagorySelectorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlpsCommodityCatagorySelectorComponent ]
     })

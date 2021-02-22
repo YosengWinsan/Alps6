@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlpsEditActionToolbarComponent } from './alps-edit-action-toolbar.component';
 
@@ -6,7 +6,7 @@ describe('AlpsEditActionToolbarComponent', () => {
   let component: AlpsEditActionToolbarComponent;
   let fixture: ComponentFixture<AlpsEditActionToolbarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlpsEditActionToolbarComponent ]
     })

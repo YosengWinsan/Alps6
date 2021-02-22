@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SupplierClassEditComponent } from './supplier-class-edit.component';
 
@@ -6,7 +6,7 @@ describe('SupplierClassEditComponent', () => {
   let component: SupplierClassEditComponent;
   let fixture: ComponentFixture<SupplierClassEditComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SupplierClassEditComponent ]
     })
