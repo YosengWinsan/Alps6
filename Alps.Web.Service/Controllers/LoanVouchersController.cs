@@ -57,6 +57,7 @@ namespace Alps.Web.Service.Controllers
         public IActionResult GetLoanVouchers([FromRoute] string hashCode)
         {
             var interestRates = GetInterestRates();
+            var minDepositDays=DoGetLoanSetting().MinDepositDay;
             if (hashCode.StartsWith('$'))
             {
                 hashCode = hashCode.Substring(1, hashCode.Length - 1);
@@ -67,7 +68,7 @@ namespace Alps.Web.Service.Controllers
                     Amount = l.Amount,
                     Interest = l.CalculateVoucherInterest(interestRates),
                     Lender = l.Lender.Name,
-                    InterestSettlable = LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
+                    InterestSettlable =l.CanSettleInterest(minDepositDays) //LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
 
                 }));
             }
@@ -80,7 +81,7 @@ namespace Alps.Web.Service.Controllers
                     Amount = l.Amount,
                     Interest = l.CalculateVoucherInterest(interestRates),
                     Lender = l.Lender.Name,
-                    InterestSettlable = LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
+                    InterestSettlable = l.CanSettleInterest(minDepositDays)//LoanVoucher.GetInterestDay(l.InterestSettlementDate, LoanVoucher.GetSettlableDate()) >= 30 ? true : false,
 
                 }));
         }
@@ -146,10 +147,12 @@ namespace Alps.Web.Service.Controllers
             LoanVoucher v = _context.LoanVouchers.Include(p => p.Records).FirstOrDefault(p => p.ID == id);
             if (v == null)
                 return this.AlpsActionWarning("无此ID");
-            if (v.CanSettleInterest())
+
+            var minDepositDays=DoGetLoanSetting().MinDepositDay;
+            if (v.CanSettleInterest(minDepositDays))
             {
                 var interestRates = GetInterestRates();
-                v.SettleInterest(DateTimeOffset.Now, "", User.Identity.Name, interestRates);
+                v.SettleInterest(DateTimeOffset.Now, "", User.Identity.Name, interestRates,minDepositDays);
                 await _context.SaveChangesAsync();
             }
             return this.AlpsActionOk();
@@ -170,7 +173,7 @@ namespace Alps.Web.Service.Controllers
                 return this.AlpsActionWarning("无此ID");
             if (v.Amount < dto.Amount)
                 return this.AlpsActionError("取款金额超过存款金额");
-            var r = v.Withdraw(dto.OperateTime, dto.Amount, dto.Memo, User.Identity.Name, GetInterestRates());
+            var r = v.Withdraw(dto.OperateTime, dto.Amount, dto.Memo, User.Identity.Name, GetInterestRates(),DoGetLoanSetting().MinDepositDay);
             await _context.SaveChangesAsync();
             return this.AlpsActionOk(r.ID);
         }
@@ -382,7 +385,7 @@ namespace Alps.Web.Service.Controllers
                     Amount = l.Amount,
                     Interest = l.CalculateQuarterInterest(interestRates),
                     Lender = hashCode,
-                    InterestSettlable = l.CanSettleInterest()
+                    InterestSettlable = l.CanSettleInterest(DoGetLoanSetting().MinDepositDay)
                 }),
                 Records = vouchers.SelectMany(p => p.Records).Select(p => new LoanRecordDto
                 {

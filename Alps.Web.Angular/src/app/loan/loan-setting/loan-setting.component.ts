@@ -13,6 +13,8 @@ export class LoanSettingComponent implements OnInit {
   setting: any = {};
   testInterestForm: FormGroup;
   interesestResult = 0;
+ // minDepositDay;
+  //minDepositAmount;
   constructor(private formBuilder: FormBuilder, private loanService: LoanService) {
     this.testInterestForm = formBuilder.group({ startDate: [new Date()], endDate: [new Date()], rate: [30], amount: [1], notEnoughSubDay: [0] });
 
@@ -30,6 +32,8 @@ export class LoanSettingComponent implements OnInit {
     });
   }
   saveloansetting() {
+   // this.setting.minDepositDay=this.minDepositDay;
+    //this.setting.minDepositAmount=this.minDepositAmount;
     this.loanService.saveloansetting(this.setting).subscribe((rst) => {
       this.setting = rst;
     });

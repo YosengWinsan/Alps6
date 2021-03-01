@@ -70,29 +70,29 @@ namespace Alps.Domain.LoanMgr
 
             return record;
         }
-        public LoanRecord Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater, IList<InterestRate> rates)
+        public LoanRecord Withdraw(DateTimeOffset operateTime, decimal amount, string memo, string creater, IList<InterestRate> rates,int minDepositDays=0)
         {
             if (this.IsInvalid)
                 throw new DomainException("已作废的条子无法取款");
-            // if (!this.CanSettleInterest())
-            //     throw new DomainException("无法结息");
+ 
             var interest = CalculateInterest(rates, operateTime, amount, 0); ;
-
+           if (this.DepositTime.Subtract(DateTimeOffset.Now).TotalDays<minDepositDays)
+                 interest=0;
             LoanRecord record = LoanRecord.Create(LoanRecordType.Withdraw, operateTime, amount, interest, memo, creater);
             this.Records.Add(record);
             this.Amount = this.Amount - record.Amount;
             this.VoucherTime = DateTimeOffset.Now;
             return record;
         }
-        public bool CanSettleInterest()
+        public bool CanSettleInterest(int minDepositDays=0)
         {
-            return this.InterestSettlementDate < GetSettlableDate();
+            return this.InterestSettlementDate < GetSettlableDate() && DateTimeOffset.Now.Subtract(this.DepositTime).Days>=minDepositDays;
         }
-        public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater, IList<InterestRate> rates)
+        public LoanRecord SettleInterest(DateTimeOffset operateTime, string memo, string creater, IList<InterestRate> rates,int minDepositDays=0)
         {
             if (this.IsInvalid)
                 throw new DomainException("已作废的条子无法结息");
-            if (!this.CanSettleInterest())
+            if (!this.CanSettleInterest(minDepositDays))
                 throw new DomainException("无法结息");
             var interest = CalculateQuarterInterest(rates);
             LoanRecord record = LoanRecord.Create(LoanRecordType.SettleInterest, operateTime, this.Amount, interest, memo, creater);
