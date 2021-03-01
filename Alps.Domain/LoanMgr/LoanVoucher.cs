@@ -255,18 +255,27 @@ namespace Alps.Domain.LoanMgr
                 var days = todate.Subtract(fromdate.Date).Days + 1;
                 if (todate.Day == 31)
                     days = days - 1;
+                //增加判断2月28天或29天为足月
+                if (todate.Month == 2 && todate.AddDays(1).Month == 3 && fromdate.Day == 1)
+                    days = 30;
+                //增加结束
                 interestDays = days;
             }
             else
             {
                 var fromDays = (fromdate.Month == 2 ? fromdate.Date.AddDays(1 - fromdate.Day).AddMonths(1).AddDays(-1).Day : 30) - fromdate.Day + 1;
                 var endDateDays = todate.Day > 30 ? 30 : todate.Day;
+                //增加判断2月28天或29天为足月
+                if (todate.Month == 2 && todate.AddDays(1).Month == 3 )
+                    endDateDays = 30;
+                //增加结束
+                //var endDateDays = todate.Day > 30 ? 30 : todate.Day;
                 interestDays = months * 30 + fromDays + endDateDays;
             }
             //临时调整利率
-            if(this.DepositTime>=new DateTimeOffset(2020,7,10,0,0,0,new TimeSpan(8,0,0)) && this.DepositTime<new DateTimeOffset(2020,12,1,0,0,0,new TimeSpan(8,0,0)))
+            if (this.DepositTime >= new DateTimeOffset(2020, 7, 10, 0, 0, 0, new TimeSpan(8, 0, 0)) && this.DepositTime < new DateTimeOffset(2020, 12, 1, 0, 0, 0, new TimeSpan(8, 0, 0)))
             {
-                rate=0.0051m;
+                rate = 0.0051m;
             }
             //临时调整利率
             return interestDays * amount * rate / 30;
