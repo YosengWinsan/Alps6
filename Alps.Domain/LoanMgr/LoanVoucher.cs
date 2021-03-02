@@ -76,7 +76,7 @@ namespace Alps.Domain.LoanMgr
                 throw new DomainException("已作废的条子无法取款");
  
             var interest = CalculateInterest(rates, operateTime, amount, 0); ;
-           if (this.DepositTime.Subtract(DateTimeOffset.Now).TotalDays<minDepositDays)
+           if (DateTimeOffset.Now.Subtract(this.DepositTime).Days<minDepositDays)
                  interest=0;
             LoanRecord record = LoanRecord.Create(LoanRecordType.Withdraw, operateTime, amount, interest, memo, creater);
             this.Records.Add(record);
